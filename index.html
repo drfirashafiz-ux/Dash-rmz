@@ -8,8 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Cairo -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Tajawal & Cairo -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <!-- html2pdf Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -19,57 +19,65 @@
         extend: {
           colors: {
             brand: {
-              navy: '#111827',
-              darkNavy: '#0F172A',
-              primary: '#1E3A8A',
-              emerald: '#059669',
-              gold: '#D97706',
-              lightBg: '#F8FAFC',
+              main: '#1C4344',       /* الأخضر/الكحلي الزيتي الفاخر الخاص برمز الامتثال */
+              dark: '#143233',       /* درجة أغمق للهيدر والحواف */
+              gold: '#C69214',       /* الذهبي الخاص بالشعار */
+              goldHover: '#B0800F',
+              lightBg: '#F4F7F7',    /* خلفية الصفحة فاتحة ومريحة للعين */
               cardBg: '#FFFFFF'
             }
           },
           fontFamily: {
-            cairo: ['Cairo', 'sans-serif']
+            brandFont: ['Tajawal', 'Cairo', 'sans-serif']
           }
         }
       }
     }
   </script>
   <style>
-    body { font-family: 'Cairo', sans-serif; background-color: #F8FAFC; color: #1E293B; }
-    canvas { border: 1px dashed #CBD5E1; border-radius: 8px; background: #FFF; cursor: crosshair; }
-    .cert-frame { border: 8px double #1E3A8A; padding: 40px; background: #FFFFFF; position: relative; }
+    body { font-family: 'Tajawal', 'Cairo', sans-serif; background-color: #F4F7F7; color: #1C4344; }
+    canvas { border: 1px dashed #C69214; border-radius: 8px; background: #FFF; cursor: crosshair; }
+    
+    /* قالب شهادة هاسب بألوان وشعار رمز الامتثال */
+    .cert-frame { 
+      border: 10px double #C69214; 
+      padding: 40px; 
+      background: #FFFFFF; 
+      position: relative; 
+      box-shadow: inset 0 0 20px rgba(28, 67, 68, 0.05);
+    }
   </style>
 </head>
 <body class="bg-brand-lightBg text-slate-800 p-4 md:p-8">
 
 <div class="max-w-6xl mx-auto space-y-6">
 
-  <!-- الهيدر الرئيسي - هوية رمز الامتثال -->
-  <header class="bg-brand-darkNavy text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4 border-b-4 border-brand-emerald">
+  <!-- الهيدر الرئيسي - هوية رمز الامتثال مطابقة للصورة -->
+  <header class="bg-brand-main text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4 border-b-4 border-brand-gold">
     <div class="flex items-center gap-4">
-      <div class="w-12 h-12 bg-brand-emerald rounded-xl flex items-center justify-center text-2xl font-bold shadow-lg">
-        <i class="fa-solid fa-shield-halved"></i>
+      <!-- درع الشعار بالألوان الحقيقية -->
+      <div class="w-14 h-14 bg-brand-gold rounded-2xl flex items-center justify-center text-brand-main text-2xl font-black shadow-lg border-2 border-white">
+        <i class="fa-solid fa-shield-halved text-3xl"></i>
       </div>
       <div>
-        <h1 class="text-2xl font-extrabold tracking-wide text-white">رمز الامتثال <span class="text-brand-gold text-sm font-normal">| Rmz Al-Amtithal</span></h1>
-        <p class="text-xs text-slate-300">منظومة إدارة الجودة والسلامة الغذائية والتفتيش الميداني</p>
+        <h1 class="text-3xl font-black tracking-wide text-brand-gold">رمز الإمتثال</h1>
+        <p class="text-sm font-semibold text-white tracking-widest">RMZ AL-AMTITHAL</p>
       </div>
     </div>
-    <div class="flex items-center gap-2 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
+    <div class="flex items-center gap-2 bg-brand-dark px-4 py-2 rounded-xl border border-brand-gold/40 shadow-inner">
       <i class="fa-solid fa-user-gear text-brand-gold"></i>
-      <span class="text-sm text-slate-300">الدور الحالي:</span>
-      <span id="currentRoleBadge" class="font-bold text-brand-emerald">المدير العام</span>
+      <span class="text-xs text-slate-200">الدور الحالي:</span>
+      <span id="currentRoleBadge" class="font-extrabold text-brand-gold">المدير العام</span>
     </div>
   </header>
 
   <!-- شريط تبديل الأدوار -->
   <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-2 text-slate-700 font-semibold text-sm">
-      <i class="fa-solid fa-[#1E3A8A] fa-sliders"></i>
+    <div class="flex items-center gap-2 text-brand-main font-bold text-sm">
+      <i class="fa-solid fa-sliders text-brand-gold"></i>
       <span>تبديل واجهة العرض للمحاكاة:</span>
     </div>
-    <select id="roleSelector" onchange="switchRole(this.value)" class="bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg p-2.5 focus:ring-brand-primary focus:border-brand-primary font-bold">
+    <select id="roleSelector" onchange="switchRole(this.value)" class="bg-slate-50 border border-slate-300 text-brand-main text-sm rounded-lg p-2.5 focus:ring-brand-gold focus:border-brand-gold font-bold">
       <option value="admin">المدير العام (Admin)</option>
       <option value="supervisor">المشرف (Supervisor)</option>
       <option value="inspector">المراقب الميداني (Inspector)</option>
@@ -81,39 +89,39 @@
     
     <!-- قسم شهادات هاسب -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-brand-gold space-y-4">
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
         <i class="fa-solid fa-award text-2xl text-brand-gold"></i>
-        <h3 class="text-xl font-bold text-brand-darkNavy">إصدار وإدارة شهادات تأهيل هاسب (HACCP)</h3>
+        <h3 class="text-xl font-bold text-brand-main">إصدار وإدارة شهادات تأهيل هاسب (HACCP)</h3>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">اختر المطبخ / العميل:</label>
-          <select id="certClientSelect" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm"></select>
+          <label class="block text-xs font-bold text-brand-main mb-1">اختر المطبخ / العميل:</label>
+          <select id="certClientSelect" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm font-semibold"></select>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">رقم الشهادة القادم:</label>
-          <input type="text" id="nextCertNumber" disabled class="w-full bg-slate-200 font-bold text-brand-primary p-2 rounded-lg text-sm">
+          <label class="block text-xs font-bold text-brand-main mb-1">رقم الشهادة القادم:</label>
+          <input type="text" id="nextCertNumber" disabled class="w-full bg-slate-200 font-extrabold text-brand-main p-2 rounded-lg text-sm">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">تاريخ الإصدار:</label>
-          <input type="date" id="certIssueDate" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm">
+          <label class="block text-xs font-bold text-brand-main mb-1">تاريخ الإصدار:</label>
+          <input type="date" id="certIssueDate" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm font-semibold">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">تاريخ الانتهاء:</label>
-          <input type="date" id="certExpiryDate" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm">
+          <label class="block text-xs font-bold text-brand-main mb-1">تاريخ الانتهاء:</label>
+          <input type="date" id="certExpiryDate" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm font-semibold">
         </div>
       </div>
-      <button onclick="issueCertificate()" class="bg-brand-emerald hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow transition flex items-center gap-2">
+      <button onclick="issueCertificate()" class="bg-brand-main hover:bg-brand-dark text-brand-gold font-bold py-2.5 px-6 rounded-lg text-sm shadow transition flex items-center gap-2 border border-brand-gold">
         <i class="fa-solid fa-file-signature"></i> إصدار شهادة تأهيل جديدة
       </button>
 
       <div class="overflow-x-auto pt-4">
-        <h4 class="font-bold text-slate-700 text-sm mb-2">الشهادات الصادرة سابقاً:</h4>
-        <table class="w-full text-sm text-right text-slate-600 border border-slate-200 rounded-lg">
-          <thead class="bg-slate-100 text-slate-800 font-bold">
+        <h4 class="font-bold text-brand-main text-sm mb-2">الشهادات الصادرة سابقاً:</h4>
+        <table class="w-full text-sm text-right text-slate-700 border border-slate-200 rounded-lg">
+          <thead class="bg-brand-main text-white font-bold">
             <tr>
-              <th class="p-3 border-b">رقم الشهادة</th>
+              <th class="p-3 border-b text-brand-gold">رقم الشهادة</th>
               <th class="p-3 border-b">اسم المطبخ / المطعم</th>
               <th class="p-3 border-b">تاريخ الإصدار</th>
               <th class="p-3 border-b">تاريخ الانتهاء</th>
@@ -127,37 +135,37 @@
 
     <!-- قسم إضافة العملاء -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-xl font-bold text-brand-darkNavy flex items-center gap-2">
-        <i class="fa-solid fa-utensils text-brand-primary"></i> إدارة العملاء (المطابخ والمطاعم)
+      <h3 class="text-xl font-bold text-brand-main flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-brand-gold"></i> إدارة العملاء (المطابخ والمطاعم)
       </h3>
       <div class="flex gap-3">
-        <input type="text" id="newClientName" placeholder="أدخل اسم المطعم أو المطبخ الجديد..." class="flex-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm">
-        <button onclick="addClient()" class="bg-brand-primary hover:bg-blue-900 text-white font-bold px-6 rounded-lg text-sm shadow">إضافة عميل</button>
+        <input type="text" id="newClientName" placeholder="أدخل اسم المطعم أو المطبخ الجديد..." class="flex-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold">
+        <button onclick="addClient()" class="bg-brand-main hover:bg-brand-dark text-white font-bold px-6 rounded-lg text-sm shadow">إضافة عميل</button>
       </div>
-      <ul id="clientsList" class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-slate-700 font-semibold pt-2"></ul>
+      <ul id="clientsList" class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-brand-main font-bold pt-2"></ul>
     </div>
 
     <!-- قسم إنشاء قوالب من الصفر -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-xl font-bold text-brand-darkNavy flex items-center gap-2">
-        <i class="fa-solid fa-folder-plus text-brand-emerald"></i> إنشاء قالب تقرير جديد من الصفر
+      <h3 class="text-xl font-bold text-brand-main flex items-center gap-2">
+        <i class="fa-solid fa-folder-plus text-brand-gold"></i> إنشاء قالب تقرير جديد من الصفر
       </h3>
       <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">اسم القالب:</label>
-        <input type="text" id="templateTitle" placeholder="مثال: قالب زيارة تقييم الاشتراطات الصحية" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm">
+        <label class="block text-xs font-bold text-brand-main mb-1">اسم القالب:</label>
+        <input type="text" id="templateTitle" placeholder="مثال: قالب زيارة تقييم الاشتراطات الصحية" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold">
       </div>
       <div>
-        <label class="block text-xs font-bold text-slate-600 mb-2">بنود القالب (ستكون إجاباتها: محقق / غير محقق):</label>
+        <label class="block text-xs font-bold text-brand-main mb-2">بنود القالب (الإجابات المقابلة لها: محقق / غير محقق):</label>
         <div id="templateItemsContainer" class="space-y-2">
           <div class="flex gap-2">
             <input type="text" placeholder="أدخل نص البند..." class="template-item-input flex-1 bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">
           </div>
         </div>
-        <button onclick="addTemplateItemField()" class="mt-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-1.5 px-4 rounded-lg text-xs flex items-center gap-1">
-          <i class="fa-solid fa-plus"></i> إضافة بند إضافي
+        <button onclick="addTemplateItemField()" class="mt-3 bg-slate-200 hover:bg-slate-300 text-brand-main font-bold py-1.5 px-4 rounded-lg text-xs flex items-center gap-1">
+          <i class="fa-solid fa-plus text-brand-gold"></i> إضافة بند إضافي
         </button>
       </div>
-      <button onclick="saveTemplate()" class="bg-brand-primary hover:bg-blue-900 text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow">حفظ القالب في النظام</button>
+      <button onclick="saveTemplate()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow">حفظ القالب في النظام</button>
     </div>
 
   </div>
@@ -165,37 +173,37 @@
   <!-- ==================== 2. قسم المشرف ==================== -->
   <div id="supervisorSection" class="space-y-6 hidden">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-xl font-bold text-brand-darkNavy flex items-center gap-2">
-        <i class="fa-solid fa-tasks text-brand-primary"></i> إسناد مهمة جديدة للمراقب
+      <h3 class="text-xl font-bold text-brand-main flex items-center gap-2">
+        <i class="fa-solid fa-tasks text-brand-gold"></i> إسناد مهمة جديدة للمراقب
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">اختر القالب:</label>
-          <select id="taskTemplateSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm"></select>
+          <label class="block text-xs font-bold text-brand-main mb-1">اختر القالب:</label>
+          <select id="taskTemplateSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold"></select>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">اختر المطبخ / العميل:</label>
-          <select id="taskClientSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm"></select>
+          <label class="block text-xs font-bold text-brand-main mb-1">اختر المطبخ / العميل:</label>
+          <select id="taskClientSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold"></select>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">اسم المراقب المكلف:</label>
-          <input type="text" id="taskInspectorName" placeholder="أدخل اسم المراقب..." class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm">
+          <label class="block text-xs font-bold text-brand-main mb-1">اسم المراقب المكلف:</label>
+          <input type="text" id="taskInspectorName" placeholder="أدخل اسم المراقب..." class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold">
         </div>
       </div>
-      <button onclick="assignTask()" class="bg-brand-primary hover:bg-blue-900 text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow">إرسال المهمة للمراقب</button>
+      <button onclick="assignTask()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow">إرسال المهمة للمراقب</button>
     </div>
 
     <!-- جدول المهام -->
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-      <h3 class="text-lg font-bold text-brand-darkNavy mb-4">متابعة التقارير والمهام</h3>
+      <h3 class="text-lg font-bold text-brand-main mb-4">متابعة التقارير والمهام</h3>
       <div class="overflow-x-auto">
-        <table class="w-full text-sm text-right text-slate-600 border border-slate-200">
-          <thead class="bg-slate-100 text-slate-800 font-bold">
+        <table class="w-full text-sm text-right text-slate-700 border border-slate-200">
+          <thead class="bg-brand-main text-white font-bold">
             <tr>
               <th class="p-3 border-b">اسم المطبخ</th>
               <th class="p-3 border-b">القالب</th>
               <th class="p-3 border-b">المراقب</th>
-              <th class="p-3 border-b">نسبة الامتثال</th>
+              <th class="p-3 border-b text-brand-gold">نسبة الامتثال</th>
               <th class="p-3 border-b">الحالة</th>
               <th class="p-3 border-b">الإجراءات</th>
             </tr>
@@ -209,33 +217,33 @@
   <!-- ==================== 3. قسم المراقب الميداني ==================== -->
   <div id="inspectorSection" class="space-y-6 hidden">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-      <h3 class="text-xl font-bold text-brand-darkNavy mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-clipboard-check text-brand-emerald"></i> تعبئة التقرير الميداني
+      <h3 class="text-xl font-bold text-brand-main mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-clipboard-check text-brand-gold"></i> تعبئة التقرير الميداني
       </h3>
       
-      <div id="noTaskWarning" class="text-slate-500 text-sm py-4">لا توجد مهمة نشطة معينة لك حالياً.</div>
+      <div id="noTaskWarning" class="text-slate-500 text-sm py-4 font-semibold">لا توجد مهمة نشطة معينة لك حالياً.</div>
 
       <div id="activeTaskForm" class="space-y-6 hidden">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
           <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">اسم المطبخ (مغلق):</label>
-            <input type="text" id="inspClientName" disabled class="w-full bg-slate-200 font-bold text-slate-700 p-2 rounded-lg text-sm">
+            <label class="block text-xs font-bold text-brand-main mb-1">اسم المطبخ (مغلق):</label>
+            <input type="text" id="inspClientName" disabled class="w-full bg-slate-200 font-bold text-brand-main p-2 rounded-lg text-sm">
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-500 mb-1">نوع القالب (مغلق):</label>
-            <input type="text" id="inspTemplateTitle" disabled class="w-full bg-slate-200 font-bold text-slate-700 p-2 rounded-lg text-sm">
+            <label class="block text-xs font-bold text-brand-main mb-1">نوع القالب (مغلق):</label>
+            <input type="text" id="inspTemplateTitle" disabled class="w-full bg-slate-200 font-bold text-brand-main p-2 rounded-lg text-sm">
           </div>
         </div>
 
         <div>
-          <h4 class="font-bold text-brand-darkNavy mb-3 text-md border-b pb-2">بنود التفتيش والامتثال:</h4>
+          <h4 class="font-bold text-brand-main mb-3 text-md border-b pb-2">بنود التفتيش والامتثال:</h4>
           <div id="inspectionChecklist" class="space-y-3"></div>
         </div>
 
         <!-- محضر المخالفة -->
         <div class="border-t pt-4">
-          <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-slate-800">
-            <input type="checkbox" id="hasIncident" onchange="toggleIncidentForm(this.checked)" class="w-4 h-4 text-brand-emerald rounded">
+          <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-brand-main">
+            <input type="checkbox" id="hasIncident" onchange="toggleIncidentForm(this.checked)" class="w-4 h-4 text-brand-gold rounded">
             <span>هل ترغب في تحرير محضر ضبط مخالفة / تعهد منفصل؟</span>
           </label>
         </div>
@@ -267,7 +275,7 @@
           </div>
         </div>
 
-        <button onclick="submitInspection()" class="w-full bg-brand-emerald hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+        <button onclick="submitInspection()" class="w-full bg-brand-main hover:bg-brand-dark text-white font-bold py-3 rounded-xl shadow-lg transition border border-brand-gold">
           حفظ وإرسال التقرير النهائي
         </button>
       </div>
@@ -280,11 +288,11 @@
 <div id="pdfExportContainer" class="hidden">
   
   <!-- 1. قالب التقرير الشامل -->
-  <div id="mainReportPDF" class="p-8 bg-white font-cairo text-slate-800 space-y-6">
-    <div class="flex justify-between items-center border-b-2 border-brand-primary pb-4">
+  <div id="mainReportPDF" class="p-8 bg-white font-brandFont text-slate-800 space-y-6">
+    <div class="flex justify-between items-center border-b-2 border-brand-main pb-4">
       <div>
-        <h2 class="text-2xl font-extrabold text-brand-darkNavy">رمز الامتثال | تقرير التفتيش الميداني</h2>
-        <p class="text-xs text-slate-500">Rmz Al-Amtithal Audit & Inspection Report</p>
+        <h2 class="text-2xl font-black text-brand-main">رمز الإمتثال | تقرير التفتيش الميداني</h2>
+        <p class="text-xs font-bold text-brand-gold">RMZ AL-AMTITHAL AUDIT REPORT</p>
       </div>
       <div id="pdfMetaDate" class="text-left text-xs font-semibold text-slate-600"></div>
     </div>
@@ -293,11 +301,11 @@
       <p><strong>اسم المنشأة:</strong> <span id="pdfClientName"></span></p>
       <p><strong>القالب:</strong> <span id="pdfTemplateName"></span></p>
       <p><strong>المراقب:</strong> <span id="pdfInspectorName"></span></p>
-      <p><strong>نسبة الامتثال النهائية:</strong> <span id="pdfComplianceRate" class="font-bold text-brand-emerald"></span></p>
+      <p><strong>نسبة الامتثال النهائية:</strong> <span id="pdfComplianceRate" class="font-bold text-brand-main"></span></p>
     </div>
 
     <table class="w-full text-sm text-right border border-slate-300">
-      <thead class="bg-slate-100 font-bold">
+      <thead class="bg-brand-main text-white font-bold">
         <tr>
           <th class="p-2 border">#</th>
           <th class="p-2 border">البند</th>
@@ -310,11 +318,11 @@
   </div>
 
   <!-- 2. قالب المحضر المنفصل -->
-  <div id="incidentPDF" class="p-8 bg-white font-cairo text-slate-800 space-y-6">
+  <div id="incidentPDF" class="p-8 bg-white font-brandFont text-slate-800 space-y-6">
     <div class="flex justify-between items-center border-b-2 border-red-600 pb-4">
       <div>
-        <h2 class="text-2xl font-extrabold text-red-600">رمز الامتثال | محضر ضبط مخالفة</h2>
-        <p class="text-xs text-slate-500">Incident & Corrective Action Record</p>
+        <h2 class="text-2xl font-black text-red-600">رمز الإمتثال | محضر ضبط مخالفة</h2>
+        <p class="text-xs font-bold text-slate-500">INCIDENT & CORRECTIVE ACTION RECORD</p>
       </div>
       <div id="pdfIncidentMeta" class="text-left text-xs font-semibold text-slate-600"></div>
     </div>
@@ -330,7 +338,7 @@
         <p id="pdfIncReason" class="text-slate-800 whitespace-pre-line"></p>
       </div>
       <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-        <strong class="text-brand-primary block mb-1">الإجراء التصحيحي الملزم:</strong>
+        <strong class="text-brand-main block mb-1">الإجراء التصحيحي الملزم:</strong>
         <p id="pdfIncAction" class="text-slate-800 whitespace-pre-line"></p>
       </div>
     </div>
@@ -347,28 +355,28 @@
     </div>
   </div>
 
-  <!-- 3. قالب شهادة هاسب الرسمي -->
-  <div id="haccpCertificatePDF" class="p-10 bg-white font-cairo text-slate-800">
+  <!-- 3. قالب شهادة هاسب الرسمي المطابق للهوية -->
+  <div id="haccpCertificatePDF" class="p-10 bg-white font-brandFont text-slate-800">
     <div class="cert-frame text-center space-y-6">
-      <div class="text-brand-gold font-bold text-lg tracking-widest">★ رمز الامتثال لخدمات الجودة ★</div>
-      <h1 class="text-3xl font-black text-brand-primary">شهادة اعتماد وتأهيل هاسب (HACCP)</h1>
-      <p class="text-sm text-slate-500">Food Safety & HACCP Compliance Certificate</p>
+      <div class="text-brand-gold font-extrabold text-xl tracking-widest">★ رمز الإمتثال لخدمات الجودة ★</div>
+      <h1 class="text-4xl font-black text-brand-main">شهادة اعتماد وتأهيل هاسب (HACCP)</h1>
+      <p class="text-sm font-semibold text-slate-500">FOOD SAFETY & HACCP COMPLIANCE CERTIFICATE</p>
 
-      <div class="py-6 space-y-2">
-        <p class="text-base text-slate-600">تشهد شركة رمز الامتثال بأن المنشأة / المطبخ:</p>
-        <h2 id="certPDFClientName" class="text-3xl font-extrabold text-red-600 underline decoration-brand-gold"></h2>
-        <p class="text-sm text-slate-700 max-w-xl mx-auto pt-2">قد استوفت متطلبات واشتراطات سلامة الغذاء ونظام تحليل المخاطر ونقاط التحكم الحرجة بنجاح.</p>
+      <div class="py-6 space-y-3">
+        <p class="text-lg text-slate-700">تشهد شركة رمز الإمتثال بأن المنشأة / المطبخ:</p>
+        <h2 id="certPDFClientName" class="text-4xl font-black text-brand-gold underline decoration-brand-main"></h2>
+        <p class="text-sm text-slate-700 max-w-xl mx-auto pt-2 font-semibold">قد استوفت متطلبات واشتراطات سلامة الغذاء ونظام تحليل المخاطر ونقاط التحكم الحرجة بنجاح.</p>
       </div>
 
       <div class="grid grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
-        <div><strong class="block text-slate-500">رقم الشهادة:</strong><span id="certPDFCode" class="text-brand-primary font-bold text-base"></span></div>
+        <div><strong class="block text-slate-500">رقم الشهادة:</strong><span id="certPDFCode" class="text-brand-main font-bold text-base"></span></div>
         <div><strong class="block text-slate-500">تاريخ الإصدار:</strong><span id="certPDFIssueDate" class="font-semibold"></span></div>
         <div><strong class="block text-slate-500">تاريخ الانتهاء:</strong><span id="certPDFExpiryDate" class="font-semibold"></span></div>
       </div>
 
-      <div class="grid grid-cols-2 gap-8 pt-8 text-xs font-bold text-slate-700">
-        <div><p>اعتماد المدير العام</p><p class="text-slate-400 font-normal mt-1">(رمز الامتثال)</p></div>
-        <div><p>إدارة توثيق الجودة</p><p class="text-slate-400 font-normal mt-1">HACCP Certified</p></div>
+      <div class="grid grid-cols-2 gap-8 pt-8 text-xs font-bold text-brand-main">
+        <div><p class="text-sm">اعتماد المدير العام</p><p class="text-slate-400 font-normal mt-1">(رمز الإمتثال)</p></div>
+        <div><p class="text-sm">إدارة توثيق الجودة</p><p class="text-slate-400 font-normal mt-1">HACCP Certified</p></div>
       </div>
     </div>
   </div>
@@ -459,12 +467,12 @@
   function renderCertificates() {
     document.getElementById('certificatesTableBody').innerHTML = certificates.map(c => `
       <tr class="border-b hover:bg-slate-50">
-        <td class="p-2.5 font-bold text-brand-primary">${c.code}</td>
+        <td class="p-2.5 font-extrabold text-brand-main">${c.code}</td>
         <td class="p-2.5">${c.clientName}</td>
         <td class="p-2.5">${c.issueDate}</td>
         <td class="p-2.5">${c.expiryDate}</td>
         <td class="p-2.5">
-          <button onclick="exportCertPDF('${c.code}')" class="text-xs bg-brand-gold text-white font-bold py-1 px-3 rounded shadow">تنزيل PDF</button>
+          <button onclick="exportCertPDF('${c.code}')" class="text-xs bg-brand-gold text-brand-main font-bold py-1 px-3 rounded shadow">تنزيل PDF</button>
         </td>
       </tr>
     `).join('');
@@ -525,10 +533,10 @@
         <td class="p-3">${t.clientName}</td>
         <td class="p-3">${t.template.title}</td>
         <td class="p-3">${t.inspectorName}</td>
-        <td class="p-3 font-bold text-brand-emerald">${t.submittedData ? t.submittedData.complianceRate + '%' : '-'}</td>
+        <td class="p-3 font-bold text-brand-main">${t.submittedData ? t.submittedData.complianceRate + '%' : '-'}</td>
         <td class="p-3"><strong>${t.status}</strong></td>
         <td class="p-3">
-          ${t.status === 'مكتملة' ? `<button onclick="exportPDFs(${t.id})" class="bg-brand-primary text-white text-xs font-bold py-1 px-3 rounded">تصدير PDF</button>` : 'قيد التعبئة'}
+          ${t.status === 'مكتملة' ? `<button onclick="exportPDFs(${t.id})" class="bg-brand-main text-white text-xs font-bold py-1 px-3 rounded border border-brand-gold">تصدير PDF</button>` : 'قيد التعبئة'}
         </td>
       </tr>
     `).join('');
@@ -547,7 +555,7 @@
 
       document.getElementById('inspectionChecklist').innerHTML = task.template.items.map((item, index) => `
         <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
-          <p class="font-bold text-xs text-slate-800">${index + 1}. ${item}</p>
+          <p class="font-bold text-xs text-brand-main">${index + 1}. ${item}</p>
           <div class="flex gap-4 items-center">
             <select class="item-status bg-white border border-slate-300 rounded p-1.5 text-xs font-bold" data-item="${item}">
               <option value="محقق">محقق</option>
@@ -582,7 +590,6 @@
       checklistResults.push({ item: s.getAttribute('data-item'), status: val, note: notes[i].value });
     });
 
-    // حساب النسبة المئوية
     const complianceRate = Math.round((achievedCount / checklistResults.length) * 100);
 
     const hasIncident = document.getElementById('hasIncident').checked;
@@ -627,7 +634,7 @@
         if(!drawing) return;
         const rect = canvas.getBoundingClientRect();
         ctx.lineWidth = 2;
-        ctx.strokeStyle = '#0F172A';
+        ctx.strokeStyle = '#1C4344';
         ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
         ctx.stroke();
         ctx.beginPath();
@@ -663,7 +670,7 @@
       <tr class="border-b">
         <td class="p-2 border">${i+1}</td>
         <td class="p-2 border">${r.item}</td>
-        <td class="p-2 border font-bold ${r.status === 'محقق' ? 'text-green-700' : 'text-red-600'}">${r.status}</td>
+        <td class="p-2 border font-bold ${r.status === 'محقق' ? 'text-emerald-700' : 'text-red-600'}">${r.status}</td>
         <td class="p-2 border">${r.note || '-'}</td>
       </tr>
     `).join('');
