@@ -2,15 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة رمز الامتثال - نظام التفتيش وإصدار الشهادات</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منصة رمز الامتثال - التفتيش وإدارة الشهادات</title>
     <style>
         :root {
             --primary-gold: #c59b27;
             --primary-green: #1b4332;
-            --bg-light: #f8f9fa;
+            --bg-light: #f4f6f9;
             --text-dark: #2d3748;
-            --border-color: #cbd5e0;
+            --border-color: #e2e8f0;
             --white: #ffffff;
         }
 
@@ -19,6 +19,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -27,24 +28,13 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* --- الشعار الرئيسي --- */
-        .brand-logo-container {
-            text-align: center;
-            display: inline-block;
-        }
-
+        /* --- الشعار ورأس الصفحة --- */
         .brand-logo-svg {
-            width: 70px;
-            height: 70px;
-        }
-
-        .brand-logo-text {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-green);
-            margin-top: 4px;
+            width: 50px;
+            height: 50px;
         }
 
         /* --- شاشة تسجيل الدخول --- */
@@ -53,17 +43,17 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #e2e8f0 0%, #edf2f7 100%);
-            padding: 20px;
+            background: linear-gradient(135deg, #1b4332 0%, #0d2319 100%);
+            padding: 15px;
         }
 
         .login-card {
             background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             text-align: center;
         }
 
@@ -76,16 +66,17 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .form-control {
             width: 100%;
-            padding: 10px;
+            padding: 10px 12px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
             outline: none;
+            background: #fff;
         }
 
         .form-control:focus {
@@ -93,15 +84,17 @@
         }
 
         .btn {
-            padding: 10px 18px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             font-size: 14px;
-            transition: 0.2s ease;
-            display: inline-block;
-            text-align: center;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .btn-primary {
@@ -118,49 +111,37 @@
             color: var(--white);
         }
 
-        /* --- الهيدر والقائمة المنسدلة ثلاث نقاط --- */
-        .dashboard {
-            display: none;
-            flex: 1;
-        }
-
+        /* --- الهيدر والقائمة ثلاث نقاط --- */
         header {
             background: var(--white);
-            padding: 12px 20px;
+            padding: 10px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid var(--primary-gold);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        /* زر الثلاث نقاط */
         .three-dots-menu {
             position: relative;
-            display: inline-block;
         }
 
         .dots-btn {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
-            padding: 5px 12px;
-            border-radius: 6px;
+            padding: 4px 10px;
             color: var(--primary-green);
-        }
-
-        .dots-btn:hover {
-            background-color: #f0f0f0;
         }
 
         .dropdown-content {
@@ -169,9 +150,9 @@
             right: 0;
             top: 100%;
             background-color: var(--white);
-            min-width: 230px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
-            border-radius: 8px;
+            min-width: 220px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+            border-radius: 10px;
             z-index: 1001;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -179,13 +160,12 @@
 
         .dropdown-content a {
             color: var(--text-dark);
-            padding: 12px 16px;
+            padding: 12px 15px;
             text-decoration: none;
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             border-bottom: 1px solid #f0f0f0;
-            transition: 0.2s;
         }
 
         .dropdown-content a:hover {
@@ -197,11 +177,12 @@
             display: block;
         }
 
-        /* --- المحتوى العام والتصميم المستجيب --- */
+        /* --- المحتوى والحاويات المستجيبة للجوال --- */
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 15px auto;
+            padding: 0 12px;
         }
 
         .page-section {
@@ -212,94 +193,66 @@
             display: block;
         }
 
-        /* البطاقات الشبكية للرئيسية والملخصات */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
             background: var(--white);
-            padding: 20px;
-            border-radius: 8px;
-            border-right: 5px solid var(--primary-gold);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border-right: 4px solid var(--primary-gold);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
         }
 
         .stat-card h4 {
             color: #718096;
-            font-size: 13px;
-            margin-bottom: 8px;
+            font-size: 12px;
+            margin-bottom: 5px;
         }
 
         .stat-card .value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: var(--primary-green);
         }
 
         .card {
             background: var(--white);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
         }
 
         .card-title {
             color: var(--primary-green);
-            margin-bottom: 15px;
-            padding-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
             border-bottom: 2px solid var(--primary-gold);
-            font-size: 16px;
+            font-size: 15px;
         }
 
-        /* شبكات النموذج المستجيبة للجوال واللابتوب */
-        .form-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 15px;
-        }
-
-        /* بند التفتيش */
-        .item-row {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #fafafa;
-        }
-
-        .status-options {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 10px 0;
-            background: var(--white);
-            padding: 10px;
-            border-radius: 6px;
-        }
-
-        .notes-img-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+        /* جدول بيانات متجاوب للجوال */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 14px;
+            font-size: 13px;
+            white-space: nowrap;
         }
 
         .data-table th, .data-table td {
             border: 1px solid var(--border-color);
-            padding: 10px;
+            padding: 8px 10px;
             text-align: right;
         }
 
@@ -308,99 +261,64 @@
             color: var(--primary-green);
         }
 
-        /* --- تصميم الشهادة للطباعة والـ PDF --- */
-        .certificate-view {
-            display: none;
+        /* بنود القوالب والتفتيش */
+        .item-row {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #fafafa;
+        }
+
+        .status-options {
+            display: flex;
+            gap: 15px;
+            margin: 8px 0;
             background: var(--white);
-            width: 100%;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 30px;
-            border: 8px solid var(--primary-gold);
-            position: relative;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
         }
 
-        .cert-header {
+        .notes-img-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary-green);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
         }
 
-        .cert-title {
-            text-align: center;
-            font-size: 24px;
-            color: var(--primary-green);
-            margin: 15px 0;
-            font-weight: bold;
-        }
-
-        .cert-body {
-            line-height: 1.8;
-            font-size: 15px;
-            margin-bottom: 25px;
-        }
-
-        .cert-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-            font-size: 12px;
+        @media (min-width: 600px) {
+            .notes-img-container {
+                flex-direction: row;
+            }
         }
 
         footer {
             text-align: center;
-            padding: 15px;
+            padding: 12px;
             color: #718096;
-            font-size: 12px;
+            font-size: 11px;
             border-top: 1px solid var(--border-color);
             background: var(--white);
             margin-top: auto;
-        }
-
-        /* التوافق مع الطباعة والتصدير */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .certificate-view, .certificate-view * {
-                visibility: visible;
-            }
-            .certificate-view {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                border: 4px solid var(--primary-gold);
-                box-shadow: none;
-            }
-            .no-print {
-                display: none !important;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. شاشة تسجيل الدخول -->
+    <!-- 1. تسجيل الدخول -->
     <div id="loginPage" class="login-wrapper">
         <div class="login-card">
-            <div class="brand-logo-container" style="margin-bottom: 20px;">
+            <div style="margin-bottom: 15px;">
                 <svg class="brand-logo-svg" viewBox="0 0 100 100">
                     <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c59b27"/>
-                    <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V30 Z" fill="#ffffff"/>
+                    <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
                     <path d="M38 48 L46 56 L64 36" fill="none" stroke="#1b4332" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <div class="brand-logo-text">رمز الامتثال</div>
+                <h3 style="color: var(--primary-green); margin-top: 5px;">رمز الامتثال</h3>
             </div>
             
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>البريد الإلكتروني</label>
                     <input type="email" id="loginEmail" class="form-control" required placeholder="drfirasahfiz@gmail.com">
@@ -409,322 +327,249 @@
                     <label>كلمة المرور</label>
                     <input type="password" id="loginPassword" class="form-control" required placeholder="******">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">تسجيل الدخول</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">تسجيل الدخول</button>
             </form>
         </div>
     </div>
 
-    <!-- 2. لوحة التحكم والعمليات الرئيسي -->
-    <div id="dashboardPage" class="dashboard">
-        <header class="no-print">
+    <!-- 2. لوحة التحكم -->
+    <div id="dashboardPage" style="display: none; flex-direction: column; min-height: 100vh;">
+        <header>
             <div class="header-right">
-                <!-- زر القائمة الثلاث نقاط -->
                 <div class="three-dots-menu">
                     <button class="dots-btn" onclick="toggleDropdown()">&#8942;</button>
                     <div id="dotsDropdown" class="dropdown-content">
                         <a href="#" onclick="openSection('dashboardSummary')">الرئيسية والملخص</a>
-                        <a href="#" onclick="openSection('certificatesSection')">قائمة الشهادات</a>
-                        <a href="#" onclick="openSection('tasksSection')">قائمة المهام</a>
-                        <a href="#" onclick="openSection('employeesSection')">قائمة الموظفين</a>
-                        <a href="#" onclick="openSection('templatesSection')">قائمة القوالب والتفتيش</a>
-                        <a href="#" onclick="openSection('createTaskSection')">إنشاء مهمة جديدة</a>
+                        <a href="#" onclick="openSection('clientsSection')">قائمة العملاء (المطابخ)</a>
+                        <a href="#" onclick="openSection('certificatesSection')">قائمة الشهادات المسجلة</a>
+                        <a href="#" onclick="openSection('reportsSection')">متابعة تقارير الموظفين (GPS)</a>
+                        <a href="#" onclick="openSection('templatesSection')">إنشاء قوالب التفتيش (البنود)</a>
+                        <a href="#" onclick="openSection('fillReportSection')">تعبئة تقرير ميداني (للمراقب)</a>
                         <a href="#" id="usersOption" onclick="openSection('usersSection')">إدارة الصلاحيات واليوزرات</a>
                     </div>
                 </div>
 
-                <svg class="brand-logo-svg" style="width: 40px; height: 40px;" viewBox="0 0 100 100">
+                <svg class="brand-logo-svg" style="width: 35px; height: 35px;" viewBox="0 0 100 100">
                     <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c59b27"/>
                     <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
                     <path d="M38 48 L46 56 L64 36" fill="none" stroke="#1b4332" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <h3 style="color: var(--primary-green); font-size: 18px;">رمز الامتثال</h3>
+                <span style="font-weight: bold; color: var(--primary-green); font-size: 15px;">رمز الامتثال</span>
             </div>
 
             <div>
-                <span id="currentUserDisplay" style="font-weight: bold; margin-left: 8px; font-size: 13px;"></span>
-                <button class="btn" style="background:#e53e3e; color:white; padding: 6px 12px; font-size: 12px;" onclick="logout()">خروج</button>
+                <button class="btn" style="background:#e53e3e; color:white; padding: 4px 8px; font-size: 11px;" onclick="logout()">خروج</button>
             </div>
         </header>
 
-        <div class="container no-print">
-            
-            <!-- أ. الرئيسية والملخص الشامل -->
+        <div class="container">
+            <!-- أ. الرئيسية والملخص -->
             <div id="dashboardSummary" class="page-section active">
-                <h2 style="color: var(--primary-green); margin-bottom: 20px;">ملخص النظام والإحصائيات</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <h4>الشهادات المصدرة</h4>
-                        <div class="value" id="countCerts">12</div>
+                        <h4>الشهادات المسجلة</h4>
+                        <div class="value" id="countCerts">1</div>
                     </div>
                     <div class="stat-card">
-                        <h4>المهام الجارية</h4>
-                        <div class="value" id="countTasks">5</div>
+                        <h4>قائمة العملاء</h4>
+                        <div class="value" id="countClients">2</div>
                     </div>
                     <div class="stat-card">
-                        <h4>الموظفين والمراقبين</h4>
-                        <div class="value" id="countEmployees">8</div>
+                        <h4>تقارير جارية</h4>
+                        <div class="value">1</div>
                     </div>
                     <div class="stat-card">
-                        <h4>قوالب التفتيش المتاحة</h4>
-                        <div class="value">4</div>
+                        <h4>القوالب المتاحة</h4>
+                        <div class="value" id="countTemplates">1</div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3 class="card-title">وصول سريع للمهام القادمة</h3>
-                    <p style="font-size: 14px; color: #4a5568;">يمكنك إمّا إنشاء مهمة جديدة أو اختيار إحدى القوائم عبر قائمة الثلاث نقاط بالأعلى.</p>
+                    <h3 class="card-title">مرحباً بك في لوحة تحكم رمز الامتثال</h3>
+                    <p style="font-size: 13px; color: #4a5568;">اضغط على قائمة النقاط الثلاث بأعلى الصفحة للانتقال السريع بين إدارة العملاء، القوالب، التفتيش، والشهادات.</p>
                 </div>
             </div>
 
-            <!-- ب. قائمة الشهادات -->
+            <!-- ب. قائمة العملاء (المطابخ) -->
+            <div id="clientsSection" class="page-section">
+                <div class="card">
+                    <h3 class="card-title">إضافة مطبخ / عميل جديد</h3>
+                    <form onsubmit="addClient(event)" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <input type="text" id="clientName" class="form-control" required placeholder="اسم المطبخ / المنشأة" style="flex: 2; min-width: 180px;">
+                        <input type="text" id="clientLocation" class="form-control" placeholder="الموقع / الحي" style="flex: 1; min-width: 120px;">
+                        <button type="submit" class="btn btn-primary">حفظ العميل</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">قائمة العملاء المعتمدين</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>اسم المنشأة/المطبخ</th>
+                                    <th>الموقع</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ج. قائمة الشهادات المسجلة -->
             <div id="certificatesSection" class="page-section">
                 <div class="card">
-                    <h3 class="card-title">قائمة الشهادات المصدرة</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>رقم الشهادة</th>
-                                <th>اسم المنشأة</th>
-                                <th>تاريخ الإصدار</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>CERT-2026-001</td>
-                                <td>مؤسسة الأفق الطبي</td>
-                                <td>2026-03-15</td>
-                                <td><button class="btn btn-primary" style="padding: 4px 8px; font-size: 12px;" onclick="generateCertificate('CERT-2026-001', 'مؤسسة الأفق الطبي', '2026-03-15')">عرض وطباعة PDF</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 class="card-title">تسجيل شهادة لمطبخ (بدون إجبار طباعة)</h3>
+                    <form onsubmit="registerCertificate(event)" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <select id="certClientSelect" class="form-control" required style="flex: 2; min-width: 180px;"></select>
+                        <input type="text" id="certNumber" class="form-control" placeholder="رقم الشهادة (مثل HA0001)" required style="flex: 1; min-width: 140px;">
+                        <button type="submit" class="btn btn-success">تسجيل الشهادة بالسجل</button>
+                    </form>
                 </div>
-            </div>
 
-            <!-- ج. قائمة المهام -->
-            <div id="tasksSection" class="page-section">
                 <div class="card">
-                    <h3 class="card-title">قائمة مهام المعاينة والتفتيش</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>اسم المهمة</th>
-                                <th>المراقب المكلف</th>
-                                <th>الحالة</th>
-                                <th>الموعد</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>تفتيش مجمع الخالدية</td>
-                                <td>مراقب ميداني 1</td>
-                                <td><span style="color: #dd6b20; font-weight: bold;">قيد التنفيذ</span></td>
-                                <td>2026-03-30</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 class="card-title">سجل المطابخ الحاصلة على شهادات</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الشهادة</th>
+                                    <th>اسم المطبخ/المنشأة</th>
+                                    <th>تاريخ التسجيل</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="certsTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- د. قائمة الموظفين -->
-            <div id="employeesSection" class="page-section">
+            <!-- د. متابعة تقارير الموظفين والموقع -->
+            <div id="reportsSection" class="page-section">
                 <div class="card">
-                    <h3 class="card-title">سجل الموظفين والمراقبين</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>اسم الموظف</th>
-                                <th>المسمى الوظيفي</th>
-                                <th>البريد الإلكتروني</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>د. فراس</td>
-                                <td>مدير النظام (Admin)</td>
-                                <td>drfirasahfiz@gmail.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 class="card-title">اطلاع مباشر على تقارير الموظفين والموقع (GPS)</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>اسم المراقب</th>
+                                    <th>المنشأة</th>
+                                    <th>التاريخ والوقت</th>
+                                    <th>موقع المراقب (GPS)</th>
+                                    <th>حالة التقرير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>مراقب ميداني 1</td>
+                                    <td>مطبخ الخالدية الحديث</td>
+                                    <td>2026-10-01 10:30 ص</td>
+                                    <td><span style="color: #2b6cb0; font-weight: bold;">21.4225° N, 39.8261° E (مكة)</span></td>
+                                    <td><span style="color: #276749; font-weight: bold;">مكتمَل</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- هـ. قائمة القوالب وتعبئة التقرير -->
+            <!-- هـ. إنشاء قوالب التفتيش (البنود بواسطة المسؤول) -->
             <div id="templatesSection" class="page-section">
                 <div class="card">
-                    <h3 class="card-title">بيانات المنشأة والشهادة</h3>
-                    <div class="form-grid-3">
-                        <div class="form-group">
-                            <label>رقم الشهادة (يدوي)</label>
-                            <input type="text" id="certNumberInput" class="form-control" placeholder="مثال: CERT-2026-001">
-                        </div>
-                        <div class="form-group">
-                            <label>اسم المنشأة/الجهة</label>
-                            <input type="text" id="facilityNameInput" class="form-control" placeholder="اسم المنشأة">
-                        </div>
-                        <div class="form-group">
-                            <label>تاريخ التفتيش</label>
-                            <input type="date" id="inspectionDateInput" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">قائمة بنود الامتثال الميدانية</h3>
-                    
-                    <div class="item-row">
-                        <h4>1. مدى الالتزام بالاشتراطات الصحية والتراخيص النظامية</h4>
-                        <div class="status-options">
-                            <label style="color: #276749;"><input type="radio" name="item1" value="محقق"> محقق</label>
-                            <label style="color: #dd6b20;"><input type="radio" name="item1" value="غير محقق"> غير محقق</label>
-                            <label style="color: #e53e3e;"><input type="radio" name="item1" value="غير ممتثل"> غير ممتثل</label>
-                        </div>
-                        <div class="notes-img-container">
-                            <input type="text" class="form-control" placeholder="ملاحظات المراقب...">
-                            <input type="file" accept="image/*" class="form-control">
-                        </div>
+                    <h3 class="card-title">بناء قالب تقرير جديد (أنت تضع البنود والأسئلة)</h3>
+                    <div class="form-group">
+                        <label>اسم القالب</label>
+                        <input type="text" id="templateTitle" class="form-control" placeholder="مثال: قالب تفتيش السلامة والنظافة للمطابخ">
                     </div>
 
-                    <div class="item-row">
-                        <h4>2. جاهزية وتوفر معدات السلامة العامة</h4>
-                        <div class="status-options">
-                            <label style="color: #276749;"><input type="radio" name="item2" value="محقق"> محقق</label>
-                            <label style="color: #dd6b20;"><input type="radio" name="item2" value="غير محقق"> غير محقق</label>
-                            <label style="color: #e53e3e;"><input type="radio" name="item2" value="غير ممتثل"> غير ممتثل</label>
-                        </div>
-                        <div class="notes-img-container">
-                            <input type="text" class="form-control" placeholder="ملاحظات المراقب...">
-                            <input type="file" accept="image/*" class="form-control">
-                        </div>
+                    <div id="questionsBuilderContainer">
+                        <!-- إضافة الأسئلة ديناميكياً -->
                     </div>
 
-                    <button class="btn btn-success" onclick="generateFromForm()">حفظ وإنشاء الشهادة / التقرير</button>
+                    <button class="btn btn-primary" onclick="addQuestionInput()" style="margin-top: 10px; width: 100%;">+ إضافة بند/سؤال جديد للقالب</button>
+                    <button class="btn btn-success" onclick="saveCustomTemplate()" style="margin-top: 10px; width: 100%;">حفظ القالب بالكامل</button>
                 </div>
             </div>
 
-            <!-- و. إنشاء مهمة جديدة -->
-            <div id="createTaskSection" class="page-section">
+            <!-- و. تعبئة تقرير ميداني (المراقب يعبي البنود اللي حطيتها) -->
+            <div id="fillReportSection" class="page-section">
                 <div class="card">
-                    <h3 class="card-title">إسناد مهمة تفتيش جديدة</h3>
-                    <form onsubmit="alert('تم حفظ وإسناد المهمة بنجاح!'); reset(); openSection('tasksSection'); return false;">
-                        <div class="form-group">
-                            <label>عنوان المهمة</label>
-                            <input type="text" class="form-control" required placeholder="مثال: تفتيش موقع الخالدية">
-                        </div>
-                        <div class="form-group">
-                            <label>المراقب المكلف</label>
-                            <input type="text" class="form-control" required placeholder="اسم المراقب">
-                        </div>
-                        <div class="form-group">
-                            <label>تاريخ وتوقيت المهمة</label>
-                            <input type="date" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">حفظ المهمة</button>
-                    </form>
+                    <h3 class="card-title">تعبئة تقرير ميداني من قبل المراقب</h3>
+                    <div class="form-group">
+                        <label>اختر المنشأة/المطبخ</label>
+                        <select id="reportClientSelect" class="form-control"></select>
+                    </div>
+
+                    <div id="activeReportQuestions">
+                        <!-- تحميل البنود التي أنشأها المسؤول -->
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>محضر وتوصية المراقب الميداني النهائي</label>
+                        <textarea class="form-control" rows="3" placeholder="اكتب المحضر والملخص الميداني هنا..."></textarea>
+                    </div>
+
+                    <button class="btn btn-success" onclick="alert('تم حفظ التقرير الميداني وتوثيقه بنجاح!'); openSection('reportsSection');" style="width: 100%;">إرسال وتوثيق التقرير الميداني</button>
                 </div>
             </div>
 
             <!-- ز. إدارة الصلاحيات واليوزرات -->
             <div id="usersSection" class="page-section">
                 <div class="card">
-                    <h3 class="card-title">إضافة مستخدم / مراقب جديد</h3>
-                    <form onsubmit="addUser(event)" class="form-grid-3" style="align-items: end;">
-                        <div class="form-group" style="margin:0;">
-                            <label>البريد الإلكتروني</label>
-                            <input type="email" id="newEmail" class="form-control" required placeholder="user@domain.com">
-                        </div>
-                        <div class="form-group" style="margin:0;">
-                            <label>كلمة المرور</label>
-                            <input type="text" id="newPassword" class="form-control" required placeholder="123456">
-                        </div>
-                        <div class="form-group" style="margin:0;">
-                            <label>الصلاحية</label>
-                            <select id="newRole" class="form-control">
-                                <option value="مراقب">مراقب ميداني</option>
-                                <option value="مشرف">مشرف عام</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">إضافة</button>
+                    <h3 class="card-title">إدارة حسابات الصلاحيات</h3>
+                    <form onsubmit="addUser(event)" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <input type="email" id="newEmail" class="form-control" required placeholder="user@domain.com" style="flex: 1; min-width: 150px;">
+                        <input type="text" id="newPassword" class="form-control" required placeholder="كلمة المرور" style="flex: 1; min-width: 100px;">
+                        <button type="submit" class="btn btn-primary">إضافة</button>
                     </form>
 
-                    <h3 class="card-title" style="margin-top: 25px;">المستخدمين المصرح لهم</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>البريد الإلكتروني</th>
-                                <th>كلمة المرور</th>
-                                <th>الصلاحية</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody"></tbody>
-                    </table>
+                    <div class="table-responsive" style="margin-top: 15px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>كلمة المرور</th>
+                                    <th>الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- المعاينة والطباعة للشهادة والتقرير -->
-        <div id="certificateView" class="certificate-view">
-            <div class="cert-header">
-                <div>
-                    <h3 style="color: var(--primary-green);">رمز الامتثال</h3>
-                    <p style="font-size: 11px; color: #718096;">للاستشارات وتقييم الامتثال</p>
-                </div>
-                <div class="brand-logo-container">
-                    <svg class="brand-logo-svg" style="width: 60px; height: 60px;" viewBox="0 0 100 100">
-                        <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c59b27"/>
-                        <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
-                        <path d="M38 48 L46 56 L64 36" fill="none" stroke="#1b4332" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div style="text-align: left; font-size: 12px;">
-                    <div><strong>رقم الشهادة:</strong> <span id="certNumDisplay">---</span></div>
-                    <div><strong>التاريخ:</strong> <span id="certDateDisplay">---</span></div>
-                </div>
-            </div>
-
-            <div class="cert-title">شهادة امتثال وتقييم ميداني</div>
-
-            <div class="cert-body">
-                تشهد منصة <strong>رمز الامتثال</strong> بأنه بعد إجراء المعاينة والتقييم الميداني لمنشأة:
-                <h3 id="certFacilityDisplay" style="text-align: center; color: var(--primary-gold); margin: 12px 0;">---</h3>
-                قد استوفت المنشأة معايير واشتراطات الامتثال وفق موجز الفحص والتفتيش.
-            </div>
-
-            <div class="cert-footer">
-                <div>
-                    <p><strong>العنوان:</strong> مكة المكرمة - حي الزائدي - بجوار صيدلية غايا</p>
-                    <p><strong>البريد:</strong> drfirasahfiz@gmail.com</p>
-                </div>
-                <div style="text-align: center;">
-                    <p>ختم الاعتماد الرسمي</p>
-                    <div style="margin-top: 8px; border-bottom: 2px solid var(--primary-green); width: 100px; display: inline-block;"></div>
-                </div>
-            </div>
-
-            <div class="no-print" style="margin-top: 20px; text-align: center;">
-                <button class="btn btn-primary" onclick="window.print()">طباعة / تصدير PDF</button>
-                <button class="btn" style="background:#718096; color:white; margin-right: 5px;" onclick="closeCert()">إغلاق</button>
-            </div>
-        </div>
-
-        <footer class="no-print">
+        <footer>
             الموقع: مكة المكرمة - حي الزائدي - بجوار صيدلية غايا | البريد: drfirasahfiz@gmail.com <br>
             جميع الحقوق محفوظة لـ <strong>رمز الامتثال</strong> &copy; 2026
         </footer>
     </div>
 
     <script>
-        // المستخدمون الصلاحيات
-        let users = JSON.parse(localStorage.getItem('app_users_v3')) || [
-            { email: 'drfirasahfiz@gmail.com', pass: '12345', role: 'مدير النظام (Admin)' }
+        // البيانات الأساسية المخزنة
+        let clients = JSON.parse(localStorage.getItem('app_clients')) || ['مطبخ الخالدية الحديث', 'مطبخ الشاطئ الذهبي'];
+        let certs = JSON.parse(localStorage.getItem('app_certs')) || [
+            { num: 'HA0001', client: 'مطبخ الخالدية الحديث', date: '2026-10-01' }
+        ];
+        let users = JSON.parse(localStorage.getItem('app_users_v4')) || [
+            { email: 'drfirasahfiz@gmail.com', pass: '12345' }
+        ];
+        let customQuestions = JSON.parse(localStorage.getItem('app_questions')) || [
+            'مدى الالتزام بالاشتراطات الصحية والتراخيص',
+            'توفر وسلائم أجهزة ومعدات السلامة'
         ];
 
         let currentUser = null;
 
-        function saveUsers() {
-            localStorage.setItem('app_users_v3', JSON.stringify(users));
+        function saveAll() {
+            localStorage.setItem('app_clients', JSON.stringify(clients));
+            localStorage.setItem('app_certs', JSON.stringify(certs));
+            localStorage.setItem('app_users_v4', JSON.stringify(users));
+            localStorage.setItem('app_questions', JSON.stringify(customQuestions));
         }
 
         // تسجيل الدخول
@@ -733,130 +578,168 @@
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPassword').value;
 
-            const foundUser = users.find(u => u.email === email && u.pass === pass);
-
-            if (foundUser) {
-                currentUser = foundUser;
+            const user = users.find(u => u.email === email && u.pass === pass);
+            if (user) {
+                currentUser = user;
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('dashboardPage').style.display = 'flex';
-                document.getElementById('currentUserDisplay').innerText = `${currentUser.email}`;
 
                 if (currentUser.email !== 'drfirasahfiz@gmail.com') {
                     document.getElementById('usersOption').style.display = 'none';
-                } else {
-                    document.getElementById('usersOption').style.display = 'block';
-                    renderUsersTable();
                 }
+
+                refreshUI();
                 openSection('dashboardSummary');
             } else {
-                alert('البريد الإلكتروني أو كلمة المرور غير صحيحة!');
+                alert('البريد أو كلمة المرور غير صحيحة!');
             }
         }
 
         function logout() {
-            currentUser = null;
             document.getElementById('dashboardPage').style.display = 'none';
             document.getElementById('loginPage').style.display = 'flex';
-            document.getElementById('loginForm').reset();
-            closeCert();
         }
 
-        // التحكم بالقائمة المنسدلة الثلاث نقاط
         function toggleDropdown() {
             document.getElementById("dotsDropdown").classList.toggle("show");
         }
 
-        window.onclick = function(event) {
-            if (!event.target.matches('.dots-btn')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
+        window.onclick = function(e) {
+            if (!e.target.matches('.dots-btn')) {
+                let dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].classList.remove('show');
                 }
             }
         }
 
-        // التنقل بين الأقسام من القائمة
-        function openSection(sectionId) {
+        function openSection(id) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            closeCert();
+            document.getElementById(id).classList.add('active');
         }
 
-        // إدارة المستخدمين
+        // إحداثيات وتحديث UI
+        function refreshUI() {
+            // تحديث العملاء
+            const clientBody = document.getElementById('clientsTableBody');
+            const clientSelect1 = document.getElementById('certClientSelect');
+            const clientSelect2 = document.getElementById('reportClientSelect');
+
+            clientBody.innerHTML = '';
+            clientSelect1.innerHTML = '';
+            clientSelect2.innerHTML = '';
+
+            clients.forEach((c, idx) => {
+                clientBody.innerHTML += `<tr><td>${idx+1}</td><td>${c}</td><td>مكة المكرمة</td></tr>`;
+                clientSelect1.innerHTML += `<option value="${c}">${c}</option>`;
+                clientSelect2.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+
+            // تحديث الشهادات
+            const certsBody = document.getElementById('certsTableBody');
+            certsBody.innerHTML = '';
+            certs.forEach(c => {
+                certsBody.innerHTML += `<tr><td><strong>${c.num}</strong></td><td>${c.client}</td><td>${c.date}</td><td><span style="color:#276749; font-weight:bold;">سارية</span></td></tr>`;
+            });
+
+            document.getElementById('countCerts').innerText = certs.length;
+            document.getElementById('countClients').innerText = clients.length;
+
+            renderTemplateQuestions();
+            renderUsers();
+        }
+
+        function addClient(e) {
+            e.preventDefault();
+            const name = document.getElementById('clientName').value;
+            if (name) {
+                clients.push(name);
+                saveAll();
+                refreshUI();
+                document.getElementById('clientName').value = '';
+                alert('تم حفظ العميل بنجاح');
+            }
+        }
+
+        function registerCertificate(e) {
+            e.preventDefault();
+            const client = document.getElementById('certClientSelect').value;
+            const num = document.getElementById('certNumber').value;
+            const date = new Date().toISOString().split('T')[0];
+
+            certs.push({ num, client, date });
+            saveAll();
+            refreshUI();
+            alert('تم تسجيل الشهادة بالسجل بنجاح!');
+        }
+
+        // بناء الأسئلة والقوالب
+        function addQuestionInput() {
+            const container = document.getElementById('questionsBuilderContainer');
+            const count = container.children.length + 1;
+            container.innerHTML += `
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>البند/السؤال رقم ${count}</label>
+                    <input type="text" class="form-control custom-q-input" placeholder="اكتب نص السؤال هنا...">
+                </div>
+            `;
+        }
+
+        function saveCustomTemplate() {
+            const inputs = document.querySelectorAll('.custom-q-input');
+            inputs.forEach(inp => {
+                if(inp.value.trim() !== '') {
+                    customQuestions.push(inp.value.trim());
+                }
+            });
+            saveAll();
+            refreshUI();
+            alert('تم حفظ القالب وبنوده بنجاح!');
+        }
+
+        function renderTemplateQuestions() {
+            const activeContainer = document.getElementById('activeReportQuestions');
+            activeContainer.innerHTML = '';
+
+            customQuestions.forEach((q, idx) => {
+                activeContainer.innerHTML += `
+                    <div class="item-row">
+                        <h4 style="font-size: 13px;">${idx+1}. ${q}</h4>
+                        <div class="status-options">
+                            <label style="color: #276749;"><input type="radio" name="q_${idx}" value="ممتثل"> ممتثل</label>
+                            <label style="color: #e53e3e;"><input type="radio" name="q_${idx}" value="غير ممتثل"> غير ممتثل</label>
+                            <label style="color: #718096;"><input type="radio" name="q_${idx}" value="لا ينطبق"> لا ينطبق</label>
+                        </div>
+                        <div class="notes-img-container">
+                            <input type="text" class="form-control" placeholder="ملاحظة المراقب..." style="font-size: 12px;">
+                            <input type="file" accept="image/*" class="form-control" style="font-size: 12px;">
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
         function addUser(e) {
             e.preventDefault();
             const email = document.getElementById('newEmail').value;
             const pass = document.getElementById('newPassword').value;
-            const role = document.getElementById('newRole').value;
-
-            if (users.some(u => u.email === email)) {
-                alert('البريد مضاف مسبقاً!');
-                return;
-            }
-
-            users.push({ email, pass, role });
-            saveUsers();
-            renderUsersTable();
+            users.push({ email, pass });
+            saveAll();
+            renderUsers();
             e.target.reset();
-            alert('تمت إضافة المستخدم بنجاح!');
         }
 
-        function renderUsersTable() {
+        function renderUsers() {
             const tbody = document.getElementById('usersTableBody');
             tbody.innerHTML = '';
-
-            users.forEach((u, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${u.email}</td>
-                    <td>${u.pass}</td>
-                    <td>${u.role}</td>
-                    <td>
-                        ${u.email !== 'drfirasahfiz@gmail.com' ? `<button onclick="deleteUser(${index})" style="background:#e53e3e; color:white; border:none; padding:3px 6px; border-radius:4px; cursor:pointer;">حذف</button>` : '<span style="color:var(--primary-gold); font-weight:bold;">الآدمن</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            users.forEach(u => {
+                tbody.innerHTML += `<tr><td>${u.email}</td><td>${u.pass}</td><td>مُصرح</td></tr>`;
             });
         }
 
-        function deleteUser(index) {
-            if (confirm('حذف المستخدم؟')) {
-                users.splice(index, 1);
-                saveUsers();
-                renderUsersTable();
-            }
-        }
-
-        // إنشاء وعرض الشهادة والتقرير
-        function generateFromForm() {
-            const num = document.getElementById('certNumberInput').value;
-            const fac = document.getElementById('facilityNameInput').value;
-            const date = document.getElementById('inspectionDateInput').value;
-
-            if(!num || !fac) {
-                alert('يرجى كتابة رقم الشهادة واسم المنشأة');
-                return;
-            }
-            generateCertificate(num, fac, date);
-        }
-
-        function generateCertificate(num, fac, date) {
-            document.getElementById('certNumDisplay').innerText = num;
-            document.getElementById('certFacilityDisplay').innerText = fac;
-            document.getElementById('certDateDisplay').innerText = date || new Date().toISOString().split('T')[0];
-
-            document.getElementById('certificateView').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('certificateView').offsetTop, behavior: 'smooth' });
-        }
-
-        function closeCert() {
-            document.getElementById('certificateView').style.display = 'none';
-        }
-
-        saveUsers();
+        // التهيئة
+        addQuestionInput();
+        saveAll();
     </script>
 </body>
 </html>
