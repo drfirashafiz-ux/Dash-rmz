@@ -2,677 +2,1000 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منظومة إدارة وتقارير الرقابة والامتثال - التقرير الشامل</title>
-    
-    <!-- Bootstrap 5 RTL -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- jsPDF & html2canvas للتصدير إلى PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- SheetJS للتصدير إلى Excel -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>رمز الامتثال - للاستشارات الغذائية وسلامة الغذاء</title>
     <style>
         :root {
-            --primary-color: #1b4332;
-            --secondary-color: #2d6a4f;
-            --accent-color: #d4af37;
-            --light-bg: #f8f9fa;
-            --border-color: #e0e0e0;
+            --brand-green-dark: #0f3825;
+            --brand-green-header: #0b2b1c;
+            --brand-gold: #c69214;
+            --brand-gold-light: #d8a72b;
+            --bg-light: #f2f4f5;
+            --card-bg: #ffffff;
+            --text-main: #1a202c;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f3f4f6;
-            color: #333;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        .navbar-custom {
-            background-color: var(--primary-color);
+        /* --- الهيدر العلوي بنمط الهوية المرفقة --- */
+        .hero-header {
+            background-color: var(--brand-green-header);
             color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            padding: 20px 15px 25px 15px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid var(--brand-gold);
         }
 
-        .card-custom {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        .header-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto 15px auto;
+        }
+
+        .brand-logo-box {
             background: #ffffff;
-            margin-bottom: 20px;
-        }
-
-        /* تنسيق هيكلية وهوية تقرير PDF */
-        #reportExportContainer {
-            background: #ffffff;
-            padding: 40px;
+            padding: 6px 10px;
             border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 0 20px rgba(0,0,0,0.03);
-            max-width: 1000px;
-            margin: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid var(--brand-gold);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
-        .report-header-identity {
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+        .brand-title-group h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
         }
 
-        .brand-logo-placeholder {
-            width: 70px;
-            height: 70px;
-            background-color: var(--primary-color);
-            color: var(--accent-color);
-            border-radius: 50%;
+        .brand-sub {
+            font-size: 11px;
+            color: #d1d5db;
+            margin-top: 2px;
+        }
+
+        .header-pills {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pill-tag {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--brand-gold);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
             display: flex;
             align-items: center;
+            gap: 6px;
+        }
+
+        .pill-btn {
+            background: var(--brand-gold);
+            color: #ffffff;
+            font-weight: bold;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+        }
+
+        /* --- شاشة تسجيل الدخول --- */
+        .login-wrapper {
+            display: flex;
             justify-content: center;
-            font-size: 30px;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--brand-green-header) 0%, #05140d 100%);
+            padding: 15px;
         }
 
-        .stat-card-box {
-            background-color: var(--light-bg);
+        .login-card {
+            background: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            border-top: 5px solid var(--brand-gold);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--brand-green-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 20px;
-            border-right: 5px solid var(--secondary-color);
-        }
-
-        .stat-card-box.danger-border {
-            border-right-color: #dc3545;
-        }
-
-        .stat-card-box.success-border {
-            border-right-color: #198754;
-        }
-
-        .badge-status-compliant {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid #a5d6a7;
-        }
-
-        .badge-status-non-compliant {
-            background-color: #ffebee;
-            color: #c62828;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid #ef9a9a;
-        }
-
-        .photo-evidence-card {
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
+            font-size: 13px;
+            outline: none;
             background: #fff;
         }
 
-        .photo-evidence-card img {
+        .form-control:focus {
+            border-color: var(--brand-gold);
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary { background-color: var(--brand-gold); color: #fff; }
+        .btn-primary:hover { background-color: var(--brand-gold-light); }
+        .btn-success { background-color: var(--brand-green-dark); color: #fff; }
+
+        /* --- القائمة العلوية والأضرار --- */
+        .three-dots-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 15px;
+            top: 60px;
+            background-color: #ffffff;
+            min-width: 240px;
+            box-shadow: 0px 8px 25px rgba(0,0,0,0.2);
+            border-radius: 14px;
+            z-index: 1001;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-content a {
+            color: var(--text-main);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f7fafc;
+            color: var(--brand-gold);
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        /* --- الحاوية الرئيسية والبطاقات بتصميم الاستايل المطلوب --- */
+        .container {
             width: 100%;
-            height: 140px;
-            object-fit: cover;
+            max-width: 900px;
+            margin: -15px auto 20px auto;
+            padding: 0 12px;
+            position: relative;
+            z-index: 100;
         }
 
-        .photo-evidence-card .caption {
-            padding: 8px;
-            font-size: 0.82rem;
+        .page-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card-header-title {
+            color: var(--brand-green-dark);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--brand-gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* شبكة الإحصائيات الموجزة */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: #fdfbf7;
+            padding: 15px;
+            border-radius: 12px;
+            border-right: 4px solid var(--brand-gold);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border-top: 1px solid #f3ebd9;
+            border-bottom: 1px solid #f3ebd9;
+            border-left: 1px solid #f3ebd9;
+        }
+
+        .stat-card h4 {
+            color: var(--text-muted);
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+        .stat-card .value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--brand-green-dark);
+        }
+
+        /* بطاقة اقتباس الهوية المرفقة */
+        .motto-card {
+            background: #f0f7f3;
+            border-radius: 12px;
+            padding: 14px;
+            border-right: 4px solid var(--brand-green-dark);
+            margin-top: 10px;
+        }
+
+        .motto-card p {
+            font-size: 12px;
+            color: var(--brand-green-dark);
+            font-weight: 600;
             text-align: center;
+        }
+
+        /* الجداول المستجيبة */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: right;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            color: var(--brand-green-dark);
+            font-weight: 700;
+        }
+
+        .item-row {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
             background: #fafafa;
-            color: #555;
-            border-top: 1px solid #eee;
         }
 
-        .report-footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-            font-size: 0.85rem;
-            color: #777;
+        .status-options {
+            display: flex;
+            gap: 15px;
+            margin: 8px 0;
+            background: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            border: 1px solid #eee;
         }
 
-        @media print {
-            body { background: white; }
-            .no-print { display: none !important; }
-            #reportExportContainer { border: none; box-shadow: none; padding: 0; }
+        .badge {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .badge-pending { background: #fefcbf; color: #744210; }
+        .badge-done { background: #c6f6d5; color: #22543d; }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--text-muted);
+            font-size: 11px;
+            border-top: 1px solid var(--border-color);
+            background: var(--card-bg);
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- الهيدر والنافبار -->
-    <nav class="navbar navbar-custom px-4 py-3 no-print">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white fw-bold d-flex align-items-center" href="#">
-                <i class="fa-solid fa-clipboard-check me-2 text-warning fs-3"></i>
-                <span>نظام التقارير الرقابية والامتثال</span>
-            </a>
-            <div class="d-flex align-items-center">
-                <div class="me-3 text-end d-none d-md-block">
-                    <small class="d-block text-white-50">صلاحية الجلسة:</small>
-                    <span class="fw-bold" id="userRoleBadge">المدير العام</span>
+    <!-- 1. شاشة تسجيل الدخول -->
+    <div id="loginPage" class="login-wrapper">
+        <div class="login-card">
+            <div style="margin-bottom: 15px;">
+                <div class="brand-logo-box" style="margin-bottom: 10px;">
+                    <svg style="width: 28px; height: 28px;" viewBox="0 0 100 100">
+                        <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c69214"/>
+                        <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
+                        <path d="M38 48 L46 56 L64 36" fill="none" stroke="#0f3825" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span style="font-weight: 800; color: #0f3825; font-size: 15px;">رمز الامتثال</span>
                 </div>
-                <select id="roleSelector" class="form-select form-select-sm bg-light fw-bold" onchange="toggleUserRole(this.value)">
-                    <option value="GM" selected>المدير العام (صلاحية كاملة لاستخراج التقارير)</option>
-                    <option value="INSPECTOR">مراقب / مشرف (لا يملك صلاحية الاستخراج)</option>
-                </select>
+                <h3 style="color: var(--brand-green-dark); font-size: 16px; margin-top: 5px;">تسجيل الدخول للنظام</h3>
             </div>
-        </div>
-    </nav>
-
-    <div class="container my-4">
-
-        <!-- شاشة منع الوصول للمستخدمين العاديين -->
-        <div id="accessDeniedPanel" class="alert alert-danger text-center p-5 card-custom d-none">
-            <i class="fa-solid fa-user-lock fa-4x text-danger mb-3"></i>
-            <h3 class="fw-bold">تنبيه: لا تملك الصلاحية اللازمة!</h3>
-            <p class="fs-5 text-muted mb-0">استخراج وتصدير تقارير الامتثال المجمعة والتفصيلية مقتصر حصراً على <strong>المدير العام</strong>.</p>
-        </div>
-
-        <!-- لوحة التحكم الرئيسية الخاصة بالتقارير -->
-        <div id="mainReportsDashboard">
             
-            <!-- أداة التصفية واختيار المطبخ ونوع التقرير -->
-            <div class="card-custom p-4 no-print">
-                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-filter me-2 text-success"></i>إعدادات استخراج التقرير</h5>
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">اختر المطبخ / المنشأة:</label>
-                        <select id="selectedKitchen" class="form-select form-select-lg" onchange="updateReportContent()">
-                            <option value="k1">مطبخ الخير المركزي - (سجل 12 زيارة سنوية)</option>
-                            <option value="k2">مطبخ الضيافة الكبرى - (سجل 8 زيارات سنوية)</option>
-                            <option value="k3">مطبخ النخبة الحديث - (سجل 5 زيارات سنوية)</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">نوع التقرير المطلوبة:</label>
-                        <select id="selectedReportMode" class="form-select form-select-lg" onchange="updateReportContent()">
-                            <option value="ANNUAL_AVERAGE">تقرير متوسط الزيارات المجمع (متوسط الـ 12 زيارة)</option>
-                            <option value="SINGLE_VISIT">تقرير زيارة منفردة (أحدث زيارة تفصيلية)</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4 text-start">
-                        <button class="btn btn-success btn-lg w-100 fw-bold" onclick="updateReportContent()">
-                            <i class="fa-solid fa-arrows-rotate me-2"></i>تحديث المعاينة
-                        </button>
-                    </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" class="form-control" required placeholder="drfirasahfiz@gmail.com">
                 </div>
-            </div>
-
-            <!-- شريط طرق الاستخراج والتصدير (الخيارات الثلاثة) -->
-            <div class="card-custom p-3 no-print d-flex flex-wrap justify-content-between align-items-center bg-white">
-                <div class="mb-2 mb-md-0">
-                    <h6 class="m-0 fw-bold text-secondary">
-                        <i class="fa-solid fa-download me-2 text-primary"></i>اختر طريقة استخراج التقرير:
-                    </h6>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="loginPassword" class="form-control" required placeholder="******">
                 </div>
-                <div class="d-flex gap-2">
-                    <!-- طريقة 1: المعاينة على الشاشة -->
-                    <button class="btn btn-outline-dark fw-bold" onclick="scrollToReportView()">
-                        <i class="fa-solid fa-desktop me-1"></i> المعاينة المباشرة
-                    </button>
-                    <!-- طريقة 2: تصدير PDF بنفس الهوية -->
-                    <button class="btn btn-danger fw-bold" onclick="exportReportToPDF()">
-                        <i class="fa-solid fa-file-pdf me-1"></i> تصدير PDF
-                    </button>
-                    <!-- طريقة 3: تصدير Excel -->
-                    <button class="btn btn-success fw-bold" onclick="exportReportToExcel()">
-                        <i class="fa-solid fa-file-excel me-1"></i> تصدير Excel
-                    </button>
-                </div>
-            </div>
-
-            <!-- حاوية التقرير الكاملة للطباعة والتصدير المعاينة -->
-            <div id="reportExportContainer">
-                
-                <!-- 1. الهوية والترويسة الرسمية للتقرير -->
-                <div class="report-header-identity d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="brand-logo-placeholder">
-                            <i class="fa-solid fa-building-circle-check"></i>
-                        </div>
-                        <div>
-                            <h3 class="fw-bold mb-1" style="color: var(--primary-color);" id="reportMainTitle">تقرير متوسط الامتثال السنوي</h3>
-                            <p class="text-muted mb-0 fw-bold" id="reportSubTitle">سجل متوسط الـ 12 زيارة الميدانية المعتمدة</p>
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <span class="badge bg-warning text-dark fs-6 px-3 py-2 mb-1" id="reportRefNo">REF-2026-K1</span>
-                        <div class="text-muted small">تاريخ التصدير: <strong id="currentExportDate"></strong></div>
-                    </div>
-                </div>
-
-                <!-- 2. معلومات الزيارات والمراقبين والوقت -->
-                <div class="card-custom p-3 bg-light mb-4">
-                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
-                        <i class="fa-solid fa-clipboard-list me-2 text-success"></i>معلومات التقرير والرقابة الميدانية
-                    </h6>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <small class="text-muted d-block">اسم المنشأة / المطبخ:</small>
-                            <strong class="fs-6 text-dark" id="displayKitchenName">مطبخ الخير المركزي</strong>
-                        </div>
-                        <div class="col-md-3">
-                            <small class="text-muted d-block">عدد الزيارات المشمولة:</small>
-                            <strong class="fs-6 text-dark" id="displayVisitsCount">12 زيارة ميدانية</strong>
-                        </div>
-                        <div class="col-md-3">
-                            <small class="text-muted d-block">طاقم المراقبين والمشرفين:</small>
-                            <strong class="fs-6 text-dark" id="displayInspectors">م. أحمد علي، م. خالد عمر، أ. سارة فهد</strong>
-                        </div>
-                        <div class="col-md-3">
-                            <small class="text-muted d-block">النطاق الزمني وساعات الزيارات:</small>
-                            <strong class="fs-6 text-dark" id="displayTimeRange">08:00 ص - 02:00 م (يناير - ديسمبر 2026)</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. الملخص الإحصائي والمتوسطات -->
-                <div class="row g-3 mb-4">
-                    <div class="col-md-4">
-                        <div class="stat-card-box success-border h-100 text-center d-flex flex-column justify-content-center">
-                            <small class="text-muted fw-bold">متوسط نسبة الامتثال العام</small>
-                            <h1 class="display-4 fw-bold text-success my-2" id="avgComplianceScore">88.5%</h1>
-                            <small class="text-success"><i class="fa-solid fa-arrow-up me-1"></i>متوسط مستقر للـ 12 زيارة</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stat-card-box success-border h-100 text-center d-flex flex-column justify-content-center">
-                            <small class="text-muted fw-bold">إجمالي البنود الممتثلة</small>
-                            <h1 class="display-4 fw-bold text-primary my-2" id="compliantItemsCount">42</h1>
-                            <small class="text-muted">بند مستوفي للمواصفات</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="stat-card-box danger-border h-100 text-center d-flex flex-column justify-content-center">
-                            <small class="text-muted fw-bold">إجمالي البنود غير الممتثلة</small>
-                            <h1 class="display-4 fw-bold text-danger my-2" id="nonCompliantItemsCount">6</h1>
-                            <small class="text-danger">ملاحظات ومخالفات رُصدت</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 4. الرسم البياني لمؤشر الزيارات -->
-                <div class="card-custom p-3 mb-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-chart-line me-2 text-primary"></i>مؤشر الامتثال عبر الـ 12 زيارة السنوية:</h6>
-                    <div style="height: 220px;">
-                        <canvas id="visitsTrendChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- 5. تفاصيل البنود غير الممتثلة والبنود الممتثلة -->
-                <div class="row g-3 mb-4">
-                    <!-- البنود غير الممتثلة (الملاحظات) -->
-                    <div class="col-md-6">
-                        <div class="card-custom p-3 border-top border-danger border-4 h-100">
-                            <h6 class="fw-bold text-danger mb-3">
-                                <i class="fa-solid fa-triangle-exclamation me-2"></i>البنود غير الممتثلة (الملاحظات والمخالفات)
-                            </h6>
-                            <ul class="list-group list-group-flush" id="nonCompliantList">
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>1. ضبط درجة حرارة ثلاجات التبريد</span>
-                                    <span class="badge-status-non-compliant">تكرر 4 مرات</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>2. كفاءة تهوية منطقة التحضير</span>
-                                    <span class="badge-status-non-compliant">تكرر مرتين</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>3. توثيق سجلات درجات الحرارة اليومية</span>
-                                    <span class="badge-status-non-compliant">تكرر مرة واحدة</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- البنود الممتثلة -->
-                    <div class="col-md-6">
-                        <div class="card-custom p-3 border-top border-success border-4 h-100">
-                            <h6 class="fw-bold text-success mb-3">
-                                <i class="fa-solid fa-circle-check me-2"></i>البنود الممتثلة (المستوفية للشروط)
-                            </h6>
-                            <ul class="list-group list-group-flush" id="compliantList">
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>1. نظافة أدوات أسطح التحضير والطهي</span>
-                                    <span class="badge-status-compliant">100% امتثال</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>2. التزام العمالة بالزي والقفازات</span>
-                                    <span class="badge-status-compliant">96% امتثال</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>3. صلاحية وتخزين المواد الأولية</span>
-                                    <span class="badge-status-compliant">98% امتثال</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                    <span>4. التخلص السليم والمستمر من النفايات</span>
-                                    <span class="badge-status-compliant">95% امتثال</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. قسم الصور التوثيقية المرفقة للزيارات -->
-                <div class="card-custom p-3 mb-4">
-                    <h6 class="fw-bold mb-3"><i class="fa-solid fa-camera me-2 text-primary"></i>الصور التوثيقية الميدانية المرفقة:</h6>
-                    <div class="row g-2" id="photoGalleryGrid">
-                        <div class="col-3">
-                            <div class="photo-evidence-card">
-                                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=300" alt="صورة توثيقية 1">
-                                <div class="caption">قياس درجات الحرارة</div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="photo-evidence-card">
-                                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=300" alt="صورة توثيقية 2">
-                                <div class="caption">منطقة التحضير والتجهيز</div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="photo-evidence-card">
-                                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=300" alt="صورة توثيقية 3">
-                                <div class="caption">نظافة المستودع والتخزين</div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="photo-evidence-card">
-                                <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=300" alt="صورة توثيقية 4">
-                                <div class="caption">الالتزام بالزي والنظافة</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7. تذييل التقرير والاعتماد -->
-                <div class="report-footer d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="d-block fw-bold">المنظومة الإلكترونية للرقابة والامتثال</small>
-                        <small>تم استخراج هذا التقرير رسمياً بناءً على صلاحيات المدير العام.</small>
-                    </div>
-                    <div class="text-end">
-                        <small class="d-block">اعتماد إدارة الجودة والرقابة</small>
-                        <strong style="color: var(--primary-color);">التوقيع الإلكتروني المعتمد ✓</strong>
-                    </div>
-                </div>
-
-            </div>
-
+                <button type="submit" class="btn btn-primary" style="width: 100%;">دخول المنصة</button>
+            </form>
         </div>
-
     </div>
 
-    <!-- البرمجة وتفعيل الوظائف -->
+    <!-- 2. لوحة التحكم والنظام الرئيسي -->
+    <div id="dashboardPage" style="display: none; flex-direction: column; min-height: 100vh;">
+        
+        <!-- الهيدر المطابق تماماً للستيل المطلوب -->
+        <div class="hero-header">
+            <div class="header-top-bar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="three-dots-btn" onclick="toggleDropdown()">&#8942;</button>
+                    <div id="dotsDropdown" class="dropdown-content">
+                        <a href="#" class="nav-item nav-summary" onclick="openSection('dashboardSummary')">نظرة عامة والملخص</a>
+                        <a href="#" class="nav-item nav-create-task" onclick="openSection('createTaskSection')">📌 إنشاء مهمة جديدة</a>
+                        <a href="#" class="nav-item nav-clients" onclick="openSection('clientsSection')">البيانات والشركاء (المطابخ)</a>
+                        <a href="#" class="nav-item nav-certs" onclick="openSection('certificatesSection')">قائمة الشهادات المسجلة</a>
+                        <a href="#" class="nav-item nav-reports" onclick="openSection('reportsSection')">متابعة تقارير الموظفين (GPS)</a>
+                        <a href="#" class="nav-item nav-templates" onclick="openSection('templatesSection')">إنشاء قوالب التفتيش (البنود)</a>
+                        <a href="#" class="nav-item nav-fill-report" onclick="openSection('fillReportSection')">تعبئة تقرير ميداني (لالمراقب)</a>
+                        <a href="#" class="nav-item nav-users" id="usersOption" onclick="openSection('usersSection')">إدارة الصلاحيات واليوزرات</a>
+                    </div>
+
+                    <div class="brand-logo-box">
+                        <svg style="width: 24px; height: 24px;" viewBox="0 0 100 100">
+                            <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c69214"/>
+                            <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
+                            <path d="M38 48 L46 56 L64 36" fill="none" stroke="#0f3825" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span style="font-weight: 800; color: #0f3825; font-size: 14px;">رمز الامتثال</span>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="pill-btn" onclick="logout()">خروج</button>
+                </div>
+            </div>
+
+            <div class="brand-title-group">
+                <h1>رمز الامتثال</h1>
+                <div class="brand-sub">للاستشارات الغذائية وسلامة الغذاء</div>
+            </div>
+
+            <div class="header-pills">
+                <div class="pill-tag">🛡️ سلامة الغذاء تبدأ من الامتثال</div>
+                <div id="userRoleBadge" class="pill-tag" style="background: rgba(198, 146, 20, 0.25); border-color: var(--brand-gold);">دور الحساب: مدير عام</div>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- أ. الرئيسية والملخص (الموجه والموجز المخصص لكل يوزر) -->
+            <div id="dashboardSummary" class="page-section active">
+                <div class="page-card">
+                    <div class="card-header-title">
+                        <span>📊 موجز وملخص اللوحة الرئيسية</span>
+                        <span id="userGreeting" style="font-size: 12px; color: var(--brand-gold);">أهلاً بك</span>
+                    </div>
+
+                    <div class="stats-grid" id="dynamicStatsGrid">
+                        <!-- يتم تحميل الإحصائيات الموجزة المخصصة حسب نوع اليوزر هنا -->
+                    </div>
+
+                    <div class="motto-card">
+                        <p>💬 الشعار الداعم: "نحو منشآت غذائية أكثر التزاماً، جودةً، واستعداداً"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ب. إنشاء مهمة جديدة -->
+            <div id="createTaskSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">📌 إنشاء مهمة تفتيش جديدة وإسنادها لمراقب</div>
+                    <form onsubmit="createNewTask(event)">
+                        <div class="form-group">
+                            <label>1. اختر القالب المناسب</label>
+                            <select id="taskTemplateSelect" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>2. اختر المطبخ / المنشأة</label>
+                            <select id="taskClientSelect" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>3. اختر المراقب المكلف بالمهمة</label>
+                            <select id="taskInspectorSelect" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>ملاحظات أو توجيهات خاصة بالمهمة</label>
+                            <input type="text" id="taskNotes" class="form-control" placeholder="مثال: يرجى التركيز على مطابقة أدوات السلامة النارية">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">إرسال المهمة للمراقب الآن</button>
+                    </form>
+                </div>
+
+                <div class="page-card">
+                    <div class="card-header-title">قائمة المهام المرسلة والمتابعة</div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>المطبخ</th>
+                                    <th>القالب</th>
+                                    <th>المراقب المكلف</th>
+                                    <th>حالة المهمة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasksTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ج. قائمة العملاء (بيانات كاملة) -->
+            <div id="clientsSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">🏢 البيانات والشركاء (إضافة مطبخ جديد)</div>
+                    <form onsubmit="addClient(event)">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div class="form-group">
+                                <label>اسم المطبخ / المنشأة *</label>
+                                <input type="text" id="clientName" class="form-control" required placeholder="مثال: مطبخ الخالدية الحديث">
+                            </div>
+                            <div class="form-group">
+                                <label>الحي / الموقع *</label>
+                                <input type="text" id="clientDistrict" class="form-control" required placeholder="مثال: حي الزائدي">
+                            </div>
+                            <div class="form-group">
+                                <label>اسم الشخص المسؤول *</label>
+                                <input type="text" id="clientManager" class="form-control" required placeholder="مثال: أ. محمد العتيبي">
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الجوال *</label>
+                                <input type="tel" id="clientPhone" class="form-control" required placeholder="050XXXXXXX">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 8px; width: 100%;">حفظ العميل بالقائمة</button>
+                    </form>
+                </div>
+
+                <div class="page-card">
+                    <div class="card-header-title">قائمة المطابخ والشركاء المعتمدين</div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>اسم المطبخ</th>
+                                    <th>الحي/الموقع</th>
+                                    <th>الشخص المسؤول</th>
+                                    <th>رقم الجوال</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- د. قائمة الشهادات المسجلة -->
+            <div id="certificatesSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">📜 تسجيل شهادة لمطبخ</div>
+                    <form onsubmit="registerCertificate(event)" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <select id="certClientSelect" class="form-control" required style="flex: 2; min-width: 180px;"></select>
+                        <input type="text" id="certNumber" class="form-control" placeholder="رقم الشهادة (مثل HA0001)" required style="flex: 1; min-width: 140px;">
+                        <button type="submit" class="btn btn-success">تسجيل الشهادة بالسجل</button>
+                    </form>
+                </div>
+
+                <div class="page-card">
+                    <div class="card-header-title">سجل المطابخ الحاصلة على شهادات</div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الشهادة</th>
+                                    <th>اسم المطبخ/المنشأة</th>
+                                    <th>تاريخ التسجيل</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="certsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- هـ. متابعة تقارير الموظفين والموقع (GPS) -->
+            <div id="reportsSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">📍 اطلاع مباشر على تقارير الموظفين والموقع (GPS)</div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>المراقب</th>
+                                    <th>المنشأة</th>
+                                    <th>التاريخ والوقت</th>
+                                    <th>موقع المراقب (GPS)</th>
+                                    <th>حالة التقرير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>مراقب ميداني 1</td>
+                                    <td>مطبخ الخالدية الحديث</td>
+                                    <td>2026-10-01 10:30 ص</td>
+                                    <td><span style="color: #2b6cb0; font-weight: bold;">21.4225° N, 39.8261° E</span></td>
+                                    <td><span class="badge badge-done">مكتمَل</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- و. إنشاء قوالب التفتيش -->
+            <div id="templatesSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">📝 بناء قالب تقرير جديد (تحديد البنود والأسئلة)</div>
+                    <div class="form-group">
+                        <label>اسم القالب</label>
+                        <input type="text" id="templateTitle" class="form-control" placeholder="مثال: قالب السلامة والصحة المهنية">
+                    </div>
+
+                    <div id="questionsBuilderContainer"></div>
+
+                    <button class="btn btn-primary" onclick="addQuestionInput()" style="margin-top: 10px; width: 100%;">+ إضافة بند/سؤال جديد للقالب</button>
+                    <button class="btn btn-success" onclick="saveCustomTemplate()" style="margin-top: 10px; width: 100%;">حفظ القالب بالكامل</button>
+                </div>
+            </div>
+
+            <!-- ز. تعبئة تقرير ميداني (للمراقب) -->
+            <div id="fillReportSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">📝 تعبئة التقرير الميداني للمهمة الموكلة</div>
+                    <div class="form-group">
+                        <label>اختر المنشأة / المطبخ</label>
+                        <select id="reportClientSelect" class="form-control"></select>
+                    </div>
+
+                    <div id="activeReportQuestions"></div>
+
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>محضر وتوصية المراقب الميداني النهائي</label>
+                        <textarea class="form-control" rows="3" placeholder="اكتب محضر المعاينة والملخص الميداني هنا..."></textarea>
+                    </div>
+
+                    <button class="btn btn-success" onclick="alert('تم حفظ وإرسال التقرير الميداني بنجاح!'); openSection('reportsSection');" style="width: 100%;">تأكيد وإرسال التقرير الميداني</button>
+                </div>
+            </div>
+
+            <!-- ح. إدارة الصلاحيات واليوزرات المتقدمة -->
+            <div id="usersSection" class="page-section">
+                <div class="page-card">
+                    <div class="card-header-title">👥 إضافة مستخدم وتحديد صلاحياته بدقة</div>
+                    <form onsubmit="addUser(event)">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                            <div class="form-group">
+                                <label>البريد الإلكتروني *</label>
+                                <input type="email" id="newEmail" class="form-control" required placeholder="inspector@domain.com">
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور *</label>
+                                <input type="text" id="newPassword" class="form-control" required placeholder="******">
+                            </div>
+                            <div class="form-group">
+                                <label>نوع الصلاحية والمهام *</label>
+                                <select id="newRole" class="form-control" required>
+                                    <option value="admin">مدير نظام كامل (Admin)</option>
+                                    <option value="inspector">مراقب ميداني (تعبئة تقارير فقط)</option>
+                                    <option value="task_creator">منشئ مهام فقط (Task Creator)</option>
+                                    <option value="viewer">مشاهد تقارير فقط (Viewer)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 5px; width: 100%;">حفظ المستخدم بالصلاحية المقررة</button>
+                    </form>
+
+                    <div class="table-responsive" style="margin-top: 15px;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>كلمة المرور</th>
+                                    <th>نوع الصلاحية</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            الموقع: مكة المكرمة - حي الزائدي - بجوار صيدلية غايا | البريد: drfirasahfiz@gmail.com <br>
+            جميع الحقوق محفوظة لـ <strong>رمز الامتثال</strong> &copy; 2026
+        </footer>
+    </div>
+
     <script>
-        // حالة المستخدم والصلاحيات (GM = المدير العام, INSPECTOR = مراقب)
-        let currentUserRole = 'GM';
-        let visitsChartInstance = null;
+        // البيانات المخزنة بالحافظة
+        let clients = JSON.parse(localStorage.getItem('app_clients_v6')) || [
+            { name: 'مطبخ الخالدية الحديث', district: 'حي الخالدية', manager: 'أ. أحمد الزهراني', phone: '0501234567' },
+            { name: 'مطبخ الشاطئ الذهبي', district: 'حي الزائدي', manager: 'أ. خالد السلمي', phone: '0559876543' }
+        ];
 
-        // قاعدة بيانات محاكاة للمطابخ والزيارات الـ 12
-        const mockDatabase = {
-            k1: {
-                name: "مطبخ الخير المركزي",
-                visitsCount: 12,
-                inspectors: "م. أحمد علي، م. خالد عمر، أ. سارة فهد",
-                timeRange: "08:00 ص - 02:00 م (يناير - ديسمبر 2026)",
-                avgScore: "88.5%",
-                compliantCount: 42,
-                nonCompliantCount: 6,
-                chartData: [80, 82, 85, 88, 87, 90, 89, 92, 91, 94, 93, 95],
-                nonCompliantItems: [
-                    { title: "1. ضبط درجة حرارة ثلاجات التبريد", detail: "تكرر 4 مرات" },
-                    { title: "2. كفاءة تهوية منطقة التحضير", detail: "تكرر مرتين" },
-                    { title: "3. توثيق سجلات درجات الحرارة اليومية", detail: "تكرر مرة واحدة" }
-                ],
-                compliantItems: [
-                    { title: "1. نظافة أدوات أسطح التحضير والطهي", detail: "100% امتثال" },
-                    { title: "2. التزام العمالة بالزي والقفازات", detail: "96% امتثال" },
-                    { title: "3. صلاحية وتخزين المواد الأولية", detail: "98% امتثال" },
-                    { title: "4. التخلص السليم والمستمر من النفايات", detail: "95% امتثال" }
-                ]
-            },
-            k2: {
-                name: "مطبخ الضيافة الكبرى",
-                visitsCount: 8,
-                inspectors: "م. حسام الدين، أ. منيرة خالد",
-                timeRange: "09:00 ص - 01:00 م (مارس - أكتوبر 2026)",
-                avgScore: "92.1%",
-                compliantCount: 38,
-                nonCompliantCount: 3,
-                chartData: [88, 90, 91, 89, 93, 94, 95, 96],
-                nonCompliantItems: [
-                    { title: "1. صيانة إضاءة منطقة المستودع", detail: "تكرر مرتين" },
-                    { title: "2. ترتيب رفوف التخزين الجاف", detail: "تكرر مرة واحدة" }
-                ],
-                compliantItems: [
-                    { title: "1. النظافة العامة والتعقيم", detail: "100% امتثال" },
-                    { title: "2. الجودة البكتيرية للعينات", detail: "100% امتثال" },
-                    { title: "3. الشهادات الصحية للعمالة", detail: "98% امتثال" }
-                ]
-            },
-            k3: {
-                name: "مطبخ النخبة الحديث",
-                visitsCount: 5,
-                inspectors: "م. عبد الرحمن الفهد",
-                timeRange: "10:00 ص - 03:00 م (يونيو - أيلول 2026)",
-                avgScore: "79.4%",
-                compliantCount: 29,
-                nonCompliantCount: 9,
-                chartData: [72, 75, 80, 83, 87],
-                nonCompliantItems: [
-                    { title: "1. عزل منطقة المواد الكيميائية", detail: "تكرر 3 مرات" },
-                    { title: "2. كفاءة مصايد الحشرات", detail: "تكرر 3 مرات" },
-                    { title: "3. نظافة أرضيات المطبخ الداخلي", detail: "تكرر 3 مرات" }
-                ],
-                compliantItems: [
-                    { title: "1. جودة الزيوت المستعملة للقلي", detail: "90% امتثال" },
-                    { title: "2. التخلص من المخلفات", detail: "88% امتثال" }
-                ]
-            }
-        };
+        let certs = JSON.parse(localStorage.getItem('app_certs_v6')) || [
+            { num: 'HA0001', client: 'مطبخ الخالدية الحديث', date: '2026-10-01' }
+        ];
 
-        // ضبط تاريخ التصدير تلقائياً
-        document.getElementById('currentExportDate').innerText = new Date().toLocaleDateString('ar-SA');
+        let tasks = JSON.parse(localStorage.getItem('app_tasks_v6')) || [
+            { template: 'قالب السلامة العام', client: 'مطبخ الخالدية الحديث', inspector: 'inspector1@gmail.com', status: 'قيد التنفيذ' }
+        ];
 
-        // التبديل بين الصلاحيات (المدير العام / مراقب)
-        function toggleUserRole(role) {
-            currentUserRole = role;
-            document.getElementById('userRoleBadge').innerText = role === 'GM' ? 'المدير العام' : 'مراقب / مشرف';
-            
-            const reportsPanel = document.getElementById('mainReportsDashboard');
-            const deniedAlert = document.getElementById('accessDeniedPanel');
+        let users = JSON.parse(localStorage.getItem('app_users_v6')) || [
+            { email: 'drfirasahfiz@gmail.com', pass: '12345', role: 'admin' },
+            { email: 'inspector1@gmail.com', pass: '12345', role: 'inspector' },
+            { email: 'creator1@gmail.com', pass: '12345', role: 'task_creator' },
+            { email: 'viewer1@gmail.com', pass: '12345', role: 'viewer' }
+        ];
 
-            if (role === 'GM') {
-                reportsPanel.classList.remove('d-none');
-                deniedAlert.classList.add('d-none');
+        let customQuestions = JSON.parse(localStorage.getItem('app_questions_v6')) || [
+            'مدى الالتزام بالاشتراطات الصحية والتراخيص',
+            'توفر وسلائم أجهزة ومعدات السلامة والإطفاء'
+        ];
+
+        let currentUser = null;
+
+        function saveAll() {
+            localStorage.setItem('app_clients_v6', JSON.stringify(clients));
+            localStorage.setItem('app_certs_v6', JSON.stringify(certs));
+            localStorage.setItem('app_tasks_v6', JSON.stringify(tasks));
+            localStorage.setItem('app_users_v6', JSON.stringify(users));
+            localStorage.setItem('app_questions_v6', JSON.stringify(customQuestions));
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.email === email && u.pass === pass);
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'flex';
+
+                applyPermissionsAndBuildDashboard();
+                refreshUI();
             } else {
-                reportsPanel.classList.add('d-none');
-                deniedAlert.classList.remove('d-none');
+                alert('البريد الإلكتروني أو كلمة المرور غير صحيحة!');
             }
         }
 
-        // تحديث محتوى التقرير بناءً على المدخلات
-        function updateReportContent() {
-            const kitchenKey = document.getElementById('selectedKitchen').value;
-            const mode = document.getElementById('selectedReportMode').value;
-            const data = mockDatabase[kitchenKey];
+        // إسناد الصلاحيات وبناء الملخص الموجز المخصص لكل مستخدم
+        function applyPermissionsAndBuildDashboard() {
+            const role = currentUser.role;
+            const badge = document.getElementById('userRoleBadge');
+            const greeting = document.getElementById('userGreeting');
+            const statsGrid = document.getElementById('dynamicStatsGrid');
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.style.display = 'none');
+            greeting.innerText = `أهلاً بك (${currentUser.email})`;
 
-            // تحديث عناوين التقرير
-            if (mode === 'ANNUAL_AVERAGE') {
-                document.getElementById('reportMainTitle').innerText = "تقرير متوسط الامتثال السنوي";
-                document.getElementById('reportSubTitle').innerText = `سجل متوسط الـ ${data.visitsCount} زيارة ميدانية المعتمدة`;
-                document.getElementById('displayVisitsCount').innerText = `${data.visitsCount} زيارات مجمعة`;
-            } else {
-                document.getElementById('reportMainTitle').innerText = "تقرير زيارة ميدانية منفردة";
-                document.getElementById('reportSubTitle').innerText = "تفاصيل أحدث زيارة رقابية معتمدة للمنشأة";
-                document.getElementById('displayVisitsCount').innerText = "زيارة واحدة تفصيلية";
+            if (role === 'admin') {
+                badge.innerText = 'دور الحساب: مدير عام (Admin)';
+                document.querySelectorAll('.nav-item').forEach(item => item.style.display = 'block');
+                
+                statsGrid.innerHTML = `
+                    <div class="stat-card"><h4>إجمالي المطابخ</h4><div class="value">${clients.length}</div></div>
+                    <div class="stat-card"><h4>الشهادات المسجلة</h4><div class="value">${certs.length}</div></div>
+                    <div class="stat-card"><h4>إجمالي المهام الموكلة</h4><div class="value">${tasks.length}</div></div>
+                    <div class="stat-card"><h4>المستخدمين النشطين</h4><div class="value">${users.length}</div></div>
+                `;
+                openSection('dashboardSummary');
+
+            } else if (role === 'inspector') {
+                badge.innerText = 'دور الحساب: مراقب ميداني (Inspector)';
+                document.querySelector('.nav-summary').style.display = 'block';
+                document.querySelector('.nav-fill-report').style.display = 'block';
+                document.querySelector('.nav-reports').style.display = 'block';
+
+                const myTasks = tasks.filter(t => t.inspector === currentUser.email);
+                statsGrid.innerHTML = `
+                    <div class="stat-card"><h4>مهامي الموكلة</h4><div class="value">${myTasks.length}</div></div>
+                    <div class="stat-card"><h4>مهام قيد الانتظار</h4><div class="value">${myTasks.filter(t=>t.status==='قيد التنفيذ').length}</div></div>
+                    <div class="stat-card"><h4>التقارير المكتملة</h4><div class="value">0</div></div>
+                `;
+                openSection('dashboardSummary');
+
+            } else if (role === 'task_creator') {
+                badge.innerText = 'دور الحساب: منشئ مهام (Task Creator)';
+                document.querySelector('.nav-summary').style.display = 'block';
+                document.querySelector('.nav-create-task').style.display = 'block';
+                document.querySelector('.nav-clients').style.display = 'block';
+
+                statsGrid.innerHTML = `
+                    <div class="stat-card"><h4>المهام التي أنشأتها</h4><div class="value">${tasks.length}</div></div>
+                    <div class="stat-card"><h4>المطابخ المتاحة</h4><div class="value">${clients.length}</div></div>
+                `;
+                openSection('dashboardSummary');
+
+            } else if (role === 'viewer') {
+                badge.innerText = 'دور الحساب: مشاهد تقارير (Viewer)';
+                document.querySelector('.nav-summary').style.display = 'block';
+                document.querySelector('.nav-reports').style.display = 'block';
+
+                statsGrid.innerHTML = `
+                    <div class="stat-card"><h4>التقارير المتاحة للاطلاع</h4><div class="value">1</div></div>
+                `;
+                openSection('dashboardSummary');
             }
-
-            // تحديث البيانات الأساسية
-            document.getElementById('displayKitchenName').innerText = data.name;
-            document.getElementById('displayInspectors').innerText = data.inspectors;
-            document.getElementById('displayTimeRange').innerText = data.timeRange;
-            document.getElementById('avgComplianceScore').innerText = data.avgScore;
-            document.getElementById('compliantItemsCount').innerText = data.compliantCount;
-            document.getElementById('nonCompliantItemsCount').innerText = data.nonCompliantCount;
-
-            // تحديث قائمة البنود غير الممتثلة
-            const nonCompContainer = document.getElementById('nonCompliantList');
-            nonCompContainer.innerHTML = '';
-            data.nonCompliantItems.forEach(item => {
-                nonCompContainer.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>${item.title}</span>
-                        <span class="badge-status-non-compliant">${item.detail}</span>
-                    </li>`;
-            });
-
-            // تحديث قائمة البنود الممتثلة
-            const compContainer = document.getElementById('compliantList');
-            compContainer.innerHTML = '';
-            data.compliantItems.forEach(item => {
-                compContainer.innerHTML += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <span>${item.title}</span>
-                        <span class="badge-status-compliant">${item.detail}</span>
-                    </li>`;
-            });
-
-            // رسم الخط البياني للزيارات
-            renderChart(data.chartData);
         }
 
-        // رسم كائن Chart.js
-        function renderChart(dataPoints) {
-            const ctx = document.getElementById('visitsTrendChart').getContext('2d');
-            
-            if (visitsChartInstance) {
-                visitsChartInstance.destroy();
+        function logout() {
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+        }
+
+        function toggleDropdown() {
+            document.getElementById("dotsDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(e) {
+            if (!e.target.matches('.three-dots-btn')) {
+                let dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].classList.remove('show');
+                }
             }
+        }
 
-            const labels = dataPoints.map((_, idx) => `زيارة ${idx + 1}`);
+        function openSection(id) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
 
-            visitsChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'نسبة الامتثال %',
-                        data: dataPoints,
-                        borderColor: '#1b4332',
-                        backgroundColor: 'rgba(45, 106, 79, 0.12)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.35,
-                        pointBackgroundColor: '#d4af37',
-                        pointRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { min: 50, max: 100 }
-                    }
+        function refreshUI() {
+            // 1. المطابخ
+            const clientBody = document.getElementById('clientsTableBody');
+            const certSelect = document.getElementById('certClientSelect');
+            const reportSelect = document.getElementById('reportClientSelect');
+            const taskClientSelect = document.getElementById('taskClientSelect');
+
+            clientBody.innerHTML = '';
+            certSelect.innerHTML = '';
+            reportSelect.innerHTML = '';
+            taskClientSelect.innerHTML = '';
+
+            clients.forEach((c, idx) => {
+                clientBody.innerHTML += `<tr><td>${idx+1}</td><td><strong>${c.name}</strong></td><td>${c.district}</td><td>${c.manager}</td><td>${c.phone}</td></tr>`;
+                certSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+                reportSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+                taskClientSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+            });
+
+            // 2. الشهادات
+            const certsBody = document.getElementById('certsTableBody');
+            certsBody.innerHTML = '';
+            certs.forEach(c => {
+                certsBody.innerHTML += `<tr><td><strong>${c.num}</strong></td><td>${c.client}</td><td>${c.date}</td><td><span style="color:#22543d; font-weight:bold;">سارية</span></td></tr>`;
+            });
+
+            // 3. القوالب والمفتشين للمهام
+            const taskTemplateSelect = document.getElementById('taskTemplateSelect');
+            const taskInspectorSelect = document.getElementById('taskInspectorSelect');
+            taskTemplateSelect.innerHTML = `<option value="قالب السلامة والصحة العام">قالب السلامة والصحة العام</option>`;
+            
+            taskInspectorSelect.innerHTML = '';
+            users.filter(u => u.role === 'inspector' || u.role === 'admin').forEach(u => {
+                taskInspectorSelect.innerHTML += `<option value="${u.email}">${u.email}</option>`;
+            });
+
+            // 4. جدول المهام
+            const tasksBody = document.getElementById('tasksTableBody');
+            tasksBody.innerHTML = '';
+            tasks.forEach((t, idx) => {
+                tasksBody.innerHTML += `<tr><td>${idx+1}</td><td>${t.client}</td><td>${t.template}</td><td>${t.inspector}</td><td><span class="badge badge-pending">${t.status}</span></td></tr>`;
+            });
+
+            renderTemplateQuestions();
+            renderUsers();
+        }
+
+        function addClient(e) {
+            e.preventDefault();
+            const name = document.getElementById('clientName').value;
+            const district = document.getElementById('clientDistrict').value;
+            const manager = document.getElementById('clientManager').value;
+            const phone = document.getElementById('clientPhone').value;
+
+            clients.push({ name, district, manager, phone });
+            saveAll();
+            refreshUI();
+            e.target.reset();
+            alert('تم حفظ بيانات العميل المطبخ بنجاح!');
+        }
+
+        function createNewTask(e) {
+            e.preventDefault();
+            const template = document.getElementById('taskTemplateSelect').value;
+            const client = document.getElementById('taskClientSelect').value;
+            const inspector = document.getElementById('taskInspectorSelect').value;
+
+            tasks.push({ template, client, inspector, status: 'قيد التنفيذ' });
+            saveAll();
+            refreshUI();
+            alert('تم إرسال المهمة بنجاح للمراقب المكلف!');
+        }
+
+        function registerCertificate(e) {
+            e.preventDefault();
+            const client = document.getElementById('certClientSelect').value;
+            const num = document.getElementById('certNumber').value;
+            const date = new Date().toISOString().split('T')[0];
+
+            certs.push({ num, client, date });
+            saveAll();
+            refreshUI();
+            alert('تم تسجيل الشهادة بنجاح!');
+        }
+
+        function addQuestionInput() {
+            const container = document.getElementById('questionsBuilderContainer');
+            const count = container.children.length + 1;
+            container.innerHTML += `
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>البند/السؤال رقم ${count}</label>
+                    <input type="text" class="form-control custom-q-input" placeholder="اكتب نص السؤال هنا...">
+                </div>
+            `;
+        }
+
+        function saveCustomTemplate() {
+            const inputs = document.querySelectorAll('.custom-q-input');
+            inputs.forEach(inp => {
+                if(inp.value.trim() !== '') {
+                    customQuestions.push(inp.value.trim());
                 }
             });
+            saveAll();
+            refreshUI();
+            alert('تم حفظ القالب بنجاح!');
         }
 
-        // الانتقال للمعاينة المباشرة
-        function scrollToReportView() {
-            document.getElementById('reportExportContainer').scrollIntoView({ behavior: 'smooth' });
-        }
+        function renderTemplateQuestions() {
+            const activeContainer = document.getElementById('activeReportQuestions');
+            activeContainer.innerHTML = '';
 
-        // 1. تصدير التقرير كـ PDF بالهوية والتنسيق الكامل
-        function exportReportToPDF() {
-            if (currentUserRole !== 'GM') {
-                alert("تنبيه: استخراج التقارير متاح فقط للمدير العام!");
-                return;
-            }
-
-            const reportElement = document.getElementById('reportExportContainer');
-            
-            // إظهار مؤشر التحميل
-            const pdfBtn = event.currentTarget;
-            const originalText = pdfBtn.innerHTML;
-            pdfBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> جاري التصدير...';
-            pdfBtn.disabled = true;
-
-            html2canvas(reportElement, {
-                scale: 2,
-                useCORS: true,
-                logging: false
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save(`تقرير_الامتثال_${new Date().toISOString().slice(0,10)}.pdf`);
-
-                pdfBtn.innerHTML = originalText;
-                pdfBtn.disabled = false;
-            }).catch(err => {
-                alert("حدث خطأ أثناء تصدير PDF");
-                pdfBtn.innerHTML = originalText;
-                pdfBtn.disabled = false;
+            customQuestions.forEach((q, idx) => {
+                activeContainer.innerHTML += `
+                    <div class="item-row">
+                        <h4 style="font-size: 13px; color: var(--brand-green-dark);">${idx+1}. ${q}</h4>
+                        <div class="status-options">
+                            <label style="color: #22543d;"><input type="radio" name="q_${idx}" value="ممتثل"> ممتثل</label>
+                            <label style="color: #e53e3e;"><input type="radio" name="q_${idx}" value="غير ممتثل"> غير ممتثل</label>
+                            <label style="color: #718096;"><input type="radio" name="q_${idx}" value="لا ينطبق"> لا ينطبق</label>
+                        </div>
+                        <div style="display:flex; gap:8px; margin-top:6px;">
+                            <input type="text" class="form-control" placeholder="ملاحظة..." style="font-size: 11px;">
+                            <input type="file" accept="image/*" class="form-control" style="font-size: 11px;">
+                        </div>
+                    </div>
+                `;
             });
         }
 
-        // 2. تصدير التقرير كـ Excel شيت للبيانات والتحليل
-        function exportReportToExcel() {
-            if (currentUserRole !== 'GM') {
-                alert("تنبيه: استخراج التقارير متاح فقط للمدير العام!");
-                return;
-            }
+        function addUser(e) {
+            e.preventDefault();
+            const email = document.getElementById('newEmail').value;
+            const pass = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
 
-            const kitchenKey = document.getElementById('selectedKitchen').value;
-            const data = mockDatabase[kitchenKey];
-
-            const excelRows = [
-                ["نظام التقارير الرقابية - شيت تصدير البيانات الخام"],
-                ["اسم المنشأة/المطبخ", data.name],
-                ["إجمالي عدد الزيارات", data.visitsCount],
-                ["طاقم المراقبين", data.inspectors],
-                ["متوسط نسبة الامتثال العام", data.avgScore],
-                [],
-                ["سجل الامتثال التفصيلي للزيارات السنوية:"],
-                ["رقم الزيارة", "نسبة الامتثال المئوية", "حالة الزيارة"]
-            ];
-
-            data.chartData.forEach((score, index) => {
-                excelRows.push([`زيارة رقم ${index + 1}`, `${score}%`, "مكتملة ومستوفية"]);
-            });
-
-            excelRows.push([]);
-            excelRows.push(["البنود غير الممتثلة والملاحظات:"]);
-            data.nonCompliantItems.forEach(item => {
-                excelRows.push([item.title, item.detail]);
-            });
-
-            const worksheet = XLSX.utils.aoa_to_sheet(excelRows);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "تقرير الامتثال");
-
-            XLSX.writeFile(workbook, `سجل_امتثال_${data.name}.xlsx`);
+            users.push({ email, pass, role });
+            saveAll();
+            renderUsers();
+            e.target.reset();
+            alert('تم إضافة المستخدم بالصلاحية المحددة!');
         }
 
-        // تشغيل البداية عند فتح الصفحة
-        window.onload = function() {
-            updateReportContent();
-        };
+        function renderUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                let roleText = 'مدير نظام';
+                if(u.role === 'inspector') roleText = 'مراقب ميداني';
+                if(u.role === 'task_creator') roleText = 'منشئ مهام';
+                if(u.role === 'viewer') roleText = 'مشاهد تقارير';
+
+                tbody.innerHTML += `<tr><td>${u.email}</td><td>${u.pass}</td><td><strong>${roleText}</strong></td></tr>`;
+            });
+        }
+
+        // التهيئة عند أول تشغيل
+        addQuestionInput();
+        saveAll();
     </script>
 </body>
 </html>
