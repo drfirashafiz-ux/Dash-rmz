@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>رمز الامتثال | نظام التفتيش والرقابة وإصدار الشهادات</title>
+  <title>رمز الإمتثال | نظام الإدارة والموظفين</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -19,11 +19,11 @@
         extend: {
           colors: {
             brand: {
-              main: '#1C4344',       /* الأخضر/الكحلي الزيتي الفاخر الخاص برمز الامتثال */
-              dark: '#143233',       /* درجة أغمق للهيدر والحواف */
-              gold: '#C69214',       /* الذهبي الخاص بالشعار */
+              main: '#1C4344',       /* الزيتي الكحلي الفاخر */
+              dark: '#143233',       
+              gold: '#C69214',       /* الذهبي الخاص بـ رمز الامتثال */
               goldHover: '#B0800F',
-              lightBg: '#F4F7F7',    /* خلفية الصفحة فاتحة ومريحة للعين */
+              bgLight: '#F3F6F6',
               cardBg: '#FFFFFF'
             }
           },
@@ -35,609 +35,954 @@
     }
   </script>
   <style>
-    body { font-family: 'Tajawal', 'Cairo', sans-serif; background-color: #F4F7F7; color: #1C4344; }
+    body { font-family: 'Tajawal', 'Cairo', sans-serif; background-color: #F3F6F6; color: #1C4344; }
     canvas { border: 1px dashed #C69214; border-radius: 8px; background: #FFF; cursor: crosshair; }
     
-    /* قالب شهادة هاسب بألوان وشعار رمز الامتثال */
-    .cert-frame { 
-      border: 10px double #C69214; 
-      padding: 40px; 
-      background: #FFFFFF; 
-      position: relative; 
-      box-shadow: inset 0 0 20px rgba(28, 67, 68, 0.05);
+    /* شعار درع رمز الامتثال الدقيق */
+    .shield-logo {
+      width: 52px;
+      height: 60px;
+      background: linear-gradient(135deg, #D49B27 0%, #C69214 100%);
+      clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
+    .shield-inner {
+      width: 42px;
+      height: 50px;
+      background-color: #FFFFFF;
+      clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-overlay { transition: opacity 0.3s ease; }
+    .sidebar-drawer { transition: transform 0.3s ease-in-out; }
   </style>
 </head>
-<body class="bg-brand-lightBg text-slate-800 p-4 md:p-8">
+<body class="bg-brand-bgLight flex flex-col min-h-screen">
 
-<div class="max-w-6xl mx-auto space-y-6">
+  <!-- ==================== 1. الهيدر والشعار الرئيسي ==================== -->
+  <header class="bg-brand-main text-white sticky top-0 z-40 shadow-lg border-b-2 border-brand-gold">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      
+      <!-- الشعار والتسمية الرسمية -->
+      <div class="flex items-center gap-3">
+        <div class="shield-logo">
+          <div class="shield-inner">
+            <i class="fa-solid fa-check text-brand-main text-2xl font-black"></i>
+          </div>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-black tracking-wide text-brand-gold leading-tight">رمز الإمتثال</h1>
+          <p class="text-[10px] md:text-xs text-white opacity-90 font-semibold tracking-wider">العرض المالي ونظام الإدارة الميدانية</p>
+        </div>
+      </div>
 
-  <!-- الهيدر الرئيسي - هوية رمز الامتثال مطابقة للصورة -->
-  <header class="bg-brand-main text-white p-6 rounded-2xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4 border-b-4 border-brand-gold">
-    <div class="flex items-center gap-4">
-      <!-- درع الشعار بالألوان الحقيقية -->
-      <div class="w-14 h-14 bg-brand-gold rounded-2xl flex items-center justify-center text-brand-main text-2xl font-black shadow-lg border-2 border-white">
-        <i class="fa-solid fa-shield-halved text-3xl"></i>
+      <!-- محاكي تبديل الأدوار والزر الجانبي -->
+      <div class="flex items-center gap-2">
+        <div class="hidden sm:flex items-center gap-2 bg-brand-dark px-3 py-1.5 rounded-lg border border-brand-gold/40 text-xs">
+          <i class="fa-solid fa-user-gear text-brand-gold"></i>
+          <span>الدور:</span>
+          <select id="roleSelector" onchange="switchRole(this.value)" class="bg-transparent text-brand-gold font-bold focus:outline-none">
+            <option value="admin" class="bg-brand-dark text-white">المدير العام</option>
+            <option value="supervisor" class="bg-brand-dark text-white">المشرف</option>
+            <option value="inspector" class="bg-brand-dark text-white">المراقب الميداني</option>
+          </select>
+        </div>
+
+        <!-- زر القائمة الجانبية (الثلاث نقاط / الثلاث خطوط) -->
+        <button onclick="toggleSidebar()" class="p-2 bg-brand-dark hover:bg-brand-gold/20 text-brand-gold rounded-lg border border-brand-gold/40 text-lg transition">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
-      <div>
-        <h1 class="text-3xl font-black tracking-wide text-brand-gold">رمز الإمتثال</h1>
-        <p class="text-sm font-semibold text-white tracking-widest">RMZ AL-AMTITHAL</p>
-      </div>
+
     </div>
-    <div class="flex items-center gap-2 bg-brand-dark px-4 py-2 rounded-xl border border-brand-gold/40 shadow-inner">
-      <i class="fa-solid fa-user-gear text-brand-gold"></i>
-      <span class="text-xs text-slate-200">الدور الحالي:</span>
-      <span id="currentRoleBadge" class="font-extrabold text-brand-gold">المدير العام</span>
+
+    <!-- شريط الدور للجوال فقط -->
+    <div class="sm:hidden bg-brand-dark px-4 py-1.5 border-t border-brand-gold/20 flex justify-between items-center text-xs">
+      <span class="text-slate-300">عرض واجهة:</span>
+      <select onchange="switchRole(this.value)" class="bg-transparent text-brand-gold font-bold">
+        <option value="admin" class="bg-brand-dark text-white">المدير العام</option>
+        <option value="supervisor" class="bg-brand-dark text-white">المشرف</option>
+        <option value="inspector" class="bg-brand-dark text-white">المراقب الميداني</option>
+      </select>
     </div>
   </header>
 
-  <!-- شريط تبديل الأدوار -->
-  <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-2 text-brand-main font-bold text-sm">
-      <i class="fa-solid fa-sliders text-brand-gold"></i>
-      <span>تبديل واجهة العرض للمحاكاة:</span>
-    </div>
-    <select id="roleSelector" onchange="switchRole(this.value)" class="bg-slate-50 border border-slate-300 text-brand-main text-sm rounded-lg p-2.5 focus:ring-brand-gold focus:border-brand-gold font-bold">
-      <option value="admin">المدير العام (Admin)</option>
-      <option value="supervisor">المشرف (Supervisor)</option>
-      <option value="inspector">المراقب الميداني (Inspector)</option>
-    </select>
-  </div>
-
-  <!-- ==================== 1. قسم المدير العام ==================== -->
-  <div id="adminSection" class="space-y-6">
-    
-    <!-- قسم شهادات هاسب -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-brand-gold space-y-4">
-      <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
-        <i class="fa-solid fa-award text-2xl text-brand-gold"></i>
-        <h3 class="text-xl font-bold text-brand-main">إصدار وإدارة شهادات تأهيل هاسب (HACCP)</h3>
-      </div>
+  <!-- ==================== 2. شريط التبويبات العلوي المقسم ==================== -->
+  <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[68px] z-30">
+    <div class="max-w-7xl mx-auto px-2 md:px-4">
       
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">اختر المطبخ / العميل:</label>
-          <select id="certClientSelect" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm font-semibold"></select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">رقم الشهادة القادم:</label>
-          <input type="text" id="nextCertNumber" disabled class="w-full bg-slate-200 font-extrabold text-brand-main p-2 rounded-lg text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">تاريخ الإصدار:</label>
-          <input type="date" id="certIssueDate" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm font-semibold">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">تاريخ الانتهاء:</label>
-          <input type="date" id="certExpiryDate" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm font-semibold">
-        </div>
-      </div>
-      <button onclick="issueCertificate()" class="bg-brand-main hover:bg-brand-dark text-brand-gold font-bold py-2.5 px-6 rounded-lg text-sm shadow transition flex items-center gap-2 border border-brand-gold">
-        <i class="fa-solid fa-file-signature"></i> إصدار شهادة تأهيل جديدة
-      </button>
-
-      <div class="overflow-x-auto pt-4">
-        <h4 class="font-bold text-brand-main text-sm mb-2">الشهادات الصادرة سابقاً:</h4>
-        <table class="w-full text-sm text-right text-slate-700 border border-slate-200 rounded-lg">
-          <thead class="bg-brand-main text-white font-bold">
-            <tr>
-              <th class="p-3 border-b text-brand-gold">رقم الشهادة</th>
-              <th class="p-3 border-b">اسم المطبخ / المطعم</th>
-              <th class="p-3 border-b">تاريخ الإصدار</th>
-              <th class="p-3 border-b">تاريخ الانتهاء</th>
-              <th class="p-3 border-b">الإجراء</th>
-            </tr>
-          </thead>
-          <tbody id="certificatesTableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- قسم إضافة العملاء -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-xl font-bold text-brand-main flex items-center gap-2">
-        <i class="fa-solid fa-utensils text-brand-gold"></i> إدارة العملاء (المطابخ والمطاعم)
-      </h3>
-      <div class="flex gap-3">
-        <input type="text" id="newClientName" placeholder="أدخل اسم المطعم أو المطبخ الجديد..." class="flex-1 bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold">
-        <button onclick="addClient()" class="bg-brand-main hover:bg-brand-dark text-white font-bold px-6 rounded-lg text-sm shadow">إضافة عميل</button>
-      </div>
-      <ul id="clientsList" class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-brand-main font-bold pt-2"></ul>
-    </div>
-
-    <!-- قسم إنشاء قوالب من الصفر -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-xl font-bold text-brand-main flex items-center gap-2">
-        <i class="fa-solid fa-folder-plus text-brand-gold"></i> إنشاء قالب تقرير جديد من الصفر
-      </h3>
-      <div>
-        <label class="block text-xs font-bold text-brand-main mb-1">اسم القالب:</label>
-        <input type="text" id="templateTitle" placeholder="مثال: قالب زيارة تقييم الاشتراطات الصحية" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-brand-main mb-2">بنود القالب (الإجابات المقابلة لها: محقق / غير محقق):</label>
-        <div id="templateItemsContainer" class="space-y-2">
-          <div class="flex gap-2">
-            <input type="text" placeholder="أدخل نص البند..." class="template-item-input flex-1 bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">
-          </div>
-        </div>
-        <button onclick="addTemplateItemField()" class="mt-3 bg-slate-200 hover:bg-slate-300 text-brand-main font-bold py-1.5 px-4 rounded-lg text-xs flex items-center gap-1">
-          <i class="fa-solid fa-plus text-brand-gold"></i> إضافة بند إضافي
+      <!-- تبويبات المدير العام -->
+      <div id="navAdmin" class="flex justify-around md:justify-start gap-1 md:gap-4 text-xs md:text-sm font-bold">
+        <button onclick="showAdminTab('tabKitchens')" class="tab-btn-admin active border-b-2 border-brand-gold text-brand-main py-3 px-3 flex items-center gap-2">
+          <i class="fa-solid fa-utensils text-brand-gold"></i>
+          <span>المطابخ والعملاء</span>
+        </button>
+        <button onclick="showAdminTab('tabTemplates')" class="tab-btn-admin border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-list text-brand-gold"></i>
+          <span>قوالب التفتيش</span>
+        </button>
+        <button onclick="showAdminTab('tabCreateTask')" class="tab-btn-admin border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
+          <i class="fa-solid fa-square-plus text-brand-gold"></i>
+          <span>إنشاء مهام جديدة</span>
         </button>
       </div>
-      <button onclick="saveTemplate()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow">حفظ القالب في النظام</button>
+
+      <!-- تبويبات المشرف -->
+      <div id="navSupervisor" class="flex justify-around md:justify-start gap-1 md:gap-4 text-xs md:text-sm font-bold hidden">
+        <button onclick="showSuperTab('tabAssign')" class="tab-btn-super active border-b-2 border-brand-gold text-brand-main py-3 px-3 flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle text-brand-gold"></i>
+          <span>إنشاء مهمة للمراقب</span>
+        </button>
+        <button onclick="showSuperTab('tabInspectors')" class="tab-btn-super border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-brand-gold"></i>
+          <span>قائمة المراقبين</span>
+        </button>
+        <button onclick="showSuperTab('tabReadyReports')" class="tab-btn-super border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
+          <i class="fa-solid fa-file-invoice text-brand-gold"></i>
+          <span>التقارير الجاهزة</span>
+        </button>
+      </div>
+
+      <!-- تبويبات المراقب الميداني -->
+      <div id="navInspector" class="flex justify-around md:justify-start gap-1 md:gap-2 text-[11px] md:text-sm font-bold overflow-x-auto hidden">
+        <button onclick="showInspTab('tabNotStarted')" class="tab-btn-insp active border-b-2 border-brand-gold text-brand-main py-3 px-2 whitespace-nowrap flex items-center gap-1">
+          <i class="fa-solid fa-clock text-amber-500"></i>
+          <span>لم يبدأ بعد</span>
+        </button>
+        <button onclick="showInspTab('tabInProgress')" class="tab-btn-insp border-b-2 border-transparent text-slate-500 py-3 px-2 whitespace-nowrap flex items-center gap-1">
+          <i class="fa-solid fa-spinner text-blue-500"></i>
+          <span>قيد العمل</span>
+        </button>
+        <button onclick="showInspTab('tabCompleted')" class="tab-btn-insp border-b-2 border-transparent text-slate-500 py-3 px-2 whitespace-nowrap flex items-center gap-1">
+          <i class="fa-solid fa-circle-check text-emerald-500"></i>
+          <span>تقارير مكتملة</span>
+        </button>
+        <button onclick="showInspTab('tabInspReady')" class="tab-btn-insp border-b-2 border-transparent text-slate-500 py-3 px-2 whitespace-nowrap flex items-center gap-1">
+          <i class="fa-solid fa-file-export text-brand-gold"></i>
+          <span>التقارير الجاهزة</span>
+        </button>
+      </div>
+
     </div>
+  </nav>
 
-  </div>
+  <!-- ==================== 3. المحتوى الرئيسي المقسم ==================== -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
 
-  <!-- ==================== 2. قسم المشرف ==================== -->
-  <div id="supervisorSection" class="space-y-6 hidden">
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-      <h3 class="text-xl font-bold text-brand-main flex items-center gap-2">
-        <i class="fa-solid fa-tasks text-brand-gold"></i> إسناد مهمة جديدة للمراقب
-      </h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">اختر القالب:</label>
-          <select id="taskTemplateSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold"></select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">اختر المطبخ / العميل:</label>
-          <select id="taskClientSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold"></select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-main mb-1">اسم المراقب المكلف:</label>
-          <input type="text" id="taskInspectorName" placeholder="أدخل اسم المراقب..." class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-lg text-sm font-semibold">
+    <!-- ---------------- SECTION 1: المدير العام ---------------- -->
+    <div id="adminContainer" class="space-y-6">
+      <div id="tabKitchens" class="admin-tab-content space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-lg font-bold text-brand-main mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-utensils text-brand-gold"></i> إدارة المطابخ والمنشآت المسجلة
+          </h3>
+          <div class="flex gap-2">
+            <input type="text" id="newClientName" placeholder="أدخل اسم المطبخ أو المطعم الجديد..." class="flex-1 bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-gold">
+            <button onclick="addClient()" class="bg-brand-main hover:bg-brand-dark text-white font-bold px-5 rounded-xl text-sm shadow">إضافة</button>
+          </div>
+          <div id="clientsList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-4"></div>
         </div>
       </div>
-      <button onclick="assignTask()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-lg text-sm shadow">إرسال المهمة للمراقب</button>
-    </div>
 
-    <!-- جدول المهام -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-      <h3 class="text-lg font-bold text-brand-main mb-4">متابعة التقارير والمهام</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-right text-slate-700 border border-slate-200">
-          <thead class="bg-brand-main text-white font-bold">
-            <tr>
-              <th class="p-3 border-b">اسم المطبخ</th>
-              <th class="p-3 border-b">القالب</th>
-              <th class="p-3 border-b">المراقب</th>
-              <th class="p-3 border-b text-brand-gold">نسبة الامتثال</th>
-              <th class="p-3 border-b">الحالة</th>
-              <th class="p-3 border-b">الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="tasksTableBody"></tbody>
-        </table>
+      <div id="tabTemplates" class="admin-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
+            <i class="fa-solid fa-folder-plus text-brand-gold"></i> إنشاء قالب تقرير جديد
+          </h3>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">اسم القالب:</label>
+            <input type="text" id="templateTitle" placeholder="مثال: قالب تفتيش النظافة والاشتراطات الصحية" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-2">بنود التفتيش (محقق / غير محقق):</label>
+            <div id="templateItemsContainer" class="space-y-2">
+              <input type="text" placeholder="أدخل نص البند الأول..." class="template-item-input w-full bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">
+            </div>
+            <button onclick="addTemplateItemField()" class="mt-3 text-xs bg-slate-100 hover:bg-slate-200 text-brand-main font-bold py-2 px-4 rounded-lg border flex items-center gap-1">
+              <i class="fa-solid fa-plus text-brand-gold"></i> إضافة بند جديد
+            </button>
+          </div>
+          <button onclick="saveTemplate()" class="w-full sm:w-auto bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-xl text-sm shadow">حفظ القالب</button>
+        </div>
+      </div>
+
+      <div id="tabCreateTask" class="admin-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
+            <i class="fa-solid fa-tasks text-brand-gold"></i> إنشاء وإسناد مهام المراقبين
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">اختر المطبخ:</label>
+              <select id="adminTaskClientSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">اختر القالب:</label>
+              <select id="adminTaskTemplateSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">اسم المراقب:</label>
+              <select id="adminTaskInspectorSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
+            </div>
+          </div>
+          <button onclick="assignTaskFromAdmin()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-xl text-sm shadow">إسناد المهمة فوراً</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ==================== 3. قسم المراقب الميداني ==================== -->
-  <div id="inspectorSection" class="space-y-6 hidden">
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-      <h3 class="text-xl font-bold text-brand-main mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-clipboard-check text-brand-gold"></i> تعبئة التقرير الميداني
-      </h3>
-      
-      <div id="noTaskWarning" class="text-slate-500 text-sm py-4 font-semibold">لا توجد مهمة نشطة معينة لك حالياً.</div>
-
-      <div id="activeTaskForm" class="space-y-6 hidden">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
-          <div>
-            <label class="block text-xs font-bold text-brand-main mb-1">اسم المطبخ (مغلق):</label>
-            <input type="text" id="inspClientName" disabled class="w-full bg-slate-200 font-bold text-brand-main p-2 rounded-lg text-sm">
+    <!-- ---------------- SECTION 2: المشرف ---------------- -->
+    <div id="supervisorContainer" class="hidden space-y-6">
+      <div id="tabAssign" class="super-tab-content space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
+            <i class="fa-solid fa-paper-plane text-brand-gold"></i> إرسال مهمة تفتيش جديدة للمراقب
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">المطبخ المستهدف:</label>
+              <select id="superTaskClient" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">القالب:</label>
+              <select id="superTaskTemplate" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">المراقب المكلف:</label>
+              <select id="superInspector" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-brand-main mb-1">نوع القالب (مغلق):</label>
-            <input type="text" id="inspTemplateTitle" disabled class="w-full bg-slate-200 font-bold text-brand-main p-2 rounded-lg text-sm">
+          <button onclick="assignTaskFromSuper()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-xl text-sm shadow">إرسال للمراقب</button>
+        </div>
+      </div>
+
+      <div id="tabInspectors" class="super-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-lg font-bold text-brand-main mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-users-gear text-brand-gold"></i> طاقم المراقبين الميدانيين
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="inspectorsListCard"></div>
+        </div>
+      </div>
+
+      <div id="tabReadyReports" class="super-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-lg font-bold text-brand-main mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-box-archive text-brand-gold"></i> أرشفة وتصدير التقارير المكتملة
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-right text-slate-700 border border-slate-200">
+              <thead class="bg-brand-main text-white text-xs">
+                <tr>
+                  <th class="p-3">المطبخ</th>
+                  <th class="p-3">المراقب</th>
+                  <th class="p-3">النسبة</th>
+                  <th class="p-3">الحالة</th>
+                  <th class="p-3">تحميل</th>
+                </tr>
+              </thead>
+              <tbody id="superTasksTable"></tbody>
+            </table>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div>
-          <h4 class="font-bold text-brand-main mb-3 text-md border-b pb-2">بنود التفتيش والامتثال:</h4>
-          <div id="inspectionChecklist" class="space-y-3"></div>
+    <!-- ---------------- SECTION 3: المراقب الميداني ---------------- -->
+    <div id="inspectorContainer" class="hidden space-y-6">
+      <div id="tabNotStarted" class="insp-tab-content space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-md font-bold text-brand-main mb-3">المهام التي لم يتم البدء بها</h3>
+          <div id="listNotStarted" class="space-y-3"></div>
         </div>
+      </div>
 
-        <!-- محضر المخالفة -->
-        <div class="border-t pt-4">
-          <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-brand-main">
-            <input type="checkbox" id="hasIncident" onchange="toggleIncidentForm(this.checked)" class="w-4 h-4 text-brand-gold rounded">
-            <span>هل ترغب في تحرير محضر ضبط مخالفة / تعهد منفصل؟</span>
-          </label>
-        </div>
+      <div id="tabInProgress" class="insp-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-md font-bold text-brand-main mb-3">استكمال تعبئة التقرير الميداني النشط</h3>
+          
+          <div id="activeTaskForm" class="space-y-5 hidden">
+            <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl text-xs font-bold text-brand-main border border-slate-200">
+              <div><span>المطبخ: </span><span id="inspClientName" class="text-brand-gold"></span></div>
+              <div><span>القالب: </span><span id="inspTemplateTitle"></span></div>
+            </div>
 
-        <div id="incidentFormContainer" class="hidden bg-red-50/50 border border-red-200 p-4 rounded-xl space-y-4">
-          <h4 class="font-bold text-red-700 text-sm flex items-center gap-2">
-            <i class="fa-solid fa-triangle-exclamation"></i> تفاصيل المحضر المنفصل:
-          </h4>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">سبب المحضر / المخالفة:</label>
-            <textarea id="incidentReason" rows="2" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm"></textarea>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">الإجراء التصحيحي المطلوب:</label>
-            <textarea id="incidentAction" rows="2" class="w-full bg-white border border-slate-300 p-2 rounded-lg text-sm"></textarea>
+            <div id="inspectionChecklist" class="space-y-3"></div>
+
+            <div class="border-t pt-4">
+              <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-red-700">
+                <input type="checkbox" id="hasIncident" onchange="toggleIncidentForm(this.checked)" class="w-4 h-4 rounded">
+                <span>هل يوجد محضر مخالفة / تعهد منفصل؟</span>
+              </label>
+            </div>
+
+            <div id="incidentFormContainer" class="hidden bg-red-50/60 border border-red-200 p-4 rounded-xl space-y-3">
+              <p class="font-bold text-xs text-red-700">بيانات محضر ضبط المخالفة:</p>
+              <textarea id="incidentReason" placeholder="سبب المخالفة..." class="w-full bg-white p-2 rounded border text-xs"></textarea>
+              <textarea id="incidentAction" placeholder="الإجراء التصحيحي المطلوب..." class="w-full bg-white p-2 rounded border text-xs"></textarea>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-bold mb-1">توقيع المراقب:</label>
+                  <canvas id="inspectorSig" width="240" height="80"></canvas>
+                  <button onclick="clearCanvas('inspectorSig')" class="text-[10px] text-red-600 block mt-1">مسح التوقيع</button>
+                </div>
+                <div>
+                  <label class="block text-[11px] font-bold mb-1">توقيع مسؤول المطبخ:</label>
+                  <canvas id="clientSig" width="240" height="80"></canvas>
+                  <button onclick="clearCanvas('clientSig')" class="text-[10px] text-red-600 block mt-1">مسح التوقيع</button>
+                </div>
+              </div>
+            </div>
+
+            <button onclick="submitInspection()" class="w-full bg-brand-main text-white font-bold py-3 rounded-xl shadow border border-brand-gold text-sm">حفظ وإرسال التقرير النهائية</button>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">توقيع المراقب الميداني:</label>
-              <canvas id="inspectorSig" width="280" height="90"></canvas>
-              <button onclick="clearCanvas('inspectorSig')" class="text-xs text-red-600 font-bold mt-1">مسح التوقيع</button>
+          <div id="noActiveTask" class="text-center py-6 text-slate-400 text-xs font-semibold">لا يوجد تقرير قيد التعبئة حالياً. اختر مهمة وابدأ بها.</div>
+        </div>
+      </div>
+
+      <div id="tabCompleted" class="insp-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-md font-bold text-brand-main mb-3">التقارير التي تم إنهاؤها بنجاح</h3>
+          <div id="listCompleted" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <div id="tabInspReady" class="insp-tab-content hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <h3 class="text-md font-bold text-brand-main mb-3">طباعة وتنزيل التقارير</h3>
+          <div id="listInspReady" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== 4. القائمة الجانبية (الثلاث نقاط) ==================== -->
+  <div id="sidebarDrawer" class="fixed inset-0 z-50 pointer-events-none">
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300"></div>
+    
+    <aside id="sidebarContent" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-brand-main text-white shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto border-l-2 border-brand-gold">
+      
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-brand-gold/30 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="shield-logo scale-75">
+              <div class="shield-inner">
+                <i class="fa-solid fa-check text-brand-main text-lg font-black"></i>
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">توقيع مسؤول المطبخ / العميل:</label>
-              <canvas id="clientSig" width="280" height="90"></canvas>
-              <button onclick="clearCanvas('clientSig')" class="text-xs text-red-600 font-bold mt-1">مسح التوقيع</button>
+            <span class="font-bold text-brand-gold text-lg">رمز الإمتثال</span>
+          </div>
+          <button onclick="toggleSidebar()" class="text-slate-300 hover:text-white text-xl">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          <p class="text-xs font-bold text-brand-gold tracking-wider">إدارة النظام والخدمات</p>
+
+          <!-- زر الموظفين والصلاحيات الخاص بالمدير العام -->
+          <button onclick="openUsersModal()" class="w-full bg-brand-dark hover:bg-brand-gold/20 text-white p-3 rounded-xl flex items-center justify-between border border-brand-gold/30 transition text-sm font-bold">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-brand-gold"></i> الموظفين والمستخدمين والصلاحيات</span>
+            <i class="fa-solid fa-chevron-left text-xs text-brand-gold"></i>
+          </button>
+          
+          <button onclick="openCertificatesModal()" class="w-full bg-brand-dark hover:bg-brand-gold/20 text-white p-3 rounded-xl flex items-center justify-between border border-brand-gold/30 transition text-sm font-bold">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-award text-brand-gold"></i> إدارة خانة الشهادات</span>
+            <i class="fa-solid fa-chevron-left text-xs text-brand-gold"></i>
+          </button>
+
+          <button onclick="alert('النظام يعمل بكامل كفاءته وملائم لجميع الشاشات')" class="w-full bg-brand-dark hover:bg-brand-gold/20 text-white p-3 rounded-xl flex items-center justify-between border border-brand-gold/30 transition text-sm font-bold">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-sliders text-brand-gold"></i> إعدادات المنظومة</span>
+            <i class="fa-solid fa-chevron-left text-xs text-brand-gold"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- معلومات التواصل الخاصة برمز الامتثال (أسفل القائمة) -->
+      <div class="border-t border-brand-gold/30 pt-4 space-y-2 text-xs">
+        <p class="font-bold text-brand-gold mb-2">معلومات التواصل (رمز الإمتثال):</p>
+        <p class="flex items-center gap-2 text-slate-200"><i class="fa-solid fa-phone text-brand-gold"></i> 0553595150</p>
+        <p class="flex items-center gap-2 text-slate-200"><i class="fa-solid fa-envelope text-brand-gold"></i> RMZ.ALEMTITHAL@gmail.com</p>
+        <p class="flex items-start gap-2 text-slate-200"><i class="fa-solid fa-location-dot text-brand-gold mt-1"></i><span>مكة المكرمة - حي الراشدي بجوار صيدلية غاية</span></p>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ==================== 5. مودال إدارة الموظفين والمستخدمين والصلاحيات ==================== -->
+  <div id="usersModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white text-slate-800 rounded-2xl max-w-3xl w-full p-6 space-y-5 max-h-[90vh] overflow-y-auto border-t-4 border-brand-gold">
+      
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-brand-gold"></i> إدارة حسابات الموظفين وإنشاء اليوزرات والصلاحيات
+        </h3>
+        <button onclick="closeUsersModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- نموذج إضافة يوزر جديد -->
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+        <h4 class="font-bold text-xs text-brand-main flex items-center gap-1">
+          <i class="fa-solid fa-plus-circle text-brand-gold"></i> إنشاء حساب مستخدم (User) جديد
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">اسم الموظف الثلاثي:</label>
+            <input type="text" id="newEmpName" placeholder="مثال: عبدالمجيد الغامدي" class="w-full p-2 bg-white border rounded-lg font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">اسم المستخدم (Username):</label>
+            <input type="text" id="newEmpUsername" placeholder="مثال: abdulmajeed" class="w-full p-2 bg-white border rounded-lg font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">كلمة المرور:</label>
+            <input type="password" id="newEmpPassword" placeholder="******" class="w-full p-2 bg-white border rounded-lg font-semibold">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">الدور الوظيفي:</label>
+            <select id="newEmpRole" class="w-full p-2 bg-white border rounded-lg font-bold">
+              <option value="المدير العام">المدير العام</option>
+              <option value="المشرف">المشرف</option>
+              <option value="المراقب الميداني">المراقب الميداني</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-slate-700 mb-1">حدد الصلاحيات الممنوحة:</label>
+            <div class="flex flex-wrap gap-3 text-[11px] pt-1">
+              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permKitchens" checked class="rounded text-brand-main"> إدارة المطابخ</label>
+              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permTemplates" checked class="rounded text-brand-main"> إنشاء القوالب</label>
+              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permAssign" checked class="rounded text-brand-main"> إسناد المهام</label>
+              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permCerts" checked class="rounded text-brand-main"> إصدار الشهادات</label>
+              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permReports" checked class="rounded text-brand-main"> تصدير التقارير</label>
             </div>
           </div>
         </div>
+        <button onclick="createUserAccount()" class="w-full sm:w-auto bg-brand-main text-white font-bold py-2 px-6 rounded-lg text-xs shadow mt-2">إضافة الموظف وتفعيل الحساب</button>
+      </div>
 
-        <button onclick="submitInspection()" class="w-full bg-brand-main hover:bg-brand-dark text-white font-bold py-3 rounded-xl shadow-lg transition border border-brand-gold">
-          حفظ وإرسال التقرير النهائي
-        </button>
+      <!-- قائمة كل الموظفين المسجلين -->
+      <div class="space-y-3">
+        <h4 class="font-bold text-xs text-brand-main flex items-center gap-1">
+          <i class="fa-solid fa-users text-brand-gold"></i> جميع الموظفين واليوزرات المسجلة في النظام:
+        </h4>
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-xs text-right">
+            <thead class="bg-brand-main text-white">
+              <tr>
+                <th class="p-2.5">اسم الموظف</th>
+                <th class="p-2.5">اسم المستخدم</th>
+                <th class="p-2.5">الدور</th>
+                <th class="p-2.5">الصلاحيات</th>
+                <th class="p-2.5">إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="employeesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== 6. مودال الشهادات ==================== -->
+  <div id="certModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white text-slate-800 rounded-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t-4 border-brand-gold">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
+          <i class="fa-solid fa-award text-brand-gold"></i> إصدار وتوثيق شهادات هاسب (HACCP)
+        </h3>
+        <button onclick="closeCertificatesModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">اختر العميل/المطبخ:</label>
+          <select id="certModalClient" class="w-full p-2 bg-white border rounded-lg font-bold"></select>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">رقم الشهادة:</label>
+          <input type="text" id="certModalCode" disabled class="w-full p-2 bg-slate-200 font-bold text-brand-main rounded-lg">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">تاريخ الإصدار:</label>
+          <input type="date" id="certModalIssue" class="w-full p-2 bg-white border rounded-lg">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">تاريخ الانتهاء:</label>
+          <input type="date" id="certModalExpiry" class="w-full p-2 bg-white border rounded-lg">
+        </div>
+      </div>
+      
+      <button onclick="issueCertFromModal()" class="w-full bg-brand-main text-brand-gold font-bold py-2.5 rounded-xl border border-brand-gold text-sm">إصدار الشهادة الآن</button>
+
+      <div class="space-y-2 pt-2">
+        <h4 class="font-bold text-xs text-brand-main">الشهادات الصادرة:</h4>
+        <div id="modalCertList" class="space-y-2 max-h-48 overflow-y-auto"></div>
       </div>
     </div>
   </div>
 
-</div>
-
-<!-- قوالب تصدير PDF المخفية -->
-<div id="pdfExportContainer" class="hidden">
-  
-  <!-- 1. قالب التقرير الشامل -->
-  <div id="mainReportPDF" class="p-8 bg-white font-brandFont text-slate-800 space-y-6">
-    <div class="flex justify-between items-center border-b-2 border-brand-main pb-4">
-      <div>
-        <h2 class="text-2xl font-black text-brand-main">رمز الإمتثال | تقرير التفتيش الميداني</h2>
-        <p class="text-xs font-bold text-brand-gold">RMZ AL-AMTITHAL AUDIT REPORT</p>
+  <!-- قوالب تصدير PDF المخفية -->
+  <div id="pdfExportContainer" class="hidden">
+    <div id="mainReportPDF" class="p-8 bg-white font-brandFont text-slate-800 space-y-6">
+      <div class="flex justify-between items-center border-b-2 border-brand-main pb-4">
+        <div>
+          <h2 class="text-2xl font-black text-brand-main">رمز الإمتثال | تقرير التفتيش الميداني</h2>
+          <p class="text-xs font-bold text-brand-gold">RMZ AL-AMTITHAL AUDIT REPORT</p>
+        </div>
+        <div id="pdfMetaDate" class="text-left text-xs font-semibold text-slate-600"></div>
       </div>
-      <div id="pdfMetaDate" class="text-left text-xs font-semibold text-slate-600"></div>
+      <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg text-sm border border-slate-200">
+        <p><strong>اسم المنشأة:</strong> <span id="pdfClientName"></span></p>
+        <p><strong>القالب:</strong> <span id="pdfTemplateName"></span></p>
+        <p><strong>المراقب:</strong> <span id="pdfInspectorName"></span></p>
+        <p><strong>نسبة الامتثال:</strong> <span id="pdfComplianceRate" class="font-bold text-brand-main"></span></p>
+      </div>
+      <table class="w-full text-sm text-right border border-slate-300">
+        <thead class="bg-brand-main text-white font-bold">
+          <tr><th class="p-2 border">#</th><th class="p-2 border">البند</th><th class="p-2 border">النتيجة</th><th class="p-2 border">الملاحظات</th></tr>
+        </thead>
+        <tbody id="pdfChecklistTable"></tbody>
+      </table>
     </div>
 
-    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg text-sm border border-slate-200">
-      <p><strong>اسم المنشأة:</strong> <span id="pdfClientName"></span></p>
-      <p><strong>القالب:</strong> <span id="pdfTemplateName"></span></p>
-      <p><strong>المراقب:</strong> <span id="pdfInspectorName"></span></p>
-      <p><strong>نسبة الامتثال النهائية:</strong> <span id="pdfComplianceRate" class="font-bold text-brand-main"></span></p>
-    </div>
-
-    <table class="w-full text-sm text-right border border-slate-300">
-      <thead class="bg-brand-main text-white font-bold">
-        <tr>
-          <th class="p-2 border">#</th>
-          <th class="p-2 border">البند</th>
-          <th class="p-2 border">النتيجة</th>
-          <th class="p-2 border">الملاحظات</th>
-        </tr>
-      </thead>
-      <tbody id="pdfChecklistTable"></tbody>
-    </table>
-  </div>
-
-  <!-- 2. قالب المحضر المنفصل -->
-  <div id="incidentPDF" class="p-8 bg-white font-brandFont text-slate-800 space-y-6">
-    <div class="flex justify-between items-center border-b-2 border-red-600 pb-4">
-      <div>
-        <h2 class="text-2xl font-black text-red-600">رمز الإمتثال | محضر ضبط مخالفة</h2>
-        <p class="text-xs font-bold text-slate-500">INCIDENT & CORRECTIVE ACTION RECORD</p>
-      </div>
-      <div id="pdfIncidentMeta" class="text-left text-xs font-semibold text-slate-600"></div>
-    </div>
-
-    <div class="bg-slate-50 p-4 rounded-lg text-sm border border-slate-200 space-y-1">
-      <p><strong>اسم المنشأة / المطبخ:</strong> <span id="pdfIncClientName"></span></p>
-      <p><strong>التاريخ والوقت:</strong> <span id="pdfIncDateTime"></span></p>
-    </div>
-
-    <div class="space-y-4 text-sm">
-      <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
-        <strong class="text-red-700 block mb-1">سبب المحضر / المخالفة:</strong>
-        <p id="pdfIncReason" class="text-slate-800 whitespace-pre-line"></p>
-      </div>
-      <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
-        <strong class="text-brand-main block mb-1">الإجراء التصحيحي الملزم:</strong>
-        <p id="pdfIncAction" class="text-slate-800 whitespace-pre-line"></p>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-8 pt-8">
-      <div class="text-center border-t border-slate-400 pt-2">
-        <p class="font-bold text-sm">توقيع المراقب الميداني</p>
-        <img id="pdfImgInspectorSig" class="h-12 mx-auto mt-2">
-      </div>
-      <div class="text-center border-t border-slate-400 pt-2">
-        <p class="font-bold text-sm">توقيع العميل / مسؤول المطبخ</p>
-        <img id="pdfImgClientSig" class="h-12 mx-auto mt-2">
+    <div id="haccpCertPDF" class="p-10 bg-white font-brandFont text-center border-8 border-double border-brand-gold space-y-6">
+      <div class="text-brand-gold font-black text-xl">★ رمز الإمتثال لخدمات الجودة ★</div>
+      <h1 class="text-3xl font-black text-brand-main">شهادة اعتماد وتأهيل هاسب (HACCP)</h1>
+      <p class="text-sm text-slate-600 font-bold">تشهد شركة رمز الإمتثال بأن:</p>
+      <h2 id="pdfCertClient" class="text-3xl font-black text-brand-gold underline"></h2>
+      <p class="text-xs text-slate-600 max-w-md mx-auto">قد استوفت كافة متطلبات واشتراطات سلامة الغذاء ونظام تحليل المخاطر ونقاط التحكم الحرجة بنجاح.</p>
+      <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-lg text-xs font-bold border">
+        <div><span>الرقم: </span><span id="pdfCertCode"></span></div>
+        <div><span>الإصدار: </span><span id="pdfCertIssue"></span></div>
+        <div><span>الانتهاء: </span><span id="pdfCertExpiry"></span></div>
       </div>
     </div>
   </div>
-
-  <!-- 3. قالب شهادة هاسب الرسمي المطابق للهوية -->
-  <div id="haccpCertificatePDF" class="p-10 bg-white font-brandFont text-slate-800">
-    <div class="cert-frame text-center space-y-6">
-      <div class="text-brand-gold font-extrabold text-xl tracking-widest">★ رمز الإمتثال لخدمات الجودة ★</div>
-      <h1 class="text-4xl font-black text-brand-main">شهادة اعتماد وتأهيل هاسب (HACCP)</h1>
-      <p class="text-sm font-semibold text-slate-500">FOOD SAFETY & HACCP COMPLIANCE CERTIFICATE</p>
-
-      <div class="py-6 space-y-3">
-        <p class="text-lg text-slate-700">تشهد شركة رمز الإمتثال بأن المنشأة / المطبخ:</p>
-        <h2 id="certPDFClientName" class="text-4xl font-black text-brand-gold underline decoration-brand-main"></h2>
-        <p class="text-sm text-slate-700 max-w-xl mx-auto pt-2 font-semibold">قد استوفت متطلبات واشتراطات سلامة الغذاء ونظام تحليل المخاطر ونقاط التحكم الحرجة بنجاح.</p>
-      </div>
-
-      <div class="grid grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
-        <div><strong class="block text-slate-500">رقم الشهادة:</strong><span id="certPDFCode" class="text-brand-main font-bold text-base"></span></div>
-        <div><strong class="block text-slate-500">تاريخ الإصدار:</strong><span id="certPDFIssueDate" class="font-semibold"></span></div>
-        <div><strong class="block text-slate-500">تاريخ الانتهاء:</strong><span id="certPDFExpiryDate" class="font-semibold"></span></div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-8 pt-8 text-xs font-bold text-brand-main">
-        <div><p class="text-sm">اعتماد المدير العام</p><p class="text-slate-400 font-normal mt-1">(رمز الإمتثال)</p></div>
-        <div><p class="text-sm">إدارة توثيق الجودة</p><p class="text-slate-400 font-normal mt-1">HACCP Certified</p></div>
-      </div>
-    </div>
-  </div>
-
-</div>
 
 <script>
-  let clients = JSON.parse(localStorage.getItem('clients')) || [];
-  let templates = JSON.parse(localStorage.getItem('templates')) || [];
-  let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
-  let nextCertCounter = parseInt(localStorage.getItem('nextCertCounter')) || 1;
+  let clients = JSON.parse(localStorage.getItem('clients')) || ['مطعم ودرة المأكولات', 'مطبخ الضيافة'];
+  let templates = JSON.parse(localStorage.getItem('templates')) || [
+    { id: 1, title: 'اشتراطات السلامة والنظافة العامة', items: ['نظافة الأرضيات والجدران', 'الالتزام بالزي الصحي والقفازات', 'درجة حرارة الثلاجات مناسبة'] }
+  ];
   let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  let currentTask = null;
+  let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
+  let certCounter = parseInt(localStorage.getItem('certCounter')) || 101;
+
+  // الموظفين الافتراضيين
+  let employees = JSON.parse(localStorage.getItem('employees')) || [
+    { id: 1, name: 'عبدالله السلمي', username: 'admin', role: 'المدير العام', perms: ['الكل'] },
+    { id: 2, name: 'سعود المالكي', username: 's.malki', role: 'المشرف', perms: ['إسناد المهام', 'تصدير التقارير'] },
+    { id: 3, name: 'أحمد علي', username: 'a.ali', role: 'المراقب الميداني', perms: ['تعبئة التقارير'] },
+    { id: 4, name: 'خالد عمر', username: 'k.omar', role: 'المراقب الميداني', perms: ['تعبئة التقارير'] }
+  ];
 
   window.onload = function() {
     renderClients();
-    renderCertificates();
-    updateNextCertCode();
-    renderTemplatesSelect();
-    renderTasksTable();
-    setupCanvasSignatures();
-    document.getElementById('certIssueDate').value = new Date().toISOString().split('T')[0];
+    renderSelects();
+    renderAllTasks();
+    renderEmployeesTable();
+    setupCanvas();
+    document.getElementById('certModalIssue').value = new Date().toISOString().split('T')[0];
   };
 
-  function switchRole(role) {
-    document.getElementById('adminSection').classList.add('hidden');
-    document.getElementById('supervisorSection').classList.add('hidden');
-    document.getElementById('inspectorSection').classList.add('hidden');
+  function toggleSidebar() {
+    const overlay = document.getElementById('sidebarOverlay');
+    const drawer = document.getElementById('sidebarContent');
+    const isHidden = drawer.classList.contains('translate-x-full');
 
-    if (role === 'admin') {
-      document.getElementById('adminSection').classList.remove('hidden');
-      document.getElementById('currentRoleBadge').innerText = "المدير العام";
-      renderCertificates();
-    } else if (role === 'supervisor') {
-      document.getElementById('supervisorSection').classList.remove('hidden');
-      document.getElementById('currentRoleBadge').innerText = "المشرف";
-      renderTemplatesSelect();
-      renderTasksTable();
-    } else if (role === 'inspector') {
-      document.getElementById('inspectorSection').classList.remove('hidden');
-      document.getElementById('currentRoleBadge').innerText = "المراقب الميداني";
-      loadInspectorTask();
+    if (isHidden) {
+      drawer.classList.remove('translate-x-full');
+      overlay.classList.remove('opacity-0');
+      document.getElementById('sidebarDrawer').classList.remove('pointer-events-none');
+    } else {
+      drawer.classList.add('translate-x-full');
+      overlay.classList.add('opacity-0');
+      document.getElementById('sidebarDrawer').classList.add('pointer-events-none');
     }
   }
 
-  // --- 1. إدارة العملاء والشهادات والقوالب (المدير) ---
+  function switchRole(role) {
+    document.getElementById('navAdmin').classList.add('hidden');
+    document.getElementById('navSupervisor').classList.add('hidden');
+    document.getElementById('navInspector').classList.add('hidden');
+
+    document.getElementById('adminContainer').classList.add('hidden');
+    document.getElementById('supervisorContainer').classList.add('hidden');
+    document.getElementById('inspectorContainer').classList.add('hidden');
+
+    if (role === 'admin') {
+      document.getElementById('navAdmin').classList.remove('hidden');
+      document.getElementById('adminContainer').classList.remove('hidden');
+    } else if (role === 'supervisor') {
+      document.getElementById('navSupervisor').classList.remove('hidden');
+      document.getElementById('supervisorContainer').classList.remove('hidden');
+    } else if (role === 'inspector') {
+      document.getElementById('navInspector').classList.remove('hidden');
+      document.getElementById('inspectorContainer').classList.remove('hidden');
+    }
+  }
+
+  function showAdminTab(tabId) {
+    document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn-admin').forEach(el => {
+      el.classList.remove('border-brand-gold', 'text-brand-main');
+      el.classList.add('border-transparent', 'text-slate-500');
+    });
+    document.getElementById(tabId).classList.remove('hidden');
+    event.currentTarget.classList.add('border-brand-gold', 'text-brand-main');
+  }
+
+  function showSuperTab(tabId) {
+    document.querySelectorAll('.super-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn-super').forEach(el => {
+      el.classList.remove('border-brand-gold', 'text-brand-main');
+      el.classList.add('border-transparent', 'text-slate-500');
+    });
+    document.getElementById(tabId).classList.remove('hidden');
+    event.currentTarget.classList.add('border-brand-gold', 'text-brand-main');
+  }
+
+  function showInspTab(tabId) {
+    document.querySelectorAll('.insp-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn-insp').forEach(el => {
+      el.classList.remove('border-brand-gold', 'text-brand-main');
+      el.classList.add('border-transparent', 'text-slate-500');
+    });
+    document.getElementById(tabId).classList.remove('hidden');
+    event.currentTarget.classList.add('border-brand-gold', 'text-brand-main');
+  }
+
+  // --- إدارة الموظفين والصلاحيات ---
+  function openUsersModal() {
+    toggleSidebar();
+    document.getElementById('usersModal').classList.remove('hidden');
+    renderEmployeesTable();
+  }
+
+  function closeUsersModal() {
+    document.getElementById('usersModal').classList.add('hidden');
+  }
+
+  function createUserAccount() {
+    const name = document.getElementById('newEmpName').value.trim();
+    const username = document.getElementById('newEmpUsername').value.trim();
+    const role = document.getElementById('newEmpRole').value;
+
+    if(!name || !username) {
+      alert('يرجى كتابة اسم الموظف واسم المستخدم');
+      return;
+    }
+
+    const perms = [];
+    if(document.getElementById('permKitchens').checked) perms.push('إدارة المطابخ');
+    if(document.getElementById('permTemplates').checked) perms.push('إنشاء القوالب');
+    if(document.getElementById('permAssign').checked) perms.push('إسناد المهام');
+    if(document.getElementById('permCerts').checked) perms.push('إصدار الشهادات');
+    if(document.getElementById('permReports').checked) perms.push('تصدير التقارير');
+
+    employees.push({ id: Date.now(), name, username, role, perms });
+    localStorage.setItem('employees', JSON.stringify(employees));
+    
+    document.getElementById('newEmpName').value = '';
+    document.getElementById('newEmpUsername').value = '';
+    document.getElementById('newEmpPassword').value = '';
+    
+    renderEmployeesTable();
+    renderSelects();
+    alert('تم إضافة الموظف وتفعيل حسابه بنجاح!');
+  }
+
+  function deleteEmployee(id) {
+    if(confirm('هل أنت تأكد من حذف حساب هذا الموظف؟')) {
+      employees = employees.filter(e => e.id !== id);
+      localStorage.setItem('employees', JSON.stringify(employees));
+      renderEmployeesTable();
+      renderSelects();
+    }
+  }
+
+  function renderEmployeesTable() {
+    const tbody = document.getElementById('employeesTableBody');
+    tbody.innerHTML = employees.map(emp => `
+      <tr class="border-b hover:bg-slate-50">
+        <td class="p-2.5 font-bold text-brand-main">${emp.name}</td>
+        <td class="p-2.5 text-slate-600 font-mono">${emp.username}</td>
+        <td class="p-2.5 font-semibold text-brand-gold">${emp.role}</td>
+        <td class="p-2.5 text-[10px]">
+          ${emp.perms.map(p => `<span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border inline-block m-0.5">${p}</span>`).join('')}
+        </td>
+        <td class="p-2.5">
+          <button onclick="deleteEmployee(${emp.id})" class="text-red-600 hover:text-red-800 font-bold"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+
+    // تحديث بطاقات المشرف
+    document.getElementById('inspectorsListCard').innerHTML = employees
+      .filter(e => e.role === 'المراقب الميداني')
+      .map(e => `
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+          <div>
+            <p class="font-bold text-brand-main text-sm">${e.name}</p>
+            <p class="text-xs text-slate-500">اسم المستخدم: @${e.username}</p>
+          </div>
+          <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold">نشط</span>
+        </div>
+      `).join('');
+  }
+
   function addClient() {
-    const name = document.getElementById('newClientName').value.trim();
-    if(name) {
-      clients.push(name);
+    const val = document.getElementById('newClientName').value.trim();
+    if(val) {
+      clients.push(val);
       localStorage.setItem('clients', JSON.stringify(clients));
       document.getElementById('newClientName').value = '';
       renderClients();
+      renderSelects();
     }
   }
 
   function renderClients() {
-    document.getElementById('clientsList').innerHTML = clients.map(c => `<li class="bg-slate-100 p-2 rounded border border-slate-200">✓ ${c}</li>`).join('');
-    document.getElementById('certClientSelect').innerHTML = clients.map(c => `<option value="${c}">${c}</option>`).join('');
-    document.getElementById('taskClientSelect').innerHTML = clients.map(c => `<option value="${c}">${c}</option>`).join('');
-  }
-
-  function updateNextCertCode() {
-    document.getElementById('nextCertNumber').value = 'HA' + String(nextCertCounter).padStart(4, '0');
-  }
-
-  function issueCertificate() {
-    const clientName = document.getElementById('certClientSelect').value;
-    const issueDate = document.getElementById('certIssueDate').value;
-    const expiryDate = document.getElementById('certExpiryDate').value;
-    const certCode = 'HA' + String(nextCertCounter).padStart(4, '0');
-
-    if(!clientName || !issueDate || !expiryDate) {
-      alert('يرجى التأكد من اختيار العميل وتواريخ الشهادة.');
-      return;
-    }
-
-    certificates.push({ id: Date.now(), code: certCode, clientName, issueDate, expiryDate });
-    nextCertCounter++;
-    localStorage.setItem('certificates', JSON.stringify(certificates));
-    localStorage.setItem('nextCertCounter', nextCertCounter.toString());
-
-    renderCertificates();
-    updateNextCertCode();
-    alert(`تم إصدار الشهادة بنجاح برقم: ${certCode}`);
-  }
-
-  function renderCertificates() {
-    document.getElementById('certificatesTableBody').innerHTML = certificates.map(c => `
-      <tr class="border-b hover:bg-slate-50">
-        <td class="p-2.5 font-extrabold text-brand-main">${c.code}</td>
-        <td class="p-2.5">${c.clientName}</td>
-        <td class="p-2.5">${c.issueDate}</td>
-        <td class="p-2.5">${c.expiryDate}</td>
-        <td class="p-2.5">
-          <button onclick="exportCertPDF('${c.code}')" class="text-xs bg-brand-gold text-brand-main font-bold py-1 px-3 rounded shadow">تنزيل PDF</button>
-        </td>
-      </tr>
+    document.getElementById('clientsList').innerHTML = clients.map(c => `
+      <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs font-bold text-brand-main">
+        <span><i class="fa-solid fa-store text-brand-gold ml-1"></i> ${c}</span>
+        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">مسجل</span>
+      </div>
     `).join('');
   }
 
+  function renderSelects() {
+    const cOptions = clients.map(c => `<option value="${c}">${c}</option>`).join('');
+    const tOptions = templates.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
+    
+    const inspectorEmployees = employees.filter(e => e.role === 'المراقب الميداني');
+    const iOptions = inspectorEmployees.length 
+      ? inspectorEmployees.map(i => `<option value="${i.name}">${i.name}</option>`).join('')
+      : '<option value="مراقب الميدان">مراقب الميدان</option>';
+
+    document.getElementById('adminTaskClientSelect').innerHTML = cOptions;
+    document.getElementById('adminTaskTemplateSelect').innerHTML = tOptions;
+    document.getElementById('adminTaskInspectorSelect').innerHTML = iOptions;
+
+    document.getElementById('superTaskClient').innerHTML = cOptions;
+    document.getElementById('superTaskTemplate').innerHTML = tOptions;
+    document.getElementById('superInspector').innerHTML = iOptions;
+
+    document.getElementById('certModalClient').innerHTML = cOptions;
+  }
+
   function addTemplateItemField() {
-    const container = document.getElementById('templateItemsContainer');
     const div = document.createElement('div');
-    div.className = 'flex gap-2';
-    div.innerHTML = `<input type="text" placeholder="أدخل نص البند..." class="template-item-input flex-1 bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">`;
-    container.appendChild(div);
+    div.innerHTML = `<input type="text" placeholder="أدخل نص البند..." class="template-item-input w-full bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">`;
+    document.getElementById('templateItemsContainer').appendChild(div);
   }
 
   function saveTemplate() {
     const title = document.getElementById('templateTitle').value.trim();
-    const itemInputs = document.querySelectorAll('.template-item-input');
+    const inputs = document.querySelectorAll('.template-item-input');
     const items = [];
-    itemInputs.forEach(i => { if(i.value.trim()) items.push(i.value.trim()); });
+    inputs.forEach(i => { if(i.value.trim()) items.push(i.value.trim()); });
 
-    if(!title || items.length === 0) {
-      alert('يرجى تحديد اسم القالب وإضافة بند واحد على الأقل.');
-      return;
+    if(title && items.length > 0) {
+      templates.push({ id: Date.now(), title, items });
+      localStorage.setItem('templates', JSON.stringify(templates));
+      alert('تم حفظ القالب بنجاح');
+      document.getElementById('templateTitle').value = '';
+      renderSelects();
     }
-
-    templates.push({ id: Date.now(), title, items });
-    localStorage.setItem('templates', JSON.stringify(templates));
-    alert('تم حفظ القالب الجديد بنجاح');
-    document.getElementById('templateTitle').value = '';
-    document.getElementById('templateItemsContainer').innerHTML = `<div class="flex gap-2"><input type="text" placeholder="أدخل نص البند..." class="template-item-input flex-1 bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm"></div>`;
-    renderTemplatesSelect();
   }
 
-  // --- 2. المشرف ---
-  function renderTemplatesSelect() {
-    document.getElementById('taskTemplateSelect').innerHTML = templates.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
-  }
+  function assignTaskFromAdmin() {
+    const client = document.getElementById('adminTaskClientSelect').value;
+    const tId = document.getElementById('adminTaskTemplateSelect').value;
+    const inspector = document.getElementById('adminTaskInspectorSelect').value;
+    const template = templates.find(t => t.id == tId);
 
-  function assignTask() {
-    const templateId = document.getElementById('taskTemplateSelect').value;
-    const clientName = document.getElementById('taskClientSelect').value;
-    const inspectorName = document.getElementById('taskInspectorName').value.trim();
-
-    if(!inspectorName || !templateId) {
-      alert('يرجى اختيار القالب وتحديد اسم المراقب');
-      return;
-    }
-
-    const template = templates.find(t => t.id == templateId);
-    tasks.push({ id: Date.now(), clientName, template, inspectorName, status: 'معلقة', submittedData: null });
+    tasks.push({ id: Date.now(), client, template, inspector, status: 'لم يبدأ', submittedData: null });
     localStorage.setItem('tasks', JSON.stringify(tasks));
     alert('تم إسناد المهمة للمراقب بنجاح');
-    renderTasksTable();
+    renderAllTasks();
   }
 
-  function renderTasksTable() {
-    document.getElementById('tasksTableBody').innerHTML = tasks.map(t => `
-      <tr class="border-b hover:bg-slate-50">
-        <td class="p-3">${t.clientName}</td>
-        <td class="p-3">${t.template.title}</td>
-        <td class="p-3">${t.inspectorName}</td>
-        <td class="p-3 font-bold text-brand-main">${t.submittedData ? t.submittedData.complianceRate + '%' : '-'}</td>
-        <td class="p-3"><strong>${t.status}</strong></td>
-        <td class="p-3">
-          ${t.status === 'مكتملة' ? `<button onclick="exportPDFs(${t.id})" class="bg-brand-main text-white text-xs font-bold py-1 px-3 rounded border border-brand-gold">تصدير PDF</button>` : 'قيد التعبئة'}
-        </td>
-      </tr>
+  function assignTaskFromSuper() {
+    const client = document.getElementById('superTaskClient').value;
+    const tId = document.getElementById('superTaskTemplate').value;
+    const inspector = document.getElementById('superInspector').value;
+    const template = templates.find(t => t.id == tId);
+
+    tasks.push({ id: Date.now(), client, template, inspector, status: 'لم يبدأ', submittedData: null });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    alert('تم إرسال المهمة بنجاح');
+    renderAllTasks();
+  }
+
+  function startInspectionTask(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if(task) {
+      task.status = 'قيد التعبئة';
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderAllTasks();
+      showInspTab('tabInProgress');
+      loadActiveInspection(task);
+    }
+  }
+
+  function loadActiveInspection(task) {
+    document.getElementById('noActiveTask').classList.add('hidden');
+    document.getElementById('activeTaskForm').classList.remove('hidden');
+
+    document.getElementById('inspClientName').innerText = task.client;
+    document.getElementById('inspTemplateTitle').innerText = task.template.title;
+
+    document.getElementById('inspectionChecklist').innerHTML = task.template.items.map((item, index) => `
+      <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+        <p class="font-bold text-xs text-brand-main">${index + 1}. ${item}</p>
+        <div class="flex gap-2">
+          <select class="item-status bg-white border border-slate-300 rounded p-1 text-xs font-bold" data-item="${item}">
+            <option value="محقق">محقق</option>
+            <option value="غير محقق">غير محقق</option>
+          </select>
+          <input type="text" class="item-notes flex-1 bg-white border border-slate-300 rounded p-1 text-xs" placeholder="ملاحظات البند...">
+        </div>
+      </div>
     `).join('');
   }
 
-  // --- 3. المراقب ---
-  function loadInspectorTask() {
-    const task = tasks.find(t => t.status === 'معلقة');
-    if(task) {
-      currentTask = task;
-      document.getElementById('noTaskWarning').classList.add('hidden');
-      document.getElementById('activeTaskForm').classList.remove('hidden');
-
-      document.getElementById('inspClientName').value = task.clientName;
-      document.getElementById('inspTemplateTitle').value = task.template.title;
-
-      document.getElementById('inspectionChecklist').innerHTML = task.template.items.map((item, index) => `
-        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
-          <p class="font-bold text-xs text-brand-main">${index + 1}. ${item}</p>
-          <div class="flex gap-4 items-center">
-            <select class="item-status bg-white border border-slate-300 rounded p-1.5 text-xs font-bold" data-item="${item}">
-              <option value="محقق">محقق</option>
-              <option value="غير محقق">غير محقق</option>
-            </select>
-            <input type="text" class="item-notes flex-1 bg-white border border-slate-300 rounded p-1.5 text-xs" placeholder="أي ملاحظات إضافية...">
-          </div>
-        </div>
-      `).join('');
-    } else {
-      document.getElementById('noTaskWarning').classList.remove('hidden');
-      document.getElementById('activeTaskForm').classList.add('hidden');
-    }
-  }
-
-  function toggleIncidentForm(show) {
-    if(show) document.getElementById('incidentFormContainer').classList.remove('hidden');
-    else document.getElementById('incidentFormContainer').classList.add('hidden');
-  }
-
   function submitInspection() {
-    if(!currentTask) return;
+    const activeTask = tasks.find(t => t.status === 'قيد التعبئة');
+    if(!activeTask) return;
 
     const statuses = document.querySelectorAll('.item-status');
     const notes = document.querySelectorAll('.item-notes');
     const checklistResults = [];
-    let achievedCount = 0;
+    let achieved = 0;
 
     statuses.forEach((s, i) => {
-      const val = s.value;
-      if(val === 'محقق') achievedCount++;
-      checklistResults.push({ item: s.getAttribute('data-item'), status: val, note: notes[i].value });
+      if(s.value === 'محقق') achieved++;
+      checklistResults.push({ item: s.getAttribute('data-item'), status: s.value, note: notes[i].value });
     });
 
-    const complianceRate = Math.round((achievedCount / checklistResults.length) * 100);
+    const rate = Math.round((achieved / checklistResults.length) * 100);
 
-    const hasIncident = document.getElementById('hasIncident').checked;
-    let incidentData = null;
-
-    if(hasIncident) {
-      incidentData = {
-        reason: document.getElementById('incidentReason').value,
-        action: document.getElementById('incidentAction').value,
-        inspectorSig: getCanvasData('inspectorSig'),
-        clientSig: getCanvasData('clientSig'),
-        dateTime: new Date().toLocaleString('ar-SA')
-      };
-    }
-
-    currentTask.status = 'مكتملة';
-    currentTask.submittedData = {
+    activeTask.status = 'مكتملة';
+    activeTask.submittedData = {
       checklistResults,
-      complianceRate,
-      hasIncident,
-      incidentData,
+      complianceRate: rate,
       completedAt: new Date().toLocaleString('ar-SA')
     };
 
     localStorage.setItem('tasks', JSON.stringify(tasks));
-    alert(`تم إرسال التقرير بنجاح! نسبة الامتثال: ${complianceRate}%`);
-    switchRole('supervisor');
-    document.getElementById('roleSelector').value = 'supervisor';
+    alert('تم إرسال التقرير النهائي بنجاح!');
+    renderAllTasks();
+    showInspTab('tabCompleted');
   }
 
-  // --- التوايع الرسمية ---
-  function setupCanvasSignatures() {
+  function renderAllTasks() {
+    document.getElementById('superTasksTable').innerHTML = tasks.map(t => `
+      <tr class="border-b text-xs">
+        <td class="p-2 font-bold">${t.client}</td>
+        <td class="p-2">${t.inspector}</td>
+        <td class="p-2 font-bold text-brand-gold">${t.submittedData ? t.submittedData.complianceRate + '%' : '-'}</td>
+        <td class="p-2">${t.status}</td>
+        <td class="p-2">
+          ${t.status === 'مكتملة' ? `<button onclick="exportTaskPDF(${t.id})" class="bg-brand-gold text-brand-main text-[10px] font-bold px-2 py-1 rounded">PDF</button>` : '-'}
+        </td>
+      </tr>
+    `).join('');
+
+    const notStarted = tasks.filter(t => t.status === 'لم يبدأ');
+    document.getElementById('listNotStarted').innerHTML = notStarted.length ? notStarted.map(t => `
+      <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-xl flex justify-between items-center text-xs">
+        <div>
+          <p class="font-bold text-brand-main">${t.client}</p>
+          <p class="text-[10px] text-slate-500">${t.template.title}</p>
+        </div>
+        <button onclick="startInspectionTask(${t.id})" class="bg-brand-main text-white font-bold px-3 py-1.5 rounded-lg">بدء التفتيش</button>
+      </div>
+    `).join('') : '<p class="text-xs text-slate-400">لا توجد مهام معلقة.</p>';
+
+    const completed = tasks.filter(t => t.status === 'مكتملة');
+    document.getElementById('listCompleted').innerHTML = completed.length ? completed.map(t => `
+      <div class="p-3 bg-emerald-50/60 border border-emerald-200 rounded-xl flex justify-between items-center text-xs">
+        <div>
+          <p class="font-bold text-brand-main">${t.client}</p>
+          <p class="text-[10px] text-slate-500">النسبة: ${t.submittedData.complianceRate}%</p>
+        </div>
+        <span class="text-emerald-700 font-bold">مكتمل</span>
+      </div>
+    `).join('') : '<p class="text-xs text-slate-400">لا توجد تقارير مكتملة.</p>';
+
+    document.getElementById('listInspReady').innerHTML = completed.length ? completed.map(t => `
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs">
+        <div>
+          <p class="font-bold text-brand-main">${t.client}</p>
+          <p class="text-[10px] text-slate-500">${t.submittedData.completedAt}</p>
+        </div>
+        <button onclick="exportTaskPDF(${t.id})" class="bg-brand-main text-white font-bold px-3 py-1 rounded-lg">تنزيل التقرير</button>
+      </div>
+    `).join('') : '<p class="text-xs text-slate-400">لا توجد تقارير جاهزة للتصدير.</p>';
+  }
+
+  function openCertificatesModal() {
+    toggleSidebar();
+    document.getElementById('certModalCode').value = 'HA-' + certCounter;
+    document.getElementById('certModal').classList.remove('hidden');
+    renderModalCerts();
+  }
+
+  function closeCertificatesModal() {
+    document.getElementById('certModal').classList.add('hidden');
+  }
+
+  function issueCertFromModal() {
+    const client = document.getElementById('certModalClient').value;
+    const code = 'HA-' + certCounter;
+    const issue = document.getElementById('certModalIssue').value;
+    const expiry = document.getElementById('certModalExpiry').value;
+
+    if(!expiry) { alert('يرجى تحديد تاريخ انتهاء الشهادة'); return; }
+
+    certificates.push({ code, client, issue, expiry });
+    certCounter++;
+    localStorage.setItem('certificates', JSON.stringify(certificates));
+    localStorage.setItem('certCounter', certCounter.toString());
+
+    document.getElementById('certModalCode').value = 'HA-' + certCounter;
+    renderModalCerts();
+    alert('تم إصدار الشهادة بنجاح!');
+  }
+
+  function renderModalCerts() {
+    document.getElementById('modalCertList').innerHTML = certificates.map(c => `
+      <div class="p-2 bg-slate-100 rounded-lg flex justify-between items-center text-xs font-bold text-brand-main">
+        <span>${c.code} - ${c.client}</span>
+        <button onclick="exportCertPDF('${c.code}')" class="text-[10px] bg-brand-gold text-brand-main px-2 py-1 rounded">طباعة الشهادة</button>
+      </div>
+    `).join('');
+  }
+
+  function setupCanvas() {
     ['inspectorSig', 'clientSig'].forEach(id => {
       const canvas = document.getElementById(id);
       if(!canvas) return;
       const ctx = canvas.getContext('2d');
       let drawing = false;
-
       canvas.addEventListener('mousedown', () => drawing = true);
       canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
       canvas.addEventListener('mousemove', (e) => {
         if(!drawing) return;
         const rect = canvas.getBoundingClientRect();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = '#1C4344';
+        ctx.lineWidth = 2; ctx.strokeStyle = '#1C4344';
         ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-        ctx.stroke();
-        ctx.beginPath();
+        ctx.stroke(); ctx.beginPath();
         ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
       });
     });
@@ -645,87 +990,45 @@
 
   function clearCanvas(id) {
     const canvas = document.getElementById(id);
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  function getCanvasData(id) {
-    return document.getElementById(id).toDataURL();
+  function toggleIncidentForm(show) {
+    document.getElementById('incidentFormContainer').classList.toggle('hidden', !show);
   }
 
-  // --- تصدير الـ PDF ---
-  function exportPDFs(taskId) {
+  function exportTaskPDF(taskId) {
     const task = tasks.find(t => t.id === taskId);
     if(!task || !task.submittedData) return;
 
-    const data = task.submittedData;
-
-    document.getElementById('pdfClientName').innerText = task.clientName;
+    document.getElementById('pdfClientName').innerText = task.client;
     document.getElementById('pdfTemplateName').innerText = task.template.title;
-    document.getElementById('pdfInspectorName').innerText = task.inspectorName;
-    document.getElementById('pdfComplianceRate').innerText = data.complianceRate + '%';
-    document.getElementById('pdfMetaDate').innerText = `التاريخ: ${data.completedAt}`;
+    document.getElementById('pdfInspectorName').innerText = task.inspector;
+    document.getElementById('pdfComplianceRate').innerText = task.submittedData.complianceRate + '%';
+    document.getElementById('pdfMetaDate').innerText = task.submittedData.completedAt;
 
-    document.getElementById('pdfChecklistTable').innerHTML = data.checklistResults.map((r, i) => `
+    document.getElementById('pdfChecklistTable').innerHTML = task.submittedData.checklistResults.map((r, i) => `
       <tr class="border-b">
         <td class="p-2 border">${i+1}</td>
         <td class="p-2 border">${r.item}</td>
-        <td class="p-2 border font-bold ${r.status === 'محقق' ? 'text-emerald-700' : 'text-red-600'}">${r.status}</td>
+        <td class="p-2 border font-bold">${r.status}</td>
         <td class="p-2 border">${r.note || '-'}</td>
       </tr>
     `).join('');
 
-    const optMain = {
-      margin: 10,
-      filename: `تقرير_رمز_الامتثال_${task.clientName}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(optMain).from(document.getElementById('mainReportPDF')).save().then(() => {
-      if(data.hasIncident && data.incidentData) {
-        setTimeout(() => {
-          const inc = data.incidentData;
-          document.getElementById('pdfIncClientName').innerText = task.clientName;
-          document.getElementById('pdfIncDateTime').innerText = inc.dateTime;
-          document.getElementById('pdfIncReason').innerText = inc.reason;
-          document.getElementById('pdfIncAction').innerText = inc.action;
-          document.getElementById('pdfImgInspectorSig').src = inc.inspectorSig;
-          document.getElementById('pdfImgClientSig').src = inc.clientSig;
-
-          const optInc = {
-            margin: 10,
-            filename: `محضر_مخالفة_منفصل_${task.clientName}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          };
-
-          html2pdf().set(optInc).from(document.getElementById('incidentPDF')).save();
-        }, 1000);
-      }
-    });
+    html2pdf().set({ margin: 10, filename: `تقرير_${task.client}.pdf` }).from(document.getElementById('mainReportPDF')).save();
   }
 
   function exportCertPDF(code) {
     const cert = certificates.find(c => c.code === code);
     if(!cert) return;
 
-    document.getElementById('certPDFClientName').innerText = cert.clientName;
-    document.getElementById('certPDFCode').innerText = cert.code;
-    document.getElementById('certPDFIssueDate').innerText = cert.issueDate;
-    document.getElementById('certPDFExpiryDate').innerText = cert.expiryDate;
+    document.getElementById('pdfCertClient').innerText = cert.client;
+    document.getElementById('pdfCertCode').innerText = cert.code;
+    document.getElementById('pdfCertIssue').innerText = cert.issue;
+    document.getElementById('pdfCertExpiry').innerText = cert.expiry;
 
-    const opt = {
-      margin: 10,
-      filename: `شهادة_هاسب_${cert.code}_${cert.clientName}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-    };
-
-    html2pdf().set(opt).from(document.getElementById('haccpCertificatePDF')).save();
+    html2pdf().set({ margin: 10, filename: `شهادة_${cert.code}.pdf` }).from(document.getElementById('haccpCertPDF')).save();
   }
 </script>
 
