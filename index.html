@@ -1,1036 +1,653 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>رمز الإمتثال | نظام الإدارة والموظفين</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Tajawal & Cairo -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <!-- html2pdf Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              main: '#1C4344',       /* الزيتي الكحلي الفاخر */
-              dark: '#143233',       
-              gold: '#C69214',       /* الذهبي الخاص بـ رمز الامتثال */
-              goldHover: '#B0800F',
-              bgLight: '#F3F6F6',
-              cardBg: '#FFFFFF'
-            }
-          },
-          fontFamily: {
-            brandFont: ['Tajawal', 'Cairo', 'sans-serif']
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة وشعار رمز الامتثال - نظام التفتيش وإصدار الشهادات</title>
+    <style>
+        :root {
+            --primary-gold: #c59b27;
+            --primary-green: #1b4332;
+            --bg-light: #f8f9fa;
+            --text-dark: #2d3748;
+            --border-color: #cbd5e0;
         }
-      }
-    }
-  </script>
-  <style>
-    body { font-family: 'Tajawal', 'Cairo', sans-serif; background-color: #F3F6F6; color: #1C4344; }
-    canvas { border: 1px dashed #C69214; border-radius: 8px; background: #FFF; cursor: crosshair; }
-    
-    /* شعار درع رمز الامتثال الدقيق */
-    .shield-logo {
-      width: 52px;
-      height: 60px;
-      background: linear-gradient(135deg, #D49B27 0%, #C69214 100%);
-      clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .shield-inner {
-      width: 42px;
-      height: 50px;
-      background-color: #FFFFFF;
-      clip-path: polygon(50% 0%, 100% 15%, 100% 75%, 50% 100%, 0% 75%, 0% 15%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
 
-    .sidebar-overlay { transition: opacity 0.3s ease; }
-    .sidebar-drawer { transition: transform 0.3s ease-in-out; }
-  </style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* --- الشعار الرئيسي --- */
+        .brand-logo-container {
+            text-align: center;
+            display: inline-block;
+        }
+
+        .brand-logo-svg {
+            width: 100px;
+            height: 100px;
+        }
+
+        .brand-logo-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- شاشة تسجيل الدخول --- */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e2e8f0 0%, #edf2f7 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-gold);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-gold);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #b08821;
+        }
+
+        .btn-success {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        /* --- لوحة التحكم --- */
+        .dashboard {
+            display: none;
+        }
+
+        header {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary-gold);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            background: #edf2f7;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary-green);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-gold);
+            font-size: 18px;
+        }
+
+        /* --- جدول البنود والتفتيش --- */
+        .item-row {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fafafa;
+        }
+
+        .item-row h4 {
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .status-options {
+            display: flex;
+            gap: 20px;
+            margin: 12px 0;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #edf2f7;
+        }
+
+        .status-options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .notes-img-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .user-table th, .user-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: right;
+        }
+
+        .user-table th {
+            background: #f7fafc;
+            color: var(--primary-green);
+        }
+
+        /* --- قالب الشهادة المطبوعة --- */
+        .certificate-view {
+            display: none;
+            background: white;
+            width: 800px;
+            margin: 20px auto;
+            padding: 40px;
+            border: 10px solid var(--primary-gold);
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .cert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 15px;
+        }
+
+        .cert-title {
+            text-align: center;
+            font-size: 28px;
+            color: var(--primary-green);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .cert-body {
+            line-height: 2;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .cert-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-size: 13px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            background: white;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .certificate-view, .certificate-view * {
+                visibility: visible;
+            }
+            .certificate-view {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: 5px solid var(--primary-gold);
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
-<body class="bg-brand-bgLight flex flex-col min-h-screen">
+<body>
 
-  <!-- ==================== 1. الهيدر والشعار الرئيسي ==================== -->
-  <header class="bg-brand-main text-white sticky top-0 z-40 shadow-lg border-b-2 border-brand-gold">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      
-      <!-- الشعار والتسمية الرسمية -->
-      <div class="flex items-center gap-3">
-        <div class="shield-logo">
-          <div class="shield-inner">
-            <i class="fa-solid fa-check text-brand-main text-2xl font-black"></i>
-          </div>
-        </div>
-        <div>
-          <h1 class="text-xl md:text-2xl font-black tracking-wide text-brand-gold leading-tight">رمز الإمتثال</h1>
-          <p class="text-[10px] md:text-xs text-white opacity-90 font-semibold tracking-wider">العرض المالي ونظام الإدارة الميدانية</p>
-        </div>
-      </div>
-
-      <!-- محاكي تبديل الأدوار والزر الجانبي -->
-      <div class="flex items-center gap-2">
-        <div class="hidden sm:flex items-center gap-2 bg-brand-dark px-3 py-1.5 rounded-lg border border-brand-gold/40 text-xs">
-          <i class="fa-solid fa-user-gear text-brand-gold"></i>
-          <span>الدور:</span>
-          <select id="roleSelector" onchange="switchRole(this.value)" class="bg-transparent text-brand-gold font-bold focus:outline-none">
-            <option value="admin" class="bg-brand-dark text-white">المدير العام</option>
-            <option value="supervisor" class="bg-brand-dark text-white">المشرف</option>
-            <option value="inspector" class="bg-brand-dark text-white">المراقب الميداني</option>
-          </select>
-        </div>
-
-        <!-- زر القائمة الجانبية (الثلاث نقاط / الثلاث خطوط) -->
-        <button onclick="toggleSidebar()" class="p-2 bg-brand-dark hover:bg-brand-gold/20 text-brand-gold rounded-lg border border-brand-gold/40 text-lg transition">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- شريط الدور للجوال فقط -->
-    <div class="sm:hidden bg-brand-dark px-4 py-1.5 border-t border-brand-gold/20 flex justify-between items-center text-xs">
-      <span class="text-slate-300">عرض واجهة:</span>
-      <select onchange="switchRole(this.value)" class="bg-transparent text-brand-gold font-bold">
-        <option value="admin" class="bg-brand-dark text-white">المدير العام</option>
-        <option value="supervisor" class="bg-brand-dark text-white">المشرف</option>
-        <option value="inspector" class="bg-brand-dark text-white">المراقب الميداني</option>
-      </select>
-    </div>
-  </header>
-
-  <!-- ==================== 2. شريط التبويبات العلوي المقسم ==================== -->
-  <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[68px] z-30">
-    <div class="max-w-7xl mx-auto px-2 md:px-4">
-      
-      <!-- تبويبات المدير العام -->
-      <div id="navAdmin" class="flex justify-around md:justify-start gap-1 md:gap-4 text-xs md:text-sm font-bold">
-        <button onclick="showAdminTab('tabKitchens')" class="tab-btn-admin active border-b-2 border-brand-gold text-brand-main py-3 px-3 flex items-center gap-2">
-          <i class="fa-solid fa-utensils text-brand-gold"></i>
-          <span>المطابخ والعملاء</span>
-        </button>
-        <button onclick="showAdminTab('tabTemplates')" class="tab-btn-admin border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
-          <i class="fa-solid fa-clipboard-list text-brand-gold"></i>
-          <span>قوالب التفتيش</span>
-        </button>
-        <button onclick="showAdminTab('tabCreateTask')" class="tab-btn-admin border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
-          <i class="fa-solid fa-square-plus text-brand-gold"></i>
-          <span>إنشاء مهام جديدة</span>
-        </button>
-      </div>
-
-      <!-- تبويبات المشرف -->
-      <div id="navSupervisor" class="flex justify-around md:justify-start gap-1 md:gap-4 text-xs md:text-sm font-bold hidden">
-        <button onclick="showSuperTab('tabAssign')" class="tab-btn-super active border-b-2 border-brand-gold text-brand-main py-3 px-3 flex items-center gap-2">
-          <i class="fa-solid fa-plus-circle text-brand-gold"></i>
-          <span>إنشاء مهمة للمراقب</span>
-        </button>
-        <button onclick="showSuperTab('tabInspectors')" class="tab-btn-super border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-brand-gold"></i>
-          <span>قائمة المراقبين</span>
-        </button>
-        <button onclick="showSuperTab('tabReadyReports')" class="tab-btn-super border-b-2 border-transparent text-slate-500 py-3 px-3 flex items-center gap-2">
-          <i class="fa-solid fa-file-invoice text-brand-gold"></i>
-          <span>التقارير الجاهزة</span>
-        </button>
-      </div>
-
-      <!-- تبويبات المراقب الميداني -->
-      <div id="navInspector" class="flex justify-around md:justify-start gap-1 md:gap-2 text-[11px] md:text-sm font-bold overflow-x-auto hidden">
-        <button onclick="showInspTab('tabNotStarted')" class="tab-btn-insp active border-b-2 border-brand-gold text-brand-main py-3 px-2 whitespace-nowrap flex items-center gap-1">
-          <i class="fa-solid fa-clock text-amber-500"></i>
-          <span>لم يبدأ بعد</span>
-        </button>
-        <button onclick="showInspTab('tabInProgress')" class="tab-btn-insp border-b-2 border-transparent text-slate-500 py-3 px-2 whitespace-nowrap flex items-center gap-1">
-          <i class="fa-solid fa-spinner text-blue-500"></i>
-          <span>قيد العمل</span>
-        </button>
-        <button onclick="showInspTab('tabCompleted')" class="tab-btn-insp border-b-2 border-transparent text-slate-500 py-3 px-2 whitespace-nowrap flex items-center gap-1">
-          <i class="fa-solid fa-circle-check text-emerald-500"></i>
-          <span>تقارير مكتملة</span>
-        </button>
-        <button onclick="showInspTab('tabInspReady')" class="tab-btn-insp border-b-2 border-transparent text-slate-500 py-3 px-2 whitespace-nowrap flex items-center gap-1">
-          <i class="fa-solid fa-file-export text-brand-gold"></i>
-          <span>التقارير الجاهزة</span>
-        </button>
-      </div>
-
-    </div>
-  </nav>
-
-  <!-- ==================== 3. المحتوى الرئيسي المقسم ==================== -->
-  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
-
-    <!-- ---------------- SECTION 1: المدير العام ---------------- -->
-    <div id="adminContainer" class="space-y-6">
-      <div id="tabKitchens" class="admin-tab-content space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-lg font-bold text-brand-main mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-utensils text-brand-gold"></i> إدارة المطابخ والمنشآت المسجلة
-          </h3>
-          <div class="flex gap-2">
-            <input type="text" id="newClientName" placeholder="أدخل اسم المطبخ أو المطعم الجديد..." class="flex-1 bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-gold">
-            <button onclick="addClient()" class="bg-brand-main hover:bg-brand-dark text-white font-bold px-5 rounded-xl text-sm shadow">إضافة</button>
-          </div>
-          <div id="clientsList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-4"></div>
-        </div>
-      </div>
-
-      <div id="tabTemplates" class="admin-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-          <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
-            <i class="fa-solid fa-folder-plus text-brand-gold"></i> إنشاء قالب تقرير جديد
-          </h3>
-          <div>
-            <label class="block text-xs font-bold text-slate-600 mb-1">اسم القالب:</label>
-            <input type="text" id="templateTitle" placeholder="مثال: قالب تفتيش النظافة والاشتراطات الصحية" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-600 mb-2">بنود التفتيش (محقق / غير محقق):</label>
-            <div id="templateItemsContainer" class="space-y-2">
-              <input type="text" placeholder="أدخل نص البند الأول..." class="template-item-input w-full bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">
+    <!-- 1. صفحة تسجيل الدخول -->
+    <div id="loginPage" class="login-wrapper">
+        <div class="login-card">
+            <div class="brand-logo-container" style="margin-bottom: 25px;">
+                <svg class="brand-logo-svg" viewBox="0 0 100 100">
+                    <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c59b27"/>
+                    <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V30 Z" fill="#ffffff"/>
+                    <path d="M38 48 L46 56 L64 36" fill="none" stroke="#1b4332" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="brand-logo-text">رمز الامتثال</div>
             </div>
-            <button onclick="addTemplateItemField()" class="mt-3 text-xs bg-slate-100 hover:bg-slate-200 text-brand-main font-bold py-2 px-4 rounded-lg border flex items-center gap-1">
-              <i class="fa-solid fa-plus text-brand-gold"></i> إضافة بند جديد
-            </button>
-          </div>
-          <button onclick="saveTemplate()" class="w-full sm:w-auto bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-xl text-sm shadow">حفظ القالب</button>
-        </div>
-      </div>
-
-      <div id="tabCreateTask" class="admin-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-          <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
-            <i class="fa-solid fa-tasks text-brand-gold"></i> إنشاء وإسناد مهام المراقبين
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">اختر المطبخ:</label>
-              <select id="adminTaskClientSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">اختر القالب:</label>
-              <select id="adminTaskTemplateSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">اسم المراقب:</label>
-              <select id="adminTaskInspectorSelect" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
-            </div>
-          </div>
-          <button onclick="assignTaskFromAdmin()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-xl text-sm shadow">إسناد المهمة فوراً</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ---------------- SECTION 2: المشرف ---------------- -->
-    <div id="supervisorContainer" class="hidden space-y-6">
-      <div id="tabAssign" class="super-tab-content space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-          <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
-            <i class="fa-solid fa-paper-plane text-brand-gold"></i> إرسال مهمة تفتيش جديدة للمراقب
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">المطبخ المستهدف:</label>
-              <select id="superTaskClient" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">القالب:</label>
-              <select id="superTaskTemplate" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">المراقب المكلف:</label>
-              <select id="superInspector" class="w-full bg-slate-50 border border-slate-300 p-2.5 rounded-xl text-sm font-semibold"></select>
-            </div>
-          </div>
-          <button onclick="assignTaskFromSuper()" class="bg-brand-main hover:bg-brand-dark text-white font-bold py-2.5 px-6 rounded-xl text-sm shadow">إرسال للمراقب</button>
-        </div>
-      </div>
-
-      <div id="tabInspectors" class="super-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-lg font-bold text-brand-main mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-users-gear text-brand-gold"></i> طاقم المراقبين الميدانيين
-          </h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="inspectorsListCard"></div>
-        </div>
-      </div>
-
-      <div id="tabReadyReports" class="super-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-lg font-bold text-brand-main mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-box-archive text-brand-gold"></i> أرشفة وتصدير التقارير المكتملة
-          </h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-right text-slate-700 border border-slate-200">
-              <thead class="bg-brand-main text-white text-xs">
-                <tr>
-                  <th class="p-3">المطبخ</th>
-                  <th class="p-3">المراقب</th>
-                  <th class="p-3">النسبة</th>
-                  <th class="p-3">الحالة</th>
-                  <th class="p-3">تحميل</th>
-                </tr>
-              </thead>
-              <tbody id="superTasksTable"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ---------------- SECTION 3: المراقب الميداني ---------------- -->
-    <div id="inspectorContainer" class="hidden space-y-6">
-      <div id="tabNotStarted" class="insp-tab-content space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-md font-bold text-brand-main mb-3">المهام التي لم يتم البدء بها</h3>
-          <div id="listNotStarted" class="space-y-3"></div>
-        </div>
-      </div>
-
-      <div id="tabInProgress" class="insp-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-md font-bold text-brand-main mb-3">استكمال تعبئة التقرير الميداني النشط</h3>
-          
-          <div id="activeTaskForm" class="space-y-5 hidden">
-            <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl text-xs font-bold text-brand-main border border-slate-200">
-              <div><span>المطبخ: </span><span id="inspClientName" class="text-brand-gold"></span></div>
-              <div><span>القالب: </span><span id="inspTemplateTitle"></span></div>
-            </div>
-
-            <div id="inspectionChecklist" class="space-y-3"></div>
-
-            <div class="border-t pt-4">
-              <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-red-700">
-                <input type="checkbox" id="hasIncident" onchange="toggleIncidentForm(this.checked)" class="w-4 h-4 rounded">
-                <span>هل يوجد محضر مخالفة / تعهد منفصل؟</span>
-              </label>
-            </div>
-
-            <div id="incidentFormContainer" class="hidden bg-red-50/60 border border-red-200 p-4 rounded-xl space-y-3">
-              <p class="font-bold text-xs text-red-700">بيانات محضر ضبط المخالفة:</p>
-              <textarea id="incidentReason" placeholder="سبب المخالفة..." class="w-full bg-white p-2 rounded border text-xs"></textarea>
-              <textarea id="incidentAction" placeholder="الإجراء التصحيحي المطلوب..." class="w-full bg-white p-2 rounded border text-xs"></textarea>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[11px] font-bold mb-1">توقيع المراقب:</label>
-                  <canvas id="inspectorSig" width="240" height="80"></canvas>
-                  <button onclick="clearCanvas('inspectorSig')" class="text-[10px] text-red-600 block mt-1">مسح التوقيع</button>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" class="form-control" required placeholder="drfirasahfiz@gmail.com">
                 </div>
-                <div>
-                  <label class="block text-[11px] font-bold mb-1">توقيع مسؤول المطبخ:</label>
-                  <canvas id="clientSig" width="240" height="80"></canvas>
-                  <button onclick="clearCanvas('clientSig')" class="text-[10px] text-red-600 block mt-1">مسح التوقيع</button>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="loginPassword" class="form-control" required placeholder="******">
                 </div>
-              </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">تسجيل الدخول</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. لوحة التحكم والعمليات -->
+    <div id="dashboardPage" class="dashboard">
+        <header class="no-print">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <svg class="brand-logo-svg" style="width: 45px; height: 45px;" viewBox="0 0 100 100">
+                    <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c59b27"/>
+                    <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
+                    <path d="M38 48 L46 56 L64 36" fill="none" stroke="#1b4332" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h2 style="color: var(--primary-green); font-size: 20px;">منصة رمز الامتثال</h2>
             </div>
 
-            <button onclick="submitInspection()" class="w-full bg-brand-main text-white font-bold py-3 rounded-xl shadow border border-brand-gold text-sm">حفظ وإرسال التقرير النهائية</button>
-          </div>
-          
-          <div id="noActiveTask" class="text-center py-6 text-slate-400 text-xs font-semibold">لا يوجد تقرير قيد التعبئة حالياً. اختر مهمة وابدأ بها.</div>
-        </div>
-      </div>
-
-      <div id="tabCompleted" class="insp-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-md font-bold text-brand-main mb-3">التقارير التي تم إنهاؤها بنجاح</h3>
-          <div id="listCompleted" class="space-y-3"></div>
-        </div>
-      </div>
-
-      <div id="tabInspReady" class="insp-tab-content hidden space-y-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <h3 class="text-md font-bold text-brand-main mb-3">طباعة وتنزيل التقارير</h3>
-          <div id="listInspReady" class="space-y-3"></div>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ==================== 4. القائمة الجانبية (الثلاث نقاط) ==================== -->
-  <div id="sidebarDrawer" class="fixed inset-0 z-50 pointer-events-none">
-    <div id="sidebarOverlay" onclick="toggleSidebar()" class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300"></div>
-    
-    <aside id="sidebarContent" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-brand-main text-white shadow-2xl p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out pointer-events-auto border-l-2 border-brand-gold">
-      
-      <div class="space-y-6">
-        <div class="flex items-center justify-between border-b border-brand-gold/30 pb-4">
-          <div class="flex items-center gap-3">
-            <div class="shield-logo scale-75">
-              <div class="shield-inner">
-                <i class="fa-solid fa-check text-brand-main text-lg font-black"></i>
-              </div>
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('inspectionTab', this)">قوالب التفتيش والشهادات</button>
+                <button class="tab-btn" id="usersTabBtn" onclick="switchTab('usersTab', this)">إدارة المستخدمين والصلاحيات</button>
             </div>
-            <span class="font-bold text-brand-gold text-lg">رمز الإمتثال</span>
-          </div>
-          <button onclick="toggleSidebar()" class="text-slate-300 hover:text-white text-xl">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
 
-        <div class="space-y-3">
-          <p class="text-xs font-bold text-brand-gold tracking-wider">إدارة النظام والخدمات</p>
-
-          <!-- زر الموظفين والصلاحيات الخاص بالمدير العام -->
-          <button onclick="openUsersModal()" class="w-full bg-brand-dark hover:bg-brand-gold/20 text-white p-3 rounded-xl flex items-center justify-between border border-brand-gold/30 transition text-sm font-bold">
-            <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-brand-gold"></i> الموظفين والمستخدمين والصلاحيات</span>
-            <i class="fa-solid fa-chevron-left text-xs text-brand-gold"></i>
-          </button>
-          
-          <button onclick="openCertificatesModal()" class="w-full bg-brand-dark hover:bg-brand-gold/20 text-white p-3 rounded-xl flex items-center justify-between border border-brand-gold/30 transition text-sm font-bold">
-            <span class="flex items-center gap-2"><i class="fa-solid fa-award text-brand-gold"></i> إدارة خانة الشهادات</span>
-            <i class="fa-solid fa-chevron-left text-xs text-brand-gold"></i>
-          </button>
-
-          <button onclick="alert('النظام يعمل بكامل كفاءته وملائم لجميع الشاشات')" class="w-full bg-brand-dark hover:bg-brand-gold/20 text-white p-3 rounded-xl flex items-center justify-between border border-brand-gold/30 transition text-sm font-bold">
-            <span class="flex items-center gap-2"><i class="fa-solid fa-sliders text-brand-gold"></i> إعدادات المنظومة</span>
-            <i class="fa-solid fa-chevron-left text-xs text-brand-gold"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- معلومات التواصل الخاصة برمز الامتثال (أسفل القائمة) -->
-      <div class="border-t border-brand-gold/30 pt-4 space-y-2 text-xs">
-        <p class="font-bold text-brand-gold mb-2">معلومات التواصل (رمز الإمتثال):</p>
-        <p class="flex items-center gap-2 text-slate-200"><i class="fa-solid fa-phone text-brand-gold"></i> 0553595150</p>
-        <p class="flex items-center gap-2 text-slate-200"><i class="fa-solid fa-envelope text-brand-gold"></i> RMZ.ALEMTITHAL@gmail.com</p>
-        <p class="flex items-start gap-2 text-slate-200"><i class="fa-solid fa-location-dot text-brand-gold mt-1"></i><span>مكة المكرمة - حي الراشدي بجوار صيدلية غاية</span></p>
-      </div>
-
-    </aside>
-  </div>
-
-  <!-- ==================== 5. مودال إدارة الموظفين والمستخدمين والصلاحيات ==================== -->
-  <div id="usersModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white text-slate-800 rounded-2xl max-w-3xl w-full p-6 space-y-5 max-h-[90vh] overflow-y-auto border-t-4 border-brand-gold">
-      
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
-          <i class="fa-solid fa-user-plus text-brand-gold"></i> إدارة حسابات الموظفين وإنشاء اليوزرات والصلاحيات
-        </h3>
-        <button onclick="closeUsersModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-
-      <!-- نموذج إضافة يوزر جديد -->
-      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-        <h4 class="font-bold text-xs text-brand-main flex items-center gap-1">
-          <i class="fa-solid fa-plus-circle text-brand-gold"></i> إنشاء حساب مستخدم (User) جديد
-        </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">اسم الموظف الثلاثي:</label>
-            <input type="text" id="newEmpName" placeholder="مثال: عبدالمجيد الغامدي" class="w-full p-2 bg-white border rounded-lg font-semibold">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">اسم المستخدم (Username):</label>
-            <input type="text" id="newEmpUsername" placeholder="مثال: abdulmajeed" class="w-full p-2 bg-white border rounded-lg font-semibold">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">كلمة المرور:</label>
-            <input type="password" id="newEmpPassword" placeholder="******" class="w-full p-2 bg-white border rounded-lg font-semibold">
-          </div>
-          <div>
-            <label class="block font-bold text-slate-700 mb-1">الدور الوظيفي:</label>
-            <select id="newEmpRole" class="w-full p-2 bg-white border rounded-lg font-bold">
-              <option value="المدير العام">المدير العام</option>
-              <option value="المشرف">المشرف</option>
-              <option value="المراقب الميداني">المراقب الميداني</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block font-bold text-slate-700 mb-1">حدد الصلاحيات الممنوحة:</label>
-            <div class="flex flex-wrap gap-3 text-[11px] pt-1">
-              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permKitchens" checked class="rounded text-brand-main"> إدارة المطابخ</label>
-              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permTemplates" checked class="rounded text-brand-main"> إنشاء القوالب</label>
-              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permAssign" checked class="rounded text-brand-main"> إسناد المهام</label>
-              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permCerts" checked class="rounded text-brand-main"> إصدار الشهادات</label>
-              <label class="flex items-center gap-1 cursor-pointer"><input type="checkbox" id="permReports" checked class="rounded text-brand-main"> تصدير التقارير</label>
+            <div>
+                <span id="currentUserDisplay" style="font-weight: bold; margin-left: 10px; font-size: 13px;"></span>
+                <button class="btn" style="background:#e53e3e; color:white;" onclick="logout()">خروج</button>
             </div>
-          </div>
-        </div>
-        <button onclick="createUserAccount()" class="w-full sm:w-auto bg-brand-main text-white font-bold py-2 px-6 rounded-lg text-xs shadow mt-2">إضافة الموظف وتفعيل الحساب</button>
-      </div>
+        </header>
 
-      <!-- قائمة كل الموظفين المسجلين -->
-      <div class="space-y-3">
-        <h4 class="font-bold text-xs text-brand-main flex items-center gap-1">
-          <i class="fa-solid fa-users text-brand-gold"></i> جميع الموظفين واليوزرات المسجلة في النظام:
-        </h4>
-        <div class="overflow-x-auto border border-slate-200 rounded-xl">
-          <table class="w-full text-xs text-right">
-            <thead class="bg-brand-main text-white">
-              <tr>
-                <th class="p-2.5">اسم الموظف</th>
-                <th class="p-2.5">اسم المستخدم</th>
-                <th class="p-2.5">الدور</th>
-                <th class="p-2.5">الصلاحيات</th>
-                <th class="p-2.5">إجراء</th>
-              </tr>
-            </thead>
-            <tbody id="employeesTableBody"></tbody>
-          </table>
-        </div>
-      </div>
+        <div class="container no-print">
+            <!-- تبويب قوالب التفتيش -->
+            <div id="inspectionTab" class="tab-content">
+                <div class="card">
+                    <h3 class="card-title">بيانات المنشأة والشهادة</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>رقم الشهادة (إدخال يدوي)</label>
+                            <input type="text" id="certNumberInput" class="form-control" placeholder="مثال: CERT-2026-001">
+                        </div>
+                        <div class="form-group">
+                            <label>اسم المنشأة/الجهة</label>
+                            <input type="text" id="facilityNameInput" class="form-control" placeholder="اسم المنشأة الخاضعة للتقييم">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ التفتيش</label>
+                            <input type="date" id="inspectionDateInput" class="form-control">
+                        </div>
+                    </div>
+                </div>
 
+                <div class="card">
+                    <h3 class="card-title">قائمة بنود الامتثال والتفتيش الميداني</h3>
+                    
+                    <!-- بند 1 -->
+                    <div class="item-row">
+                        <h4>1. مدى التزام المنشأة بالاشتراطات الصحية والتراخيص النظامية</h4>
+                        <div class="status-options">
+                            <label style="color: #276749;"><input type="radio" name="item1" value="محقق"> محقق</label>
+                            <label style="color: #dd6b20;"><input type="radio" name="item1" value="غير محقق"> غير محقق</label>
+                            <label style="color: #e53e3e;"><input type="radio" name="item1" value="غير ممتثل"> غير ممتثل</label>
+                        </div>
+                        <div class="notes-img-container">
+                            <input type="text" class="form-control" placeholder="إضافة ملاحظات المراقب على البند الأول...">
+                            <input type="file" accept="image/*" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- بند 2 -->
+                    <div class="item-row">
+                        <h4>2. توفر وتجهيز معدات السلامة وسجلات الصيانة الدورية</h4>
+                        <div class="status-options">
+                            <label style="color: #276749;"><input type="radio" name="item2" value="محقق"> محقق</label>
+                            <label style="color: #dd6b20;"><input type="radio" name="item2" value="غير محقق"> غير محقق</label>
+                            <label style="color: #e53e3e;"><input type="radio" name="item2" value="غير ممتثل"> غير ممتثل</label>
+                        </div>
+                        <div class="notes-img-container">
+                            <input type="text" class="form-control" placeholder="إضافة ملاحظات المراقب على البند الثاني...">
+                            <input type="file" accept="image/*" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- بند 3 -->
+                    <div class="item-row">
+                        <h4>3. تطبيق معايير جودة البيئة وتدريب العاملين</h4>
+                        <div class="status-options">
+                            <label style="color: #276749;"><input type="radio" name="item3" value="محقق"> محقق</label>
+                            <label style="color: #dd6b20;"><input type="radio" name="item3" value="غير محقق"> غير محقق</label>
+                            <label style="color: #e53e3e;"><input type="radio" name="item3" value="غير ممتثل"> غير ممتثل</label>
+                        </div>
+                        <div class="notes-img-container">
+                            <input type="text" class="form-control" placeholder="إضافة ملاحظات المراقب على البند الثالث...">
+                            <input type="file" accept="image/*" class="form-control">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-success" onclick="generateCertificate()">حفظ وإنشاء الشهادة والتقرير</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تبويب إدارة الصلاحيات والمستخدمين -->
+            <div id="usersTab" class="tab-content" style="display: none;">
+                <div class="card">
+                    <h3 class="card-title">إضافة مراقب / مشرف جديد</h3>
+                    <form onsubmit="addUser(event)" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                        <div class="form-group" style="margin:0;">
+                            <label>البريد الإلكتروني</label>
+                            <input type="email" id="newEmail" class="form-control" required placeholder="user@domain.com">
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label>كلمة المرور</label>
+                            <input type="text" id="newPassword" class="form-control" required placeholder="123456">
+                        </div>
+                        <div class="form-group" style="margin:0;">
+                            <label>الصلاحية / الدور</label>
+                            <select id="newRole" class="form-control">
+                                <option value="مراقب">مراقب ميداني</option>
+                                <option value="مشرف">مشرف عام</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">إضافة المستخدم</button>
+                    </form>
+
+                    <h3 class="card-title" style="margin-top: 30px;">المستخدمين المصرح لهم بالنظام</h3>
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>البريد الإلكتروني</th>
+                                <th>كلمة المرور</th>
+                                <th>الصلاحية</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- تعبئة تلقائية -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. معاينة الشهادة للطباعة -->
+        <div id="certificateView" class="certificate-view">
+            <div class="cert-header">
+                <div>
+                    <h3 style="color: var(--primary-green);">رمز الامتثال</h3>
+                    <p style="font-size: 12px; color: #718096;">للاستشارات وتقييم الامتثال</p>
+                </div>
+                <div class="brand-logo-container">
+                    <svg class="brand-logo-svg" style="width: 80px; height: 80px;" viewBox="0 0 100 100">
+                        <path d="M50 10 L85 25 V50 C85 70 50 90 50 90 C50 90 15 70 15 50 V25 Z" fill="#c59b27"/>
+                        <path d="M50 18 L78 30 V50 C78 66 50 82 50 82 C50 82 22 66 22 50 V25 Z" fill="#ffffff"/>
+                        <path d="M38 48 L46 56 L64 36" fill="none" stroke="#1b4332" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="brand-logo-text" style="font-size: 16px;">رمز الامتثال</div>
+                </div>
+                <div style="text-align: left; font-size: 13px;">
+                    <div><strong>رقم الشهادة:</strong> <span id="certNumDisplay">---</span></div>
+                    <div><strong>التاريخ:</strong> <span id="certDateDisplay">---</span></div>
+                </div>
+            </div>
+
+            <div class="cert-title">شهادة امتثال ومعاينة ميدانية</div>
+
+            <div class="cert-body">
+                تشهد شركة <strong>رمز الامتثال</strong> بأنه بعد إجراء الفحص والمعاينة الميدانية بواسطة المراقبين المعتمدين لمنشأة:
+                <h3 id="certFacilityDisplay" style="text-align: center; color: var(--primary-gold); margin: 15px 0;">---</h3>
+                قد تبين التزام المنشأة بالمعايير والاشتراطات المعتمدة، وبناءً عليه تم منح هذه الشهادة.
+            </div>
+
+            <div class="cert-footer">
+                <div>
+                    <p><strong>العنوان:</strong> مكة المكرمة - حي الزائدي - بجوار صيدلية غايا</p>
+                    <p><strong>البريد الإلكتروني:</strong> drfirasahfiz@gmail.com</p>
+                </div>
+                <div style="text-align: center;">
+                    <p>ختم واعتماد المنصة</p>
+                    <div style="margin-top: 10px; border-bottom: 2px stroke var(--primary-green); width: 120px; display: inline-block;"></div>
+                </div>
+            </div>
+
+            <div class="no-print" style="margin-top: 30px; text-align: center;">
+                <button class="btn btn-primary" onclick="window.print()" style="width: auto;">طباعة الشهادة</button>
+                <button class="btn" style="background:#718096; color:white;" onclick="closeCert()">إغلاق المعاينة</button>
+            </div>
+        </div>
+
+        <footer class="no-print">
+            الموقع: مكة المكرمة - حي الزائدي - بجوار صيدلية غايا | البريد: drfirasahfiz@gmail.com <br>
+            جميع الحقوق محفوظة لـ <strong>رمز الامتثال</strong> &copy; 2026
+        </footer>
     </div>
-  </div>
 
-  <!-- ==================== 6. مودال الشهادات ==================== -->
-  <div id="certModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white text-slate-800 rounded-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto border-t-4 border-brand-gold">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-lg font-bold text-brand-main flex items-center gap-2">
-          <i class="fa-solid fa-award text-brand-gold"></i> إصدار وتوثيق شهادات هاسب (HACCP)
-        </h3>
-        <button onclick="closeCertificatesModal()" class="text-slate-400 hover:text-slate-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">اختر العميل/المطبخ:</label>
-          <select id="certModalClient" class="w-full p-2 bg-white border rounded-lg font-bold"></select>
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">رقم الشهادة:</label>
-          <input type="text" id="certModalCode" disabled class="w-full p-2 bg-slate-200 font-bold text-brand-main rounded-lg">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">تاريخ الإصدار:</label>
-          <input type="date" id="certModalIssue" class="w-full p-2 bg-white border rounded-lg">
-        </div>
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">تاريخ الانتهاء:</label>
-          <input type="date" id="certModalExpiry" class="w-full p-2 bg-white border rounded-lg">
-        </div>
-      </div>
-      
-      <button onclick="issueCertFromModal()" class="w-full bg-brand-main text-brand-gold font-bold py-2.5 rounded-xl border border-brand-gold text-sm">إصدار الشهادة الآن</button>
-
-      <div class="space-y-2 pt-2">
-        <h4 class="font-bold text-xs text-brand-main">الشهادات الصادرة:</h4>
-        <div id="modalCertList" class="space-y-2 max-h-48 overflow-y-auto"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- قوالب تصدير PDF المخفية -->
-  <div id="pdfExportContainer" class="hidden">
-    <div id="mainReportPDF" class="p-8 bg-white font-brandFont text-slate-800 space-y-6">
-      <div class="flex justify-between items-center border-b-2 border-brand-main pb-4">
-        <div>
-          <h2 class="text-2xl font-black text-brand-main">رمز الإمتثال | تقرير التفتيش الميداني</h2>
-          <p class="text-xs font-bold text-brand-gold">RMZ AL-AMTITHAL AUDIT REPORT</p>
-        </div>
-        <div id="pdfMetaDate" class="text-left text-xs font-semibold text-slate-600"></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg text-sm border border-slate-200">
-        <p><strong>اسم المنشأة:</strong> <span id="pdfClientName"></span></p>
-        <p><strong>القالب:</strong> <span id="pdfTemplateName"></span></p>
-        <p><strong>المراقب:</strong> <span id="pdfInspectorName"></span></p>
-        <p><strong>نسبة الامتثال:</strong> <span id="pdfComplianceRate" class="font-bold text-brand-main"></span></p>
-      </div>
-      <table class="w-full text-sm text-right border border-slate-300">
-        <thead class="bg-brand-main text-white font-bold">
-          <tr><th class="p-2 border">#</th><th class="p-2 border">البند</th><th class="p-2 border">النتيجة</th><th class="p-2 border">الملاحظات</th></tr>
-        </thead>
-        <tbody id="pdfChecklistTable"></tbody>
-      </table>
-    </div>
-
-    <div id="haccpCertPDF" class="p-10 bg-white font-brandFont text-center border-8 border-double border-brand-gold space-y-6">
-      <div class="text-brand-gold font-black text-xl">★ رمز الإمتثال لخدمات الجودة ★</div>
-      <h1 class="text-3xl font-black text-brand-main">شهادة اعتماد وتأهيل هاسب (HACCP)</h1>
-      <p class="text-sm text-slate-600 font-bold">تشهد شركة رمز الإمتثال بأن:</p>
-      <h2 id="pdfCertClient" class="text-3xl font-black text-brand-gold underline"></h2>
-      <p class="text-xs text-slate-600 max-w-md mx-auto">قد استوفت كافة متطلبات واشتراطات سلامة الغذاء ونظام تحليل المخاطر ونقاط التحكم الحرجة بنجاح.</p>
-      <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-lg text-xs font-bold border">
-        <div><span>الرقم: </span><span id="pdfCertCode"></span></div>
-        <div><span>الإصدار: </span><span id="pdfCertIssue"></span></div>
-        <div><span>الانتهاء: </span><span id="pdfCertExpiry"></span></div>
-      </div>
-    </div>
-  </div>
-
-<script>
-  let clients = JSON.parse(localStorage.getItem('clients')) || ['مطعم ودرة المأكولات', 'مطبخ الضيافة'];
-  let templates = JSON.parse(localStorage.getItem('templates')) || [
-    { id: 1, title: 'اشتراطات السلامة والنظافة العامة', items: ['نظافة الأرضيات والجدران', 'الالتزام بالزي الصحي والقفازات', 'درجة حرارة الثلاجات مناسبة'] }
-  ];
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
-  let certCounter = parseInt(localStorage.getItem('certCounter')) || 101;
-
-  // الموظفين الافتراضيين
-  let employees = JSON.parse(localStorage.getItem('employees')) || [
-    { id: 1, name: 'عبدالله السلمي', username: 'admin', role: 'المدير العام', perms: ['الكل'] },
-    { id: 2, name: 'سعود المالكي', username: 's.malki', role: 'المشرف', perms: ['إسناد المهام', 'تصدير التقارير'] },
-    { id: 3, name: 'أحمد علي', username: 'a.ali', role: 'المراقب الميداني', perms: ['تعبئة التقارير'] },
-    { id: 4, name: 'خالد عمر', username: 'k.omar', role: 'المراقب الميداني', perms: ['تعبئة التقارير'] }
-  ];
-
-  window.onload = function() {
-    renderClients();
-    renderSelects();
-    renderAllTasks();
-    renderEmployeesTable();
-    setupCanvas();
-    document.getElementById('certModalIssue').value = new Date().toISOString().split('T')[0];
-  };
-
-  function toggleSidebar() {
-    const overlay = document.getElementById('sidebarOverlay');
-    const drawer = document.getElementById('sidebarContent');
-    const isHidden = drawer.classList.contains('translate-x-full');
-
-    if (isHidden) {
-      drawer.classList.remove('translate-x-full');
-      overlay.classList.remove('opacity-0');
-      document.getElementById('sidebarDrawer').classList.remove('pointer-events-none');
-    } else {
-      drawer.classList.add('translate-x-full');
-      overlay.classList.add('opacity-0');
-      document.getElementById('sidebarDrawer').classList.add('pointer-events-none');
-    }
-  }
-
-  function switchRole(role) {
-    document.getElementById('navAdmin').classList.add('hidden');
-    document.getElementById('navSupervisor').classList.add('hidden');
-    document.getElementById('navInspector').classList.add('hidden');
-
-    document.getElementById('adminContainer').classList.add('hidden');
-    document.getElementById('supervisorContainer').classList.add('hidden');
-    document.getElementById('inspectorContainer').classList.add('hidden');
-
-    if (role === 'admin') {
-      document.getElementById('navAdmin').classList.remove('hidden');
-      document.getElementById('adminContainer').classList.remove('hidden');
-    } else if (role === 'supervisor') {
-      document.getElementById('navSupervisor').classList.remove('hidden');
-      document.getElementById('supervisorContainer').classList.remove('hidden');
-    } else if (role === 'inspector') {
-      document.getElementById('navInspector').classList.remove('hidden');
-      document.getElementById('inspectorContainer').classList.remove('hidden');
-    }
-  }
-
-  function showAdminTab(tabId) {
-    document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn-admin').forEach(el => {
-      el.classList.remove('border-brand-gold', 'text-brand-main');
-      el.classList.add('border-transparent', 'text-slate-500');
-    });
-    document.getElementById(tabId).classList.remove('hidden');
-    event.currentTarget.classList.add('border-brand-gold', 'text-brand-main');
-  }
-
-  function showSuperTab(tabId) {
-    document.querySelectorAll('.super-tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn-super').forEach(el => {
-      el.classList.remove('border-brand-gold', 'text-brand-main');
-      el.classList.add('border-transparent', 'text-slate-500');
-    });
-    document.getElementById(tabId).classList.remove('hidden');
-    event.currentTarget.classList.add('border-brand-gold', 'text-brand-main');
-  }
-
-  function showInspTab(tabId) {
-    document.querySelectorAll('.insp-tab-content').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.tab-btn-insp').forEach(el => {
-      el.classList.remove('border-brand-gold', 'text-brand-main');
-      el.classList.add('border-transparent', 'text-slate-500');
-    });
-    document.getElementById(tabId).classList.remove('hidden');
-    event.currentTarget.classList.add('border-brand-gold', 'text-brand-main');
-  }
-
-  // --- إدارة الموظفين والصلاحيات ---
-  function openUsersModal() {
-    toggleSidebar();
-    document.getElementById('usersModal').classList.remove('hidden');
-    renderEmployeesTable();
-  }
-
-  function closeUsersModal() {
-    document.getElementById('usersModal').classList.add('hidden');
-  }
-
-  function createUserAccount() {
-    const name = document.getElementById('newEmpName').value.trim();
-    const username = document.getElementById('newEmpUsername').value.trim();
-    const role = document.getElementById('newEmpRole').value;
-
-    if(!name || !username) {
-      alert('يرجى كتابة اسم الموظف واسم المستخدم');
-      return;
-    }
-
-    const perms = [];
-    if(document.getElementById('permKitchens').checked) perms.push('إدارة المطابخ');
-    if(document.getElementById('permTemplates').checked) perms.push('إنشاء القوالب');
-    if(document.getElementById('permAssign').checked) perms.push('إسناد المهام');
-    if(document.getElementById('permCerts').checked) perms.push('إصدار الشهادات');
-    if(document.getElementById('permReports').checked) perms.push('تصدير التقارير');
-
-    employees.push({ id: Date.now(), name, username, role, perms });
-    localStorage.setItem('employees', JSON.stringify(employees));
-    
-    document.getElementById('newEmpName').value = '';
-    document.getElementById('newEmpUsername').value = '';
-    document.getElementById('newEmpPassword').value = '';
-    
-    renderEmployeesTable();
-    renderSelects();
-    alert('تم إضافة الموظف وتفعيل حسابه بنجاح!');
-  }
-
-  function deleteEmployee(id) {
-    if(confirm('هل أنت تأكد من حذف حساب هذا الموظف؟')) {
-      employees = employees.filter(e => e.id !== id);
-      localStorage.setItem('employees', JSON.stringify(employees));
-      renderEmployeesTable();
-      renderSelects();
-    }
-  }
-
-  function renderEmployeesTable() {
-    const tbody = document.getElementById('employeesTableBody');
-    tbody.innerHTML = employees.map(emp => `
-      <tr class="border-b hover:bg-slate-50">
-        <td class="p-2.5 font-bold text-brand-main">${emp.name}</td>
-        <td class="p-2.5 text-slate-600 font-mono">${emp.username}</td>
-        <td class="p-2.5 font-semibold text-brand-gold">${emp.role}</td>
-        <td class="p-2.5 text-[10px]">
-          ${emp.perms.map(p => `<span class="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border inline-block m-0.5">${p}</span>`).join('')}
-        </td>
-        <td class="p-2.5">
-          <button onclick="deleteEmployee(${emp.id})" class="text-red-600 hover:text-red-800 font-bold"><i class="fa-solid fa-trash"></i></button>
-        </td>
-      </tr>
-    `).join('');
-
-    // تحديث بطاقات المشرف
-    document.getElementById('inspectorsListCard').innerHTML = employees
-      .filter(e => e.role === 'المراقب الميداني')
-      .map(e => `
-        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
-          <div>
-            <p class="font-bold text-brand-main text-sm">${e.name}</p>
-            <p class="text-xs text-slate-500">اسم المستخدم: @${e.username}</p>
-          </div>
-          <span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold">نشط</span>
-        </div>
-      `).join('');
-  }
-
-  function addClient() {
-    const val = document.getElementById('newClientName').value.trim();
-    if(val) {
-      clients.push(val);
-      localStorage.setItem('clients', JSON.stringify(clients));
-      document.getElementById('newClientName').value = '';
-      renderClients();
-      renderSelects();
-    }
-  }
-
-  function renderClients() {
-    document.getElementById('clientsList').innerHTML = clients.map(c => `
-      <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs font-bold text-brand-main">
-        <span><i class="fa-solid fa-store text-brand-gold ml-1"></i> ${c}</span>
-        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">مسجل</span>
-      </div>
-    `).join('');
-  }
-
-  function renderSelects() {
-    const cOptions = clients.map(c => `<option value="${c}">${c}</option>`).join('');
-    const tOptions = templates.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
-    
-    const inspectorEmployees = employees.filter(e => e.role === 'المراقب الميداني');
-    const iOptions = inspectorEmployees.length 
-      ? inspectorEmployees.map(i => `<option value="${i.name}">${i.name}</option>`).join('')
-      : '<option value="مراقب الميدان">مراقب الميدان</option>';
-
-    document.getElementById('adminTaskClientSelect').innerHTML = cOptions;
-    document.getElementById('adminTaskTemplateSelect').innerHTML = tOptions;
-    document.getElementById('adminTaskInspectorSelect').innerHTML = iOptions;
-
-    document.getElementById('superTaskClient').innerHTML = cOptions;
-    document.getElementById('superTaskTemplate').innerHTML = tOptions;
-    document.getElementById('superInspector').innerHTML = iOptions;
-
-    document.getElementById('certModalClient').innerHTML = cOptions;
-  }
-
-  function addTemplateItemField() {
-    const div = document.createElement('div');
-    div.innerHTML = `<input type="text" placeholder="أدخل نص البند..." class="template-item-input w-full bg-slate-50 border border-slate-300 p-2 rounded-lg text-sm">`;
-    document.getElementById('templateItemsContainer').appendChild(div);
-  }
-
-  function saveTemplate() {
-    const title = document.getElementById('templateTitle').value.trim();
-    const inputs = document.querySelectorAll('.template-item-input');
-    const items = [];
-    inputs.forEach(i => { if(i.value.trim()) items.push(i.value.trim()); });
-
-    if(title && items.length > 0) {
-      templates.push({ id: Date.now(), title, items });
-      localStorage.setItem('templates', JSON.stringify(templates));
-      alert('تم حفظ القالب بنجاح');
-      document.getElementById('templateTitle').value = '';
-      renderSelects();
-    }
-  }
-
-  function assignTaskFromAdmin() {
-    const client = document.getElementById('adminTaskClientSelect').value;
-    const tId = document.getElementById('adminTaskTemplateSelect').value;
-    const inspector = document.getElementById('adminTaskInspectorSelect').value;
-    const template = templates.find(t => t.id == tId);
-
-    tasks.push({ id: Date.now(), client, template, inspector, status: 'لم يبدأ', submittedData: null });
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    alert('تم إسناد المهمة للمراقب بنجاح');
-    renderAllTasks();
-  }
-
-  function assignTaskFromSuper() {
-    const client = document.getElementById('superTaskClient').value;
-    const tId = document.getElementById('superTaskTemplate').value;
-    const inspector = document.getElementById('superInspector').value;
-    const template = templates.find(t => t.id == tId);
-
-    tasks.push({ id: Date.now(), client, template, inspector, status: 'لم يبدأ', submittedData: null });
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    alert('تم إرسال المهمة بنجاح');
-    renderAllTasks();
-  }
-
-  function startInspectionTask(taskId) {
-    const task = tasks.find(t => t.id === taskId);
-    if(task) {
-      task.status = 'قيد التعبئة';
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      renderAllTasks();
-      showInspTab('tabInProgress');
-      loadActiveInspection(task);
-    }
-  }
-
-  function loadActiveInspection(task) {
-    document.getElementById('noActiveTask').classList.add('hidden');
-    document.getElementById('activeTaskForm').classList.remove('hidden');
-
-    document.getElementById('inspClientName').innerText = task.client;
-    document.getElementById('inspTemplateTitle').innerText = task.template.title;
-
-    document.getElementById('inspectionChecklist').innerHTML = task.template.items.map((item, index) => `
-      <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
-        <p class="font-bold text-xs text-brand-main">${index + 1}. ${item}</p>
-        <div class="flex gap-2">
-          <select class="item-status bg-white border border-slate-300 rounded p-1 text-xs font-bold" data-item="${item}">
-            <option value="محقق">محقق</option>
-            <option value="غير محقق">غير محقق</option>
-          </select>
-          <input type="text" class="item-notes flex-1 bg-white border border-slate-300 rounded p-1 text-xs" placeholder="ملاحظات البند...">
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function submitInspection() {
-    const activeTask = tasks.find(t => t.status === 'قيد التعبئة');
-    if(!activeTask) return;
-
-    const statuses = document.querySelectorAll('.item-status');
-    const notes = document.querySelectorAll('.item-notes');
-    const checklistResults = [];
-    let achieved = 0;
-
-    statuses.forEach((s, i) => {
-      if(s.value === 'محقق') achieved++;
-      checklistResults.push({ item: s.getAttribute('data-item'), status: s.value, note: notes[i].value });
-    });
-
-    const rate = Math.round((achieved / checklistResults.length) * 100);
-
-    activeTask.status = 'مكتملة';
-    activeTask.submittedData = {
-      checklistResults,
-      complianceRate: rate,
-      completedAt: new Date().toLocaleString('ar-SA')
-    };
-
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    alert('تم إرسال التقرير النهائي بنجاح!');
-    renderAllTasks();
-    showInspTab('tabCompleted');
-  }
-
-  function renderAllTasks() {
-    document.getElementById('superTasksTable').innerHTML = tasks.map(t => `
-      <tr class="border-b text-xs">
-        <td class="p-2 font-bold">${t.client}</td>
-        <td class="p-2">${t.inspector}</td>
-        <td class="p-2 font-bold text-brand-gold">${t.submittedData ? t.submittedData.complianceRate + '%' : '-'}</td>
-        <td class="p-2">${t.status}</td>
-        <td class="p-2">
-          ${t.status === 'مكتملة' ? `<button onclick="exportTaskPDF(${t.id})" class="bg-brand-gold text-brand-main text-[10px] font-bold px-2 py-1 rounded">PDF</button>` : '-'}
-        </td>
-      </tr>
-    `).join('');
-
-    const notStarted = tasks.filter(t => t.status === 'لم يبدأ');
-    document.getElementById('listNotStarted').innerHTML = notStarted.length ? notStarted.map(t => `
-      <div class="p-3 bg-amber-50/60 border border-amber-200 rounded-xl flex justify-between items-center text-xs">
-        <div>
-          <p class="font-bold text-brand-main">${t.client}</p>
-          <p class="text-[10px] text-slate-500">${t.template.title}</p>
-        </div>
-        <button onclick="startInspectionTask(${t.id})" class="bg-brand-main text-white font-bold px-3 py-1.5 rounded-lg">بدء التفتيش</button>
-      </div>
-    `).join('') : '<p class="text-xs text-slate-400">لا توجد مهام معلقة.</p>';
-
-    const completed = tasks.filter(t => t.status === 'مكتملة');
-    document.getElementById('listCompleted').innerHTML = completed.length ? completed.map(t => `
-      <div class="p-3 bg-emerald-50/60 border border-emerald-200 rounded-xl flex justify-between items-center text-xs">
-        <div>
-          <p class="font-bold text-brand-main">${t.client}</p>
-          <p class="text-[10px] text-slate-500">النسبة: ${t.submittedData.complianceRate}%</p>
-        </div>
-        <span class="text-emerald-700 font-bold">مكتمل</span>
-      </div>
-    `).join('') : '<p class="text-xs text-slate-400">لا توجد تقارير مكتملة.</p>';
-
-    document.getElementById('listInspReady').innerHTML = completed.length ? completed.map(t => `
-      <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs">
-        <div>
-          <p class="font-bold text-brand-main">${t.client}</p>
-          <p class="text-[10px] text-slate-500">${t.submittedData.completedAt}</p>
-        </div>
-        <button onclick="exportTaskPDF(${t.id})" class="bg-brand-main text-white font-bold px-3 py-1 rounded-lg">تنزيل التقرير</button>
-      </div>
-    `).join('') : '<p class="text-xs text-slate-400">لا توجد تقارير جاهزة للتصدير.</p>';
-  }
-
-  function openCertificatesModal() {
-    toggleSidebar();
-    document.getElementById('certModalCode').value = 'HA-' + certCounter;
-    document.getElementById('certModal').classList.remove('hidden');
-    renderModalCerts();
-  }
-
-  function closeCertificatesModal() {
-    document.getElementById('certModal').classList.add('hidden');
-  }
-
-  function issueCertFromModal() {
-    const client = document.getElementById('certModalClient').value;
-    const code = 'HA-' + certCounter;
-    const issue = document.getElementById('certModalIssue').value;
-    const expiry = document.getElementById('certModalExpiry').value;
-
-    if(!expiry) { alert('يرجى تحديد تاريخ انتهاء الشهادة'); return; }
-
-    certificates.push({ code, client, issue, expiry });
-    certCounter++;
-    localStorage.setItem('certificates', JSON.stringify(certificates));
-    localStorage.setItem('certCounter', certCounter.toString());
-
-    document.getElementById('certModalCode').value = 'HA-' + certCounter;
-    renderModalCerts();
-    alert('تم إصدار الشهادة بنجاح!');
-  }
-
-  function renderModalCerts() {
-    document.getElementById('modalCertList').innerHTML = certificates.map(c => `
-      <div class="p-2 bg-slate-100 rounded-lg flex justify-between items-center text-xs font-bold text-brand-main">
-        <span>${c.code} - ${c.client}</span>
-        <button onclick="exportCertPDF('${c.code}')" class="text-[10px] bg-brand-gold text-brand-main px-2 py-1 rounded">طباعة الشهادة</button>
-      </div>
-    `).join('');
-  }
-
-  function setupCanvas() {
-    ['inspectorSig', 'clientSig'].forEach(id => {
-      const canvas = document.getElementById(id);
-      if(!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let drawing = false;
-      canvas.addEventListener('mousedown', () => drawing = true);
-      canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-      canvas.addEventListener('mousemove', (e) => {
-        if(!drawing) return;
-        const rect = canvas.getBoundingClientRect();
-        ctx.lineWidth = 2; ctx.strokeStyle = '#1C4344';
-        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-        ctx.stroke(); ctx.beginPath();
-        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-      });
-    });
-  }
-
-  function clearCanvas(id) {
-    const canvas = document.getElementById(id);
-    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-  }
-
-  function toggleIncidentForm(show) {
-    document.getElementById('incidentFormContainer').classList.toggle('hidden', !show);
-  }
-
-  function exportTaskPDF(taskId) {
-    const task = tasks.find(t => t.id === taskId);
-    if(!task || !task.submittedData) return;
-
-    document.getElementById('pdfClientName').innerText = task.client;
-    document.getElementById('pdfTemplateName').innerText = task.template.title;
-    document.getElementById('pdfInspectorName').innerText = task.inspector;
-    document.getElementById('pdfComplianceRate').innerText = task.submittedData.complianceRate + '%';
-    document.getElementById('pdfMetaDate').innerText = task.submittedData.completedAt;
-
-    document.getElementById('pdfChecklistTable').innerHTML = task.submittedData.checklistResults.map((r, i) => `
-      <tr class="border-b">
-        <td class="p-2 border">${i+1}</td>
-        <td class="p-2 border">${r.item}</td>
-        <td class="p-2 border font-bold">${r.status}</td>
-        <td class="p-2 border">${r.note || '-'}</td>
-      </tr>
-    `).join('');
-
-    html2pdf().set({ margin: 10, filename: `تقرير_${task.client}.pdf` }).from(document.getElementById('mainReportPDF')).save();
-  }
-
-  function exportCertPDF(code) {
-    const cert = certificates.find(c => c.code === code);
-    if(!cert) return;
-
-    document.getElementById('pdfCertClient').innerText = cert.client;
-    document.getElementById('pdfCertCode').innerText = cert.code;
-    document.getElementById('pdfCertIssue').innerText = cert.issue;
-    document.getElementById('pdfCertExpiry').innerText = cert.expiry;
-
-    html2pdf().set({ margin: 10, filename: `شهادة_${cert.code}.pdf` }).from(document.getElementById('haccpCertPDF')).save();
-  }
-</script>
-
+    <script>
+        // إدارة بيانات المستخدمين والنظام
+        let users = JSON.parse(localStorage.getItem('app_users_v2')) || [
+            { email: 'drfirasahfiz@gmail.com', pass: '12345', role: 'مدير النظام (Admin)' }
+        ];
+
+        let currentUser = null;
+
+        function saveUsers() {
+            localStorage.setItem('app_users_v2', JSON.stringify(users));
+        }
+
+        // تسجيل الدخول
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+
+            const foundUser = users.find(u => u.email === email && u.pass === pass);
+
+            if (foundUser) {
+                currentUser = foundUser;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+                document.getElementById('currentUserDisplay').innerText = `${currentUser.email} [${currentUser.role}]`;
+
+                // التحكم بتبويب إدارة الصلاحيات للمسؤول فقط
+                if (currentUser.email !== 'drfirasahfiz@gmail.com') {
+                    document.getElementById('usersTabBtn').style.display = 'none';
+                } else {
+                    document.getElementById('usersTabBtn').style.display = 'inline-block';
+                    renderUsersTable();
+                }
+            } else {
+                alert('البريد الإلكتروني أو كلمة المرور غير صحيحة!');
+            }
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            currentUser = null;
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+            closeCert();
+        }
+
+        // التنقل بين التبويبات
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).style.display = 'block';
+            btnElement.classList.add('active');
+        }
+
+        // إضافة مستخدم جديد بواسطة المسؤول
+        function addUser(e) {
+            e.preventDefault();
+            const email = document.getElementById('newEmail').value;
+            const pass = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+
+            if (users.some(u => u.email === email)) {
+                alert('هذا البريد الإلكتروني مضاف مسبقاً!');
+                return;
+            }
+
+            users.push({ email, pass, role });
+            saveUsers();
+            renderUsersTable();
+            e.target.reset();
+            alert('تمت إضافة المستخدم بنجاح!');
+        }
+
+        // عرض جدول المستخدمين
+        function renderUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+
+            users.forEach((u, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${u.email}</td>
+                    <td>${u.pass}</td>
+                    <td>${u.role}</td>
+                    <td>
+                        ${u.email !== 'drfirasahfiz@gmail.com' ? `<button onclick="deleteUser(${index})" style="background:#e53e3e; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">حذف</button>` : '<span style="color:var(--primary-gold); font-weight:bold;">الآدمن الرئيسي</span>'}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // حذف مستخدم
+        function deleteUser(index) {
+            if (confirm('هل أنت تأكد من حذف هذا المستخدم؟')) {
+                users.splice(index, 1);
+                saveUsers();
+                renderUsersTable();
+            }
+        }
+
+        // عرض وتعبئة الشهادة
+        function generateCertificate() {
+            const certNum = document.getElementById('certNumberInput').value;
+            const facility = document.getElementById('facilityNameInput').value;
+            const certDate = document.getElementById('inspectionDateInput').value;
+
+            if(!certNum || !facility) {
+                alert('يرجى كتابة رقم الشهادة واسم المنشأة أولاً.');
+                return;
+            }
+
+            document.getElementById('certNumDisplay').innerText = certNum;
+            document.getElementById('certFacilityDisplay').innerText = facility;
+            document.getElementById('certDateDisplay').innerText = certDate || new Date().toISOString().split('T')[0];
+
+            document.getElementById('certificateView').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('certificateView').offsetTop, behavior: 'smooth' });
+        }
+
+        function closeCert() {
+            document.getElementById('certificateView').style.display = 'none';
+        }
+
+        // الحفظ الأولي للمستخدمين
+        saveUsers();
+    </script>
 </body>
 </html>
